@@ -1,0 +1,31 @@
+
+
+		<!-- Reputation Widget -->
+		<li id="reputation" class="rel pointer" ng-click="reputationSummaryDetail.hide || switchSuiteDashboardView('reputation')" show-widget-spinner="{{reputationSummaryDetail==null}}" ng-class="{pointer: !reputationSummaryDetail.hide}">
+			
+			<h3 class="fb18">Reputation</h3>
+			<div class="spin"></div>
+
+			<ol class="dataLists reputation" ng-show="reputationSummaryDetail" ng-hide="reputationSummaryDetail.hide">
+				<li>
+					<div class="wrappper">
+						<div class="hidden listTitle">
+							<span class="fl center">Positive</span>
+							<span class="fr center">Negative</span>
+						</div>
+						<div class="circularChart fl rel">
+							<input type="text" value="{{reputationSummaryDetail.positive}}" circular-chart bg-color="#175a31" fg-color="#42be25"/>
+						</div>
+						<div class="circularChart fr rel">
+							<input type="text" value="{{reputationSummaryDetail.negative}}" circular-chart bg-color="#801d37" fg-color="#ff6875"/>
+						</div>
+					</div>
+				</li>
+				<li>
+					<span class="label">Rating</span>
+					<span class="value fl48">{{reputationSummaryDetail.rating}}</span>
+				</li>
+			</ol>
+
+			<h4 ng-show="reputationSummaryDetail.hide" class="noDataMsg center">No data available for the selected date range</h4>
+		</li>

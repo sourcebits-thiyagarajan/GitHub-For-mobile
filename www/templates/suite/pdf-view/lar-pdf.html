@@ -1,0 +1,117 @@
+<section class="lar rel" ng-controller="LarCtrl" id="exportPdf" class="noData">
+	<div class="spin"></div>
+
+	<div >
+	<!-- Wrapper -->
+	<div ng-show="detailedContent">
+		<!-- Chart View -->
+		<div class="chartDataView">
+			<header class="pdf-header clearfix">
+				<img src="../images/erevmax-logo.png" class="logo" />
+				<div class="details">
+					<h1 class="fb24">{{hotelDetail.name}}, {{hotelDetail.city}}, {{hotelDetail.country}}</h1>
+					<span>
+						{{currentDate}}
+					</span>
+				</div>		
+			</header>
+			<div class="sub-details">
+				<div class="item clearfix fb16">
+					<span class="tag fl">Regions:</span>
+					<span class="value fl">{{hotelDetail.city}}, {{hotelDetail.country}}</span>
+				</div>
+				<div class="item clearfix fb16">
+					<span class="tag fl">Date Range:</span>
+					<span class="value fl">{{currentFilterDetails.startDate}} to {{currentFilterDetails.endDate}}</span>
+				</div>
+				<div class="item legends clearfix fb16">
+					<span class="tag fl">Legends:</span>
+					<div class="value fl">
+						<ul class="f14 fl">
+							<li ng-repeat="legend in larSummary.legendDetails">
+								<span class="fb14">{{legend.sname}} </span>{{legend.name}}
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<!-- Summary Report -->
+			<h1 class="fb24 catHead">Summary Report - LAR</h1>
+
+			<div class="larReportWrap inlBlk w100 rel">
+				<div class="larReportLabel fl">				
+					<ul>
+						<li></li>
+						<li ng-repeat="obj in larSummary.dates" ng-class="{weekend: isWeekend(obj.date), hotDateHighlightVertical: isHotDate(obj.date)}"><span class="tableCell">{{obj.date | dateDDMMMYYYY:true}}</span></li>
+					</ul>
+				</div>
+
+				<!-- Actual Table -->
+				<div class="larReportData fl rel">
+					<table class="w100">	
+						<!-- Hotels in the Table Header -->
+						<thead>
+							<th ng-repeat="hotel in larSummary.hotels">{{hotel}}</th>
+							<th>Average</th>
+						</thead>			
+						<tbody>				
+							<tr ng-repeat="item in larSummary.dates">
+								<td ng-repeat="hotel in larSummary.hotels" ng-class="{weekend: isWeekend(item.date)}">
+									<span class="value center blk fb18">{{larSummary.data[item.date][hotel].price | currencyCode: currency}}</span>
+									<span class="fl number">{{larSummary.data[item.date][hotel].position}}</span>
+									<span class="fr status">{{larSummary.data[item.date][hotel].sname}}</span>
+								</td>
+								<td ng-class="{weekend: isWeekend(item.date)}">
+									<span class="value center blk fb18">{{item.averagePrice | currencyCode: currency}}</span>
+								</td>
+							</tr>
+						</tbody>
+					</table>			
+				</div>		
+			</div>
+
+		<h1 class="fb24 catHead">Detail Reports - LAR</h1>
+
+		<!-- Detail Report -->
+		<div ng-repeat="channel in larDetail.channels">
+			<h1 class="chnlHead center blue">Channel: {{channel}}</h1>
+
+			<div class="larReportWrap inlBlk w100 rel" >
+				
+				<!-- Dates on the LHS -->
+				<div class="larReportLabel fl">				
+					<ul>
+						<li></li>
+						<li ng-repeat="date in larDetail.dates" ng-class="{weekend: isWeekend(date), hotDateHighlightVertical: isHotDate(date)}"><span class="tableCell">{{date | dateDDMMMYYYY:true}}</span></li>
+					</ul>
+				</div>
+
+				<!-- Actual Table -->
+				<div class="larReportData larReportDataDetail fl rel">
+					<table class="w100">	
+						<!-- Hotels in the Table Header -->
+						<thead>
+							<th ng-repeat="hotel in larSummary.hotels">{{hotel}}</th>
+							<th>Average</th>
+						</thead>			
+						<tbody>				
+							<!-- Horizontal Rows -->
+							<tr ng-repeat="date in larDetail.dates">
+								<!-- Actual Table Data-->
+								<td ng-repeat="hotel in larDetail.hotels" ng-class="{weekend: isWeekend(date)}">
+									<span class="value center blk fb18">
+										{{larDetail.data[hotel][date][channel] | currencyCode: currency | noText | isBlank}}
+									</span>
+								</td>
+								<td ng-class="{weekend: isWeekend(date)}">
+									<span class="value center blk fb18">{{larDetail.averages[date][selectedChannel] | currencyCode: currency | noText | isBlank}}</span>
+								</td>
+							</tr>
+						</tbody>
+					</table>			
+				</div>	
+			</div>
+		</div>
+	</div>
+</section>

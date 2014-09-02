@@ -1,0 +1,38 @@
+<div id="manageRatePopup" class="none">
+	
+	<div class="spin"></div>
+	
+	<div id="manageRateContainer" class="popUpBox" ng-class="{closed: manageRates.response.manageRatesHash[manageRates.currentPlan.planId][roomType.roomId][date].isClosed}">
+
+		<div class="fillDropDown">
+			<ul class="topSection">
+				<li ng-click="fillCells(manageRates.currentPlan, roomType, date, true, parent)" ng-class="{blocked: rightFill === 'false'}">
+					<span class="sp doubleArrow inlBlk pointer rel"></span> Right Fill
+				</li>
+				<li ng-click="fillCells(manageRates.currentPlan, roomType, date, false, parent)" ng-class="{blocked: leftFill === 'false'}">
+					<span class="sp doubleArrow left inlBlk pointer rel"></span> Left Fill
+				</li>
+				<li ng-click="fillCells(manageRates.currentPlan, roomType, date, null, parent)">Clear All</li>
+			</ul>
+			<ul ng-show="parent === 'room'">
+				<li ng-click="toggleDate(manageRates.currentPlan, manageRates.response.manageRatesHash[manageRates.currentPlan.planId][roomType.roomId][date].isClosed, date, roomType)">
+					<div ng-show="!manageRates.response.manageRatesHash[manageRates.currentPlan.planId][roomType.roomId][date].isClosed">
+						Close Selected Rate Plan
+					</div>
+					<div ng-show="manageRates.response.manageRatesHash[manageRates.currentPlan.planId][roomType.roomId][date].isClosed">
+						Open Selected Rate Plan
+					</div>
+				</li>
+				<li ng-click="toggleDate(null, manageRates.response.manageRatesHash[manageRates.currentPlan.planId][roomType.roomId][date].isClosed, date, roomType)">
+					<div ng-show="!manageRates.response.manageRatesHash[manageRates.currentPlan.planId][roomType.roomId][date].isClosed">
+						Close All Rate Plan
+					</div>
+					<div ng-show="manageRates.response.manageRatesHash[manageRates.currentPlan.planId][roomType.roomId][date].isClosed">
+						Open All Rate Plan
+					</div>
+				</li>
+				<li ng-show="manageRates.response.manageRatesHash[manageRates.currentPlan.planId][roomType.roomId][date].isClosed" ng-click="toggleEditMode(manageRates.currentPlan, roomType, date)">Change Closed Date Rate</li>
+			</ul>
+		</div>
+	</div>
+</div>

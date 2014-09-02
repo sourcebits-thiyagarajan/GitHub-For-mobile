@@ -1,0 +1,67 @@
+
+<div id="exportPdf" class="noData">
+
+	<!-- Chart View -->
+	<div class="chartDataView"  >
+	
+		<header class="pdf-header clearfix">
+			<img src="../images/erevmax-logo.png" class="logo" />
+			<div class="details">
+				<h1 class="fb24">{{hotelDetail.name}}, {{hotelDetail.city}}, {{hotelDetail.country}}</h1>
+				<span>
+					{{currentDate}}
+				</span>
+			</div>		
+		</header>
+
+		<div class="sub-details">
+			<div class="item clearfix fb16">
+				<span class="tag fl">Regions:</span>
+				<span class="value fl">{{hotelDetail.city}}, {{hotelDetail.country}}</span>
+			</div>
+			<div class="item clearfix fb16">
+				<span class="tag fl">Date Range:</span>
+				<span class="value fl">{{manageAvailability.dates[0]}} to {{currentFilterDetails.endDate}}</span>
+			</div>
+			
+		</div>
+	</div>
+
+	<div class="spin pdf"></div>
+
+	<div class="inlBlk w100 rel maTableCls" ng-show="manageAvailability.rooms">
+
+		<div id="singleTableFormat" class="lightBlueTheme h40" ng-class="{singleColumn: availabilityContent.length == 1}">
+
+			<table class="w100">
+				<tbody>
+					<thead>
+						<tr class="maCell">
+							<td rowspan="2" class="maCell black maPdfHeaderCls"><div>Dates/</div><div>RoomType</div></td>
+							<td colspan="2" class="maCell" ng-repeat="room in manageAvailability.rooms track by $index"><div class="maPdfHeaderCls">{{room.roomName}}</div></td>
+						</tr>
+						<tr class="maCell">
+							<td class="maCell" ng-repeat-start="room in manageAvailability.rooms">Rooms Available
+							</td>
+							<td class="maCell" ng-repeat-end>Rooms Sold</td>
+						</tr>
+					</thead>
+					<tr class="maCell" ng-repeat="date in manageAvailability.dates track by $index" ng-class="{weekend: date.isWeekend}">
+						
+						<td class="date pdfDateCls" ng-class="{hotDateHighlightVertical: isHotDate(date)}">
+							<div class="groupItems w100">{{date | dateDDMMMYYYY}}</div>
+						</td>
+						<td ng-repeat-start="room in manageAvailability.rooms track by $index" ng-class-odd="'bg'" class="maCell textAlignCenter">
+							<span class="size55">{{manageAvailability.hash[room.roomId][date].roomsAvailable | isBlank}}</span>
+						</td>
+						<td ng-repeat-end ng-class-odd="'bg'" class="maCell textAlignCenter">
+							<span>{{manageAvailability.hash[room.roomId][date].roomsSold ? manageAvailability.hash[room.roomId][date].roomsSold : '0'}}</span>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+			<div class="clear"></div>
+		</div>
+	</div>
+	
+</div>

@@ -1,0 +1,79 @@
+
+<section class="lar rel" ng-controller="LarCtrl">
+	<div class="spin"></div>
+
+	<div ng-show="larSummary.data" ng-hide="showDefaultView" class="rel" ng-class="{singleColumn: larSummary.dates.length == 1}">
+
+		<!-- Left Slide Pagination Arrow -->
+		<span class="slidePrev inlBlk abs pointer noSelect" ng-click="paginateData(false)" ng-hide="paginationDetails.currentPage == 0">
+			<span class="icons arrowPrev inlBlk"></span>
+		</span>
+
+		<!-- Right Slide Pagination Arrow-->
+		<span class="slideNext inlBlk abs pointer noSelect" ng-click="paginateData(true)" ng-hide="paginationDetails.currentPage == paginationDetails.totalPages()-1 || paginationDetails.data.length == 0">
+			<span class="icons arrowNext inlBlk"></span>
+		</span>
+
+
+		<!-- Dates in the Table Header -->
+		<table class="dates w100">
+			<tr>
+				<th><!-- Blank Space--></th>
+				<th ng-repeat="item in larSummary.dates | startAt:paginationDetails.currentPage*paginationDetails.pageSize:7 | limitTo:paginationDetails.pageSize" ng-init="hotdateItem = isHotDate(item.date)" ng-class="{weekend: isWeekend(item.date), hotDateHighlightHorizontal: hotdateItem}" title="{{hotdateItem.description}}">{{item.date | dateDDMMMYYYY:true}}</th>
+			</tr>
+		</table>
+
+		<!-- Scrollable Content -->
+		<div class="larReportWrap inlBlk w100 rel scrollable" ma-page-size="lar">
+			
+			<!-- Hotel names on the LHS -->
+			<!-- <div class="larReportLabel fl">				
+				<ul>
+					<li ng-repeat="hotel in larSummary.hotels"><span class="tableCell">{{hotel}}</span></li>
+				</ul>
+			</div> -->
+
+			<!-- Actual Table -->
+			<div class="larReportData fl rel withSideHeading">
+				<table class="w100">				
+					<tbody>				
+						<tr ng-repeat="hotel in larSummary.hotels">
+							<td class="tableSideheading"><span class="tableCell">{{hotel}}</span></td>
+							<td ng-repeat="item in larSummary.dates | startAt:paginationDetails.currentPage*paginationDetails.pageSize:7 | limitTo:paginationDetails.pageSize track by $index" ng-class="{weekend: isWeekend(item.date)}">
+								<span class="value center blk fb18">{{larSummary.data[item.date][hotel].price | currencyCode: currency | noText}}</span>
+								<span class="fl number" ng-class="{red: larSummary.data[item.date][hotel].isMax, green: larSummary.data[item.date][hotel].isMin}">{{larSummary.data[item.date][hotel].position}}</span>
+								<span class="fr status">{{larSummary.data[item.date][hotel].sname}}</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>			
+			</div>		
+			<div class="clear"></div>		
+		</div>
+
+		<!-- Final Avg Rates (at the bottom)-->
+		<table class="tfoot w100" ng-show="larSummary.data">
+			<tr>
+				<td class="lblAvg" >Average</td>
+				<td ng-repeat="avg in larSummary.dates | startAt:paginationDetails.currentPage*paginationDetails.pageSize:7 | limitTo:paginationDetails.pageSize track by $index" ng-class="{weekend: isWeekend(avg.date)}">{{avg.averagePrice | currencyCode: currency}}</td>
+			</tr>
+		</table>
+
+		<div class="navigate center noSelect" ng-show="larSummary.data">
+			<span ng-repeat="dot in getDots() track by $index" ng-click="dotClicked($index)" ng-class="{active: $index==paginationDetails.currentPage}" class="inlBlk"></span>
+		</div>
+
+		<!-- LEGENDS at the bottom -->
+		<div class="larReportFooter rel" ng-show="larSummary.data">
+			<div class="horScrollContent" horizontal-scroll >				
+				<ul class="fl">
+					<li ng-repeat="legend in larSummary.legendDetails"><span class="fb14">{{legend.sname}}</span>{{legend.name}}
+					</li>
+				</ul>
+			</div>
+			<div class="abs infoBg pointer fr center" ng-click="fadeToggle()"><span class="icons info inlBlk"></span></div>
+		</div>
+
+	</div>
+	<span class="no-data abs" ng-show="showDefaultView">No data available for the current date range.</span>
+</section>

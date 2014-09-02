@@ -1,0 +1,42 @@
+<div ng-controller="SuiteExportPDFCtrl" id="exportPdf" class="noData">
+
+	<!-- Chart View -->
+	<div class="chartDataView"  ng-controller="ChartDataDetailedCtrl">
+	
+		<header class="pdf-header clearfix">
+			<img src="../images/erevmax-logo.png" class="logo" />
+			<div class="details">
+				<h1 class="fb24">{{hotelDetail.name}}, {{hotelDetail.city}}, {{hotelDetail.country}}</h1>
+				<span>
+					{{currentDate}}
+				</span>
+			</div>		
+		</header>
+		<div class="sub-details">
+			<div class="item clearfix fb16">
+				<span class="tag fl">Regions:</span>
+				<span class="value fl">{{hotelDetail.city}}, {{hotelDetail.country}}</span>
+			</div>
+			<div class="item clearfix fb16">
+				<span class="tag fl">Date Range:</span>
+				<span class="value fl">{{currentFilterDetails.startDate}} to {{currentFilterDetails.endDate}}</span>
+			</div>
+			<div class="item legends clearfix fb16">
+				<span class="tag fl">Legends:</span>
+				<div class="value fl">
+					<ul class="f14 fl">
+						<li ng-repeat="legend in larSummary.legendDetails">
+							<span class="fb14">{{legend.sname}} </span>{{legend.name}}
+						</li>
+					</ul>
+				</div>
+			</div>
+		</div>
+
+		<h1 class="fb24 catHead">Graph View - {{currPagNam}} </h1>
+		<div ui-view="chartView"></div>
+
+		<h1 class="fb24 catHead">Data View - {{currPagNam}} </h1>
+		<div ui-view="dataView" class="suite-data-view"></div>
+	</div>
+</div>

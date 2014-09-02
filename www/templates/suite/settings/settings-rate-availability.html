@@ -1,0 +1,22 @@
+
+<!-- Rate Availability WRAPPER -->
+<section ng-controller="RateAvailabilityCtrl" class="rateAvailability">
+
+	<div class="spin"></div>
+
+	<ul class="accordion rateAvailabilityLists noBg" settings-size ng-show="currentState === 'suite.settings.rate_availability'" order-rate-availability>
+
+		<li ng-repeat="item in list">
+			<a ng-href="{{item.url}}">
+				<div class="accordionHead pointer">
+					<span class="icons next inlBlk"></span>
+					<h3><span class="accordionTitle inlBlk">{{item.displayName}}</span></h3>
+				</div>
+			</a>
+		</li>
+	</ul>
+
+	<div ui-view></div>
+
+</section>
+

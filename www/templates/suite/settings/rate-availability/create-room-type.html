@@ -1,0 +1,122 @@
+
+<h3 class="setHdr">Create Room Type</h3>
+
+<section class="createRoomType" ng-controller="CreateRoomTypeCtrl" >
+	<div class="spin"></div>
+	<div ng-show="roomTypeDetails.hasLoaded" page-double-scroll>
+
+		<!-- Any change on the Tabular Layout might need change in the popup, Please Update in the DateRange Layout also, available at the end of the file -->
+
+		<table class="tabularData">
+			<tr class="thead">
+				<td width="50">Base Room</td>
+				<td width="15%">Hotel Room Code</td>
+				<td width="30%">Hotel Room Type Name</td>
+				<td width="15%">Weight 00/%</td>
+				<td width="20%">Min. Rate</td>
+				<td width="50">Delete</td>
+			</tr>
+		</table>
+
+		
+		<form class="rel" name="createRateTypeForm">
+			<!-- Scrollable Content -->
+			<div class="scrollable main-content">
+
+				<!-- Any change on the Tabular Layout might need change in the popup, Please Update in the DateRange Layout also, available at the end of the file -->
+
+				<table class="tabularData">
+					<tr ng-repeat="room in roomTypeDetails.roomTypes track by $index">
+						<td width="50">
+							<input type="radio" name="base" class="pointer" ng-model="roomTypeDetails.baseRoomType" ng-value="room"/> 
+						</td>
+						<td width="15%">
+							<input class="input wSmall w100" value="{{room.code}}" ng-model="room.code" validate-duplicate="code" validate-src="roomTypeDetails.roomTypes" required>
+						</td>
+						<td width="30%">
+							<input class="input w100" value="{{room.name}}" ng-model="room.name" validate-duplicate="name" validate-src="roomTypeDetails.roomTypes" required/>
+						</td>
+						<td width="15%" ng-class="{disabled: room.is_base_room_type && roomTypeDetails.roomTypes.length > 1}">
+							<input type="text" class="wSmall textAlignRight"  value="{{room.weight}}" ng-model="room.weight" ng-pattern="validator.number" ng-disabled="room.is_base_room_type && roomTypeDetails.roomTypes.length > 1"/>
+							<span class="inlBlk center f12 weight pointer noSelect toggleBtn" toggle-text="room.is_weight_percentage"  ng-model="room.is_weight_percentage" ng-class="{disabled: room.is_base_room_type && roomTypeDetails.roomTypes.length > 1}">.00</span>
+						</td>
+						<td width="20%">
+							<input type="text" class="wMedium textAlignRight" value="{{room.min_rate}}" ng-model="room.min_rate" ng-pattern="validator.positiveNumber"/>
+						</td>
+						<td width="50">
+							<span ng-click="deleteRoomType(room, $index)" ng-class="{blocked: room.is_base_room_type && roomTypeDetails.roomTypes.length > 1}" class="inlBlk pointer icons thrash" ng-model="room.id"></span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="noData center f14" ng-hide="roomTypeDetails.roomTypes.length">No Room Type Available. Click on Add to create one.</div>
+
+			<div class="blk addRow noSelect clearfix">
+				<span class="fl"><span class="inlBlk center plus pointer" ng-click="addNewRoomType($event)">+</span>Add</span>
+				<div class="inlBlk fr">
+					<div class="rel fr pointer submit-btn fb14 center" ng-class="{blocked: !roomTypeDetails.roomTypes || !roomTypeDetails.roomTypes.length || createRateTypeForm.$invalid || discardChangesMade}" ng-click="saveDetails(createRateTypeForm, $event)">
+						<div class="spin"></div>
+						Save
+					</div>
+					<div class="rel fr pointer submit-btn fb14 center" ng-class="{blocked: !roomTypeDetails.originalData.roomTypes || !roomTypeDetails.originalData.roomTypes.length}" show-daterange-popup create-daterange="true">
+						<div class="spin"></div>
+						Add Date Range
+					</div>
+				</div>
+			</div>
+		</form>
+
+		<div class="tableOptions inlBlk w100">
+
+			<!-- Scrollable Content -->
+			<div class="dateRangeAddContainer scrollable secondary-content">
+				<div class="dateRangeAdded" ng-repeat= "dateRangeItem in roomTypeDetails.dateRanges | dateRange track by $index">
+					<label class="inlBlk rel f14">Date Range Added</label>
+					<span class="currentDateRange f14">From: {{dateRangeItem.from_date | dateDDMMMYYYY }} To: {{dateRangeItem.to_date | dateDDMMMYYYY }} :</span>
+
+					<span class="white">&nbsp;(<span class="day" ng-repeat="day in dateRangeItem.selectedRange">{{day}}</span> &nbsp;)</span>
+
+					<span class="rel inlBlk fr pointer icons thrash small" ng-click="deleteDateRange(dateRangeItem, $event)"></span>
+					<span class="inlBlk fr pointer icons editDateRange" show-daterange-popup edit-daterange="{{dateRangeItem}}"></span>
+				</div>
+			</div>
+		</div>	
+	</div>
+	
+
+	<!-- ***************** Date range Popup Tabular Layout hidden in the page always. ******************* -->
+	<div id="dateRangeLayout" class="none">
+		<textarea unbind-scope>
+			<table class="tabularData">
+				<tr class="thead">
+					<td width="15%" class="disabled">Hotel Room Code</td>
+					<td width="30%" class="disabled">Hotel Room Type Name</td>
+					<td width="15%">Weight 00/%</td>
+					<td width="20%">Min. Rate</td>
+				</tr>
+			</table>
+		</textarea>
+		
+		<textarea unbind-scope>
+			<form name="updateForm">
+				<table class="tabularData">
+					<tr ng-repeat="room in dateRangePoupContent.tabularContent track by $index">
+						<td width="15%" class="disabled">
+							<input class="input wSmall w100" value="{{room.code}}" ng-model="room.code" disabled>
+						</td>
+						<td width="30%" class="disabled">
+							<input class="input w100" value="{{room.name}}" ng-model="room.name" disabled/>
+						</td>
+						<td width="15%" ng-class="{disabled: room.is_base_room_type || dateRangePoupContent.basePlanId == room.id}">
+							<input type="text" class="wSmall textAlignRight"  value="{{room.weight}}" ng-model="room.weight" ng-pattern="validator.number" ng-disabled="room.is_base_room_type || dateRangePoupContent.basePlanId == room.id"/>
+							<span class="inlBlk center f12 weight pointer noSelect" toggle-text="room.is_weight_percentage"  ng-model="room.is_weight_percentage" ng-class="{disabled: room.is_base_room_type || dateRangePoupContent.basePlanId == room.id}">.00</span>
+						</td>
+						<td width="20%" class="disabled">
+							<input type="text" class="wMedium textAlignRight" value="{{room.min_rate}}" ng-model="room.min_rate"  disabled/>
+						</td>
+					</tr>
+				</table>
+			</form>
+		</textarea>
+	</div>
+</section>

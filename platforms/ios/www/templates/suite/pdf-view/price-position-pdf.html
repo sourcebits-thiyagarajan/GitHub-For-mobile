@@ -1,0 +1,67 @@
+
+<section class="chartDataWrap clearfix rel">
+	<div class="spin"></div>
+	<span class="no-data abs" ng-hide="isSpinnerShowing || detailedContent">No data available</span>
+	<div id="dataContent" class="center pricePosition">
+		<!-- Dates in the Table Header -->
+		<table class="dates w100" ng-show="detailedContent.chartData">
+			
+		</table>
+
+		<!-- Scrollable Content -->
+		<div class="pricePositionDataWrap inlBlk w100 rel" ng-show="detailedContent.chartData">
+			<!-- Hotel names on the LHS -->
+			<div class="pricePositionLabel fl">
+				<ul>
+					<li><span class="tableCell">Conversion Rank</span></li>
+					<li ng-repeat="item in detailedContent.chartData" ng-class="{weekend: isWeekend(item.date), hotDateHighlightVertical: isHotDate(item.date)}"><span class="tableCell">{{item.date | dateDDMMMYYYY:true}}</span></li>
+				</ul>
+			</div>
+
+			<!-- Actual Table -->
+			<div class="pricePositionData fl rel">
+				<table class="w100">
+					<thead>
+						<tr>
+							<th ng-repeat="position in [1, 2, 3]" colspan="2">
+								{{position}}
+							</th>
+							<th rowspan="2">Current Position</th>
+							<th rowspan="2">Total</th>
+						</tr>
+						<tr>
+							<th ng-repeat-start="position in [1, 2, 3]">Best Position</th>
+							<th ng-repeat-end>Revenue Share</th>
+						</tr>
+					</thead>
+					<tbody>
+						<tr ng-repeat="item in detailedContent.chartData">
+							<td ng-repeat-start="index in [0, 1, 2]">
+								<span ng-if="item.sorted_position_list[index]">
+									<div class="cell position">{{item.sorted_position_list[index] ? item.sorted_position_list[index].position_no : '-'}}</div>
+								</span>
+								<span ng-if="!item.sorted_position_list[index]">
+									<div>-</div>
+								</span>
+							</td>
+							<td ng-repeat-end>
+								<span ng-if="item.sorted_position_list[index]">
+									<div class="cell percent">{{item.sorted_position_list[index] ? item.sorted_position_list[index].percentage : '-'}}</div>
+								</span>
+								<span ng-if="!item.sorted_position_list[index]">
+									<div>-</div>
+								</span>
+							</td>
+							<td>{{item.my_hotel_position}}</td>
+							<td>{{item.total_count}}</td>
+						</tr>
+					</tbody>
+				</table>			
+			</div>
+			<div class="clear"></div>
+		</div>
+	</div>
+</section>
+
+
+

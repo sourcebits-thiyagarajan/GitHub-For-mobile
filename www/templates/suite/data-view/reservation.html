@@ -1,0 +1,112 @@
+		
+<ul class="statsBtn resSumDet fb14 hidden fr mb12">
+	<li ng-click="toggleView()" ng-class="{active: isSummary == true}">Summary</li>
+	<li ng-click="toggleView()" ng-class="{active: isSummary == false}">Detail</li>
+</ul>
+<div class="clear"></div>
+
+<section class="chartDataWrap clearfix rel">
+	<div class="spin"></div>
+	
+	<h3 class="fb24 catHead" ng-show="isPDFView">Summary View</h3>
+	<!-- Summary Tab -->
+	<div ng-show="isSummary">
+		<span class="no-data abs" ng-show="!isSpinnerShowing && detailedContent.dataView.summary.length == 0">No data available</span>
+		<div view-size="suite" id="dataContent" class="center" ng-show="isSummary && detailedContent.dataView && detailedContent.dataView.summary && detailedContent.dataView.summary.length">
+			<table>
+				<thead>
+					<tr class="dataLabel pointer">
+						<th ng-click="reverse=!reverse; sortTable(reverse, 'dname')">Channel</th>
+						<th ng-click="reverse=!reverse; sortTable(reverse, 'current_reservation', 'room_sold')">No. of Rooms Nights</th>
+						<th ng-click="reverse=!reverse; sortTable(reverse, 'current_reservation', 'avg_rate')">Avg. Room Rate</th>
+						<th ng-click="reverse=!reverse; sortTable(reverse, 'current_reservation', 'total_rev_per_guest')">Total Rev Per Guest</th>
+						<th ng-click="reverse=!reverse; sortTable(reverse, 'current_reservation', 'revenue')">Total Rate <span>({{currencyCodeFromAPI}})</span></th>
+					</tr>
+				</thead>
+				<tbody>
+					<tr ng-repeat="item in detailedContent.dataView.summary | startFrom:paginationDetails.currentPage*paginationDetails.pageSize | limitTo:paginationDetails.pageSize">
+						<td>{{item.dname | isBlank}}</td>
+						<td>{{item.current_reservation.room_sold}}</td>
+						<td>{{item.current_reservation.avg_rate | numberFormat: 2}}</td>
+						<td>{{item.current_reservation.total_rev_per_guest | numberFormat: 2}}</td>
+						<td>{{item.current_reservation.revenue | numberFormat: 2}}</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="navigate center">
+				<span ng-repeat="dot in getDots() track by $index" ng-click="dotClicked($index)" ng-class="{active: $index==paginationDetails.currentPage}" class="inlBlk"></span>
+			</div>
+		</div>
+	</div>
+
+	<h3 class="fb24 catHead" ng-show="isPDFView">Detail View</h3>
+
+	<!-- Details Tab -->
+	<div ng-show="!isSummary || isPDFView">
+		<span class="no-data abs" ng-show="!isSpinnerShowing && detailedContent.dataView.detail.length == 0">No data available</span>
+		<div view-size="reservation" id="detailContent" class="center" ng-show="(!isSummary || isPDFView) && detailedContent.dataView && detailedContent.dataView.detail && detailedContent.dataView.detail.length">
+			<table>
+				<thead>
+					<tr>
+						<th colspan="3">Confirmation Number</th>
+						<th colspan="2">Booking</th>
+						<th colspan="2">Name</th>
+						<th colspan="7">Reservation Details</th>
+					</tr>					
+				</thead>
+
+				<tbody>
+
+					<tr class="dataLabel pointer">
+						<td ng-click="reverse=!reverse; sortTable(reverse, 'rt_confirmation_no')">Connect</td>
+						<td ng-click="reverse=!reverse; sortTable(reverse, 'pms_confirmation_no')">Hotel</td>
+						<td ng-click="reverse=!reverse; sortTable(reverse, 'channel_confirmation_no')">Channel</td>
+						<td ng-click="reverse=!reverse; sortTable(reverse, 'res_status')">Status</td>
+						<td ng-click="reverse=!reverse; sortTable(reverse, 'res_booking_date')">Date</td>
+						<td ng-click="reverse=!reverse; sortTable(reverse, 'res_guests', 'guest_first_name')">First Name</td>
+						<td ng-click="reverse=!reverse; sortTable(reverse, 'res_guests', 'guest_last_name')">Last Name</td>
+						<td ng-click="reverse=!reverse; sortTable(reverse, 'room_stays', 'check_in_date')">Arrival Date</td>
+						<td ng-click="reverse=!reverse; sortTable(reverse, 'room_stays', 'no_of_night')">Nights</td>
+						<td ng-click="reverse=!reverse; sortTable(reverse, 'room_stays', 'room_name')">Room Type</td>
+						<td ng-click="reverse=!reverse; sortTable(reverse, 'room_stays', 'no_of_adult')">Adults</td>
+						<td ng-click="reverse=!reverse; sortTable(reverse, 'room_stays', 'no_of_room')">Rooms</td>
+						<td ng-click="reverse=!reverse; sortTable(reverse, 'room_stays', 'avg_room_rate')">Rate</td>
+						<td ng-click="reverse=!reverse; sortTable(reverse, 'room_stays', 'total_rate')">Total Rev <span>({{currencyCodeFromAPI}})</span></td>
+					</tr>
+
+					<tr ng-repeat="item in detailedContent.dataView.detail | startFrom:paginationDetails.currentPage*paginationDetails.pageSize | limitTo:paginationDetails.pageSize">
+						<td>{{item.rt_confirmation_no}}</td>
+						<td>{{item.pms_confirmation_no | isBlank}}</td>
+						<td>{{item.channel_confirmation_no}}</td>
+						<td>{{item.res_status}}</td>
+						<td>{{item.res_booking_date | dateDDMMMYYYY}}</td>
+						<td>{{item.room_stays.guest_first_name | isBlank}}</td>
+						<td>{{item.room_stays.guest_last_name | isBlank}}</td>
+						<td>{{item.room_stays.check_in_date | dateDDMMMYYYY | noFalse}}</td>
+						<td>{{item.room_stays.no_of_night}}</td>
+						<td>{{item.room_stays.room_name | isBlank}}</td>
+						<td>{{item.room_stays.no_of_adult}}</td>
+						<td>{{item.room_stays.no_of_room | isBlank}}</td>
+						<td>{{item.room_stays.avg_room_rate | numberFormat: 2}}</td>
+						<td>{{item.room_stays.total_rate | numberFormat: 2}}</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="navigate center">
+				<span ng-repeat="dot in getDots() track by $index" ng-click="dotClicked($index)" ng-class="{active: $index==paginationDetails.currentPage}" class="inlBlk"></span>
+			</div>
+			
+		</div>
+	</div>
+
+	<span class="slideNext inlBlk abs pointer noSelect" ng-click="paginateData(true)"
+		ng-hide="paginationDetails.currentPage == paginationDetails.totalPages()-1 || paginationDetails.data.length == 0">
+		<span class="icons arrowNext inlBlk"></span>
+	</span>
+	<span class="slidePrev inlBlk abs pointer noSelect" ng-click="paginateData(false)"
+		ng-hide="paginationDetails.currentPage == 0">
+		<span class="icons arrowPrev inlBlk"></span>
+	</span>
+</section>

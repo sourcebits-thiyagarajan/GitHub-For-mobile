@@ -1,0 +1,48 @@
+
+<section class="chartDataWrap clearfix rel">
+	<div class="spin"></div>
+	<span class="no-data abs" ng-hide="isSpinnerShowing || detailedContent">No data available</span>
+	<div view-size="suite" id="dataContent" class="center" ng-show="isSpinnerShowing || detailedContent">
+		<table>
+			<thead ng-show="detailedContent">
+				<tr class="pointer noSelect">												
+					<th ng-click="reverse=!reverse; sortTable(reverse, 'date')">Date</th>						
+					<th ng-click="reverse=!reverse; sortTable(reverse, 'room_booked')">Room Nights Booked</th>						
+					<th ng-click="reverse=!reverse; sortTable(reverse, 'gap')">Pace Gap</th>
+					<th ng-click="reverse=!reverse; sortTable(reverse, 'current_pace_7_days')">7 Day Pace (R/D)</th>
+					<th ng-click="reverse=!reverse; sortTable(reverse, 'current_pace_14_days')">14 Day Pace (R/D)</th>
+					<th ng-click="reverse=!reverse; sortTable(reverse, 'required_pace')">Pace Required (R/D)</th>
+				</tr>
+			</thead>
+			<tbody>
+				
+				<tr ng-repeat="item in paginationDetails.data | startFrom:paginationDetails.currentPage*paginationDetails.pageSize | limitTo:paginationDetails.pageSize" ng-init="hotdateItem = isHotDate(item.date)">
+					<td ng-class="{hotDateHighlightVertical: hotdateItem}" title="{{hotdateItem.description}}">{{item.date | dateDDMMMYYYY}}</td>
+					<td>{{item.room_booked}}</td>
+					<td>{{item.gap}}</td>
+					<td>{{item.current_pace_7_days}}</td>
+					<td>{{item.current_pace_14_days}}</td>
+					<td>{{item.required_pace}}</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="navigate center">
+			<span ng-repeat="dot in getDots() track by $index" ng-click="dotClicked($index)" ng-class="{active: $index==paginationDetails.currentPage}" class="inlBlk"></span>
+		</div>
+		
+	</div>
+
+	<span class="slideNext inlBlk abs pointer noSelect" ng-click="paginateData(true)"
+		ng-class="{blocked: paginationDetails.currentPage == paginationDetails.totalPages()-1}">
+		<span class="icons arrowNext inlBlk"></span>
+	</span>
+	<span class="slidePrev inlBlk abs pointer noSelect" ng-click="paginateData(false)"
+		ng-class="{blocked: paginationDetails.currentPage == 0}">
+		<span class="icons arrowPrev inlBlk"></span>
+	</span>
+</section>
+
+
+
+

@@ -1,0 +1,72 @@
+
+<section class="chartDataWrap clearfix rel">
+	<div class="spin"></div>
+	<span class="no-data abs" ng-hide="isSpinnerShowing || detailedContent">No data available</span>
+	<div id="dataContent" class="center" ng-show="detailedContent">
+
+		<!-- Left Slide pagination arrow -->
+		<span class="slidePrev inlBlk abs pointer noSelect" ng-click="paginateData(false)" ng-hide="paginationDetails.currentPage == 0">
+			<span class="icons arrowPrev inlBlk"></span>
+		</span>
+
+		<!-- Right Slide pagination arrow -->
+		<span class="slideNext inlBlk abs pointer noSelect" ng-click="paginateData(true)" ng-hide="paginationDetails.currentPage == paginationDetails.totalPages()-1 || paginationDetails.data.length == 0">
+			<span class="icons arrowNext inlBlk"></span>
+		</span>
+
+		<!-- Scrollable Content -->
+		<div id="singleTableFormat" class="inlBlk w100 rel" ng-class="{singleColumn: detailedContent.chartData.length == 1}">
+
+			<!-- Dates in the Table Header -->
+			<table>
+				<thead class="dates">
+				<tr>
+					<th><!-- Blank Space--></th>
+					<th ng-repeat="item in detailedContent.chartData | startAt:paginationDetails.currentPage*paginationDetails.pageSize : paginationDetails.pageSize | limitTo:paginationDetails.pageSize" ng-init="hotdateItem = isHotDate(item.date)" ng-class="{weekend: isWeekend(item.date), hotDateHighlightHorizontal: hotdateItem}" title="{{hotdateItem.description}}">
+						{{item.date | dateDDMMMYYYY:true}}
+					</th>
+				</tr>
+				</thead>
+			</table>
+
+			<!-- Main Scrollable Content -->
+			<div ma-page-size class="scrollableContent">
+				<table>
+					<tbody>
+							<tr ng-repeat="hoteldetail in detailedContent.competitorHotelDetails | orderBy: '-my_hotel'">
+
+								<td ng-class="{myHotel: hoteldetail.hotel_code===hotelCode}">
+									{{hoteldetail.hotel_name}}
+								</td>
+
+								<td class="cellValue closedValue" ng-repeat="item in detailedContent.chartData | startAt:paginationDetails.currentPage*paginationDetails.pageSize : paginationDetails.pageSize | limitTo:paginationDetails.pageSize">
+
+									{{item[hoteldetail.hotel_code].closedInChannelList.length == detailedContent.channelListLength ? 'ALL' : item[hoteldetail.hotel_code].clubbedChannelName}}
+
+								</td>
+							</tr>
+					</tbody>
+				</table>
+			</div>
+			<div class="clear"></div>
+		</div>
+		<div class="navigate center">
+			<span ng-repeat="dot in getDots() track by $index" ng-click="dotClicked($index)" ng-class="{active: $index==paginationDetails.currentPage}" class="inlBlk"></span>
+		</div>
+
+		<!-- LEGENDS at the bottom -->
+		<div class="expansionList rel" >
+			<div class="horScrollContent" horizontal-scroll >				
+				<ul class="fl">
+					<li ng-repeat="channel in detailedContent.channelList"><span class="fb14">{{channel.sname}}</span>{{channel.dname}}
+					</li>
+				</ul>
+			</div>
+			<div class="abs infoBg pointer fr center" ng-click="fadeToggle()"><span class="icons info inlBlk"></span></div>
+		</div>
+	</div>
+</section>
+
+
+
+

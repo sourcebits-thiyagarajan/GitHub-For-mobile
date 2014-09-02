@@ -1,0 +1,41 @@
+<section class="settingsCompliance" ng-controller="ComplianceSettingsCtrl">
+
+	<div class="complianceSettings rel">
+		<div class="spin"></div>
+		<p>Please enter the below compliance settings:</p>
+		<form class="settingsComplianceForm">
+			<ul>
+				<li>
+					<label class="inlBlk fb16">Reputation Score:</label>
+					<input type="number" placeholder="Enter text" required ng-model="complianceSetting.modelData.reputationScore" min="0" max="10" step="any"/>
+					<span class="notes f12 inlBlk">
+						Please consider our system supports rating system of 1-10, 10 being the maximum and 1 being the minimum
+					</span>
+				</li>
+				<li>
+					<label class="inlBlk fb16">Parity Ignore Range:</label>
+					<input class="inpPerc" type="number" required ng-model="complianceSetting.modelData.parityRange" min="0" max="100"/> <span class="f14">%</span>
+					<div class="rangeChk inlBlk">	
+						<input id="plus" type="checkbox" ng-model="complianceSetting.modelData.category.plus"/>
+						<label class="icheckbox noSelect" for="plus"></label>
+						<span class="checkLabel">Plus</span>
+					</div>
+					<div class="rangeChk inlBlk">	
+						<input id="minus" type="checkbox" ng-model="complianceSetting.modelData.category.minus"/>
+						<label class="icheckbox noSelect" for="minus"></label>
+						<span class="checkLabel">Minus</span>
+					</div>
+				</li>
+				<li>
+					<div class="rel fr pointer submit-btn fb14 center" ng-click="saveComplianceSettings($event)" ng-class="{blocked: discardChangesMade}">
+						<div class="spin"></div>
+						Save
+					</div>
+					<!-- <input class="fb14 fr pointer" type="submit" value="Save" ng-click="saveComplianceSettings()" /> -->
+				</li>
+			</ul>
+		</form>
+
+	</div>	
+	
+</section>

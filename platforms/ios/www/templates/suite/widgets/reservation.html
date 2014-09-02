@@ -1,0 +1,33 @@
+
+		<!-- Reservation Widget -->
+		<li id="reservation" class="rel pointer" ng-click="reservationSummary.hide || switchSuiteDashboardView('reservation-chart')" show-widget-spinner="{{reservationSummary==null}}" ng-class="{pointer: !reservationSummary.hide}">
+			<h3 class="fb18">Reservations</h3>
+			<div class="spin"></div>
+
+			<ol class="dataLists" ng-show="reservationSummary" ng-hide="reservationSummary.hide">
+				<li ng-repeat="widget in reservationSummary.sections" >
+					<h4>
+						{{widget.name}} 
+						<span class="fr">
+							<span ng-if="widget.this_year != 0">
+								{{widget.this_year | numberFormat: (widget.name == 'Rooms Sold' ? 0 : 2) | currencyCode: (widget.name == 'Rooms Sold' ? null : reservationSummary.currency)}}
+							</span>
+							<span class="gray" ng-if="widget.this_year == 0">N/A</span>
+						</span>
+					</h4>
+					<div class="{{widget.net_change}}">
+						<span class="icons arrowUpGreenLrg inlBlk" ng-class="{none: widget.last_year == 0}"></span>
+						<span class="green" ng-if="widget.last_year != 0">{{widget.percentage | numberFormat: 2}}%</span>
+						<span class="gray" ng-if="widget.last_year == 0">N/A</span>
+						<span class="gray fr">
+							<span ng-if="widget.last_year != 0">
+								{{widget.last_year | numberFormat: (widget.name == 'Rooms Sold' ? 0 : 2)| currencyCode: (widget.name == 'Rooms Sold' ? null : reservationSummary.currency)}}
+							</span>
+							<span ng-if="widget.last_year == 0">N/A</span>
+						</span>
+					</div>
+				</li>
+			</ol>
+
+			<h4 ng-show="reservationSummary.hide" class="noDataMsg center">No data available for the selected date range</h4>
+		</li>

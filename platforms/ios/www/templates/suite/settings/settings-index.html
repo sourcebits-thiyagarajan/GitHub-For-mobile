@@ -1,0 +1,35 @@
+
+<!-- Settings Landing Page -->
+<section ng-controller="SettingsIndexCtrl">
+	
+	<ul class="settingsList inlBlk">
+		<li class="pointer" ng-click="settingsView('budget')">
+			<span class="icons settings fl pointer"></span>
+			<span class="settingsListTitle fl">Budget Settings</span>
+		</li>
+		<li class="pointer" ng-click="settingsView('alerts')">
+			<span class="icons settings fl pointer"></span>
+			<span class="settingsListTitle fl">Alert Settings</span>
+		</li>
+		<li class="pointer" ng-click="settingsView('compliance')">
+			<span class="icons settings fl pointer"></span>
+			<span class="settingsListTitle fl">Compliance Settings</span>
+		</li>
+		<!-- <li class="pointer" ng-click="settingsView('email-notification')">
+			<span class="icons settings fl pointer"></span>
+			<span class="settingsListTitle fl">eMail Notification</span>
+		</li> -->
+		<li class="pointer" ng-click="settingsView('rate-availability')" ng-if="!isBlocked(WIDGETS.CLOSED_DATES) && !isBlocked(WIDGETS.MANAGE)">
+			<span class="icons settings fl pointer"></span>
+			<span class="settingsListTitle fl">Rate & Availability</span>
+		</li>
+		<li class="pointer" ng-click="settingsView('reservation-mapping')" ng-if="!isBlocked(WIDGETS.CLOSED_DATES) && !isBlocked(WIDGETS.MANAGE)">
+			<span class="icons settings fl pointer"></span>
+			<span class="settingsListTitle fl">Reservation Mapping</span>
+		</li>
+		<li class="pointer" ng-click="settingsView('hot-dates')">
+			<span class="icons settings fl pointer"></span>
+			<span class="settingsListTitle fl">Hot Dates</span>
+		</li>
+	</ul>
+</section>

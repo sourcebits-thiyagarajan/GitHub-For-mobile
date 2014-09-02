@@ -1,0 +1,17 @@
+		
+		<!-- Benchmark Widget -->
+		<li id="benchmarkSummary" class="rel" ng-click="benchmarkSummary.hide || switchSuiteDashboardView('market_analysis-rate_benchmark-chart')" ng-class="{pointer: !benchmarkSummary.hide}" show-widget-spinner="{{benchmarkSummary==null}}">
+
+			<h3 class="fb18 sml">Rate Benchmarking</h3>
+			<div class="spin"></div>
+
+			<ol class="barChart large ca-box tableCell" ng-hide="benchmarkSummary.hide">
+				<li ng-repeat="item in benchmarkSummary.data | orderBy: '-value'">
+					<span class="label">{{item.label}}</span>
+					<span class="bar" ng-class="{green: item.isMyHotel}" bar-chart="{{((item.value / benchmarkSummary.max)*100)}}" offset="50"></span>
+					<span class="chartValue">{{item.value | numberFormat: 2 | humanReadableNumber | currencyCode: benchmarkSummary.currency }}</span>
+				</li>
+			</ol>
+
+			<h4 ng-show="benchmarkSummary.hide" class="noDataMsg center">No data available for the selected date range</h4>
+		</li>

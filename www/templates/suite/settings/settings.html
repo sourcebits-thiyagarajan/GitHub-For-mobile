@@ -1,0 +1,55 @@
+
+<!-- Settings Landing Page -->
+<section class="settings" ng-controller="SettingsIndexCtrl">
+
+	<div id="settingsToolbar" class="clearfix">
+		<a class="toDashboard fl" ng-href="#/suite/dashboard/{{suiteHotelCode}}"><span class="sp fourSquare fl indent"></span></a>
+		<span class="toSettings fl pointer rel" sidepanel-toggle ><span class="icons settings fl indent"></span></span>
+
+		<h2 class="fl30" ng-show="navCrumbList">
+			<span ng-repeat="item in navCrumbList | limitTo: navCrumbList.length - 1"><a class="pointer navigationCrumb noSelect" href="{{item.url}}">{{item.name}} </a>&gt; </span> {{navCrumbList[navCrumbList.length - 1].name}}
+		</h2>
+	</div>
+	
+	<div class="clearfix" ui-view></div>
+
+	<!-- Suite Settings side panel -->
+	<div id="suiteSettingsSidePanel" class="suite-side-panel abs white f16 none" >
+
+			<h3 class="f24 hidden upper"><a ng-href="#/suite/{{suiteHotelCode}}/settings/index">Settings</a></h3>
+			<ul ng-click="hideSidePanel($event)">
+				<li>
+					<a ng-href="#/suite/{{suiteHotelCode}}/settings/budget">Budget</a>
+				</li>
+				<li>
+					<a ng-href="#/suite/{{suiteHotelCode}}/settings/compliance">Compliance</a>
+				</li>
+				<!-- <li> -->
+					<!-- <a ng-href="#/suite/{{suiteHotelCode}}/settings/email-notification">eMail Notification</a> -->
+				<!-- </li> -->
+				<li>
+					<a ng-href="#/suite/{{suiteHotelCode}}/settings/alerts">Alerts</a>
+				</li>
+				<li ng-if="!isBlocked(WIDGETS.CLOSED_DATES) && !isBlocked(WIDGETS.MANAGE)">
+					<a ng-href="#/suite/{{suiteHotelCode}}/settings/rate-availability">Rate & Availability</a>
+					<ol>
+						<li><a ng-href="#/suite/{{suiteHotelCode}}/settings/rate-availability/channel-information"> Channel Information </a></li>
+						<li><a ng-href="#/suite/{{suiteHotelCode}}/settings/rate-availability/create-room-type"> Create Room Type </a></li>
+						<li><a ng-href="#/suite/{{suiteHotelCode}}/settings/rate-availability/create-rate-plan"> Create Rate Plan </a></li>
+						<li><a ng-href="#/suite/{{suiteHotelCode}}/settings/rate-availability/create-room-type-rate-plan-mapping"> Room Type Rate Plan Mapping </a></li>
+						<!-- <li><a ng-href="#/suite/{{suiteHotelCode}}/settings/rate-availability/rms-room-type-mapping"> RMS Room Type Mapping </a></li> -->
+						<li><a ng-href="#/suite/{{suiteHotelCode}}/settings/rate-availability/channel-to-property-mapping"> Channel To Property Mapping </a></li>
+						<li><a ng-href="#/suite/{{suiteHotelCode}}/settings/rate-availability/channel-rate-weight-setup"> Channel Rate Weight Setup </a></li>
+						<li><a ng-href="#/suite/{{suiteHotelCode}}/settings/rate-availability/tax_commission_setup"> Tax & Commission Setup </a></li>
+					</ol>
+				</li>
+				<li ng-if="!isBlocked(WIDGETS.CLOSED_DATES) && !isBlocked(WIDGETS.MANAGE)">
+					<a ng-href="#/suite/{{suiteHotelCode}}/settings/reservation-mapping">Reservation Mapping</a>
+				</li>
+				<li>
+					<a ng-href="#/suite/{{suiteHotelCode}}/settings/hot-dates">Hot Dates</a>
+				</li>
+			</ul>
+	</div>
+
+</section>

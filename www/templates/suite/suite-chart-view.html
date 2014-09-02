@@ -1,0 +1,48 @@
+<!--pace page element-->
+<div class="fl clear paceOptions rel" ng-show="isPaceView">
+	<span class="f24 head">Booking Pace</span>
+
+		<div class="customSelect rel inlBlk">	
+		<div dropdown class="arrowWrapper inlBlk rel pointer noSelect">
+			{{paceRangeChanged.label}}
+		</div>
+		<ul class="ddmenu fb14 mLeft customSelectMenu w100 rel">
+			<li ng-click="paceRangeChanged(7)">7 Days Before Arrival</li>
+			<li ng-click="paceRangeChanged(14)">14 Days Before Arrival</li>
+		</ul>
+	</div>			
+</div>
+
+<div class="catgToolbar clearfix fb16">
+	<span class="caps inlBlk info" ng-show="pageName"></span>
+	<ul class="f14 fr suite-legends" ng-class="{notReservation: !isReservationView}">
+		<li class="{{item.tag}}" ng-class="{active: item.active == true}" ng-click="getLegends(item)" ng-repeat='item in legends'>
+			<div class="current"><span class="legends inlBlk rel"></span> {{item.name}}</div>
+			<div class="lastYear"><span class="legends inlBlk rel"></span> Last Year</div>
+		</li>
+	</ul>
+</div>
+
+<section class="chartDataWrap clearfix rel">
+	<div class="spin"></div>
+	<span class="no-data abs" ng-hide="isSpinnerShowing || detailedContent">No data available</span>
+	<div view-size id="chartContent" ng-show="isSpinnerShowing || detailedContent">
+		<!-- Chart goes here -->
+	</div>
+	<span class="slideNext inlBlk abs pointer" ng-click="paginateData(true)" ng-hide="currentSlide == 3 || !isReservationView" >
+		<span class="icons arrowNext inlBlk"></span>
+	</span>
+	<span class="slidePrev inlBlk abs pointer" ng-click="paginateData(false)" ng-hide="currentSlide == 1 || !isReservationView" >
+		<span class="icons arrowPrev inlBlk"></span>
+	</span>
+
+	<!--tab navigation for suite reservation -->
+	<ul class="center revenueGraphTab" ng-show="isReservationView">
+		<li class="inlBlk pointer fb14" ng-click="dotClicked(1)" ng-class="{active: currentSlide == 1}">Revenue</li>
+		<li class="inlBlk pointer fb14" ng-click="dotClicked(2)" ng-class="{active: currentSlide == 2}">Rooms Sold</li>
+		<li class="inlBlk pointer fb14" ng-click="dotClicked(3)" ng-class="{active: currentSlide == 3}">Channel Share</li>
+	</ul>
+</section>
+
+
+	

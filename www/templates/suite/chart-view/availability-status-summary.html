@@ -1,0 +1,92 @@
+
+<section class="chartDataWrap clearfix rel">
+	<div class="clearfix">
+		<ul class="statsBtn resSumDet fb14 hidden fr mb12">
+			<li ng-click="toggleView()" ng-class="{active: isMyHotel == true}">My Hotel</li>
+			<li ng-click="toggleView()" ng-class="{active: isMyHotel == false}">All Hotels</li>
+		</ul>
+	<div>
+	<div class="spin"></div>
+	<span class="no-data abs" ng-hide="isSpinnerShowing || detailedContent">No data available</span>
+	<div id="dataContent" class="center availabilityStatus" ng-show="detailedContent.chartData">
+
+		<!-- Left Slide pagination arrow -->
+		<span class="slidePrev inlBlk abs pointer noSelect" ng-click="paginateData(false)" ng-hide="paginationDetails.currentPage == 0">
+			<span class="icons arrowPrev inlBlk"></span>
+		</span>
+
+		<!-- Right Slide pagination arrow -->
+		<span class="slideNext inlBlk abs pointer noSelect" ng-click="paginateData(true)" ng-hide="paginationDetails.currentPage == paginationDetails.totalPages()-1 || paginationDetails.data.length == 0">
+			<span class="icons arrowNext inlBlk"></span>
+		</span>
+		<div class="pricePositionDataWrap inlBlk w100 rel" ng-show="isMyHotel">
+			<div id="singleTableFormat" ng-class="{singleColumn: detailedContent.chartData.length == 1}">
+				<table class="w100">
+					<!-- Dates in the Table Header -->
+					<thead class="dates w100">
+						<tr>
+							<th class="latoBold"></th>
+							<th ng-repeat="item in detailedContent.chartData | startAt:paginationDetails.currentPage*paginationDetails.pageSize : paginationDetails.pageSize | limitTo:paginationDetails.pageSize" ng-init="hotdateItem = isHotDate(item.date)" ng-class="{weekend: isWeekend(item.date), hotDateHighlightHorizontal: hotdateItem}" title="{{hotdateItem.description}}">
+								{{item.date | dateDDMMMYYYY:true}}
+							</th>
+						</tr>
+					</thead>
+				</table>
+				<!-- Main Scrollable Content -->
+				<div ma-page-size class="scrollableContent">
+					<table>
+						<tbody>
+								<tr ng-repeat="channel in detailedContent.myChannels">
+									<td>{{channel.dname}}</td>
+									<td ng-repeat="item in detailedContent.chartData | startAt:paginationDetails.currentPage*paginationDetails.pageSize : paginationDetails.pageSize | limitTo:paginationDetails.pageSize" ng-class="{weekend: isWeekend(item.date)}">
+										<span class="sp circle red cross inlBlk" ng-if="item.closed_channels[channel.dname]"></span>
+									</td>
+								</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<div class="pricePositionDataWrap inlBlk w100 rel" ng-hide="isMyHotel">
+
+			<div id="singleTableFormat">
+				<table class="w100">
+					<!-- Dates in the Table Header -->
+					<thead class="dates w100">
+						<tr>
+							<th class="latoBold"></th>
+							<th ng-repeat="item in detailedContent.chartData | startAt:paginationDetails.currentPage*paginationDetails.pageSize : paginationDetails.pageSize | limitTo:paginationDetails.pageSize" ng-init="hotdateItem = isHotDate(item.date)" ng-class="{weekend: isWeekend(item.date), hotDateHighlightHorizontal: hotdateItem}" title="{{hotdateItem.description}}">
+								{{item.date | dateDDMMMYYYY:true}}
+							</th>
+						</tr>
+					</thead>
+				</table>
+				<!-- Main Scrollable Content -->
+				<div ma-page-size class="scrollableContent">
+					<table>
+						<tbody>
+								<tr ng-repeat="hotel in detailedContent.competitorHotelDetails">
+									<td ng-class="{myHotel: hotel.hotel_code === hotelCode}">{{hotel.hotel_name}}</td>
+									<td ng-repeat="item in detailedContent.chartData | startAt:paginationDetails.currentPage*paginationDetails.pageSize : paginationDetails.pageSize | limitTo:paginationDetails.pageSize" ng-class="{weekend: isWeekend(item.date)}">
+										<span class="sp circle red cross inlBlk" ng-if="item.closed_hotels[hotel.hotel_name]"></span>
+									</td>
+								</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<div class="navigate center" ng-show="detailedContent.chartData">
+			<span ng-repeat="dot in getDots() track by $index" ng-click="dotClicked($index)" ng-class="{active: $index==paginationDetails.currentPage}" class="inlBlk"></span>
+		</div>
+		
+	</div>	
+</section>
+
+
+
+

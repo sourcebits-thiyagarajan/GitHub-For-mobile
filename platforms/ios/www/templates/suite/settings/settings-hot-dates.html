@@ -1,0 +1,53 @@
+<section class="hotDates rel" ng-controller="HotDatesCtrl">
+	<div class="spin"></div>
+	<table class="tabularData" ng-show="noData || hotDates">
+		<tr class="thead">
+			<td class="cell" width="15%">Date From</td>
+			<td class="cell" width="15%">Date To</td>
+			<td class="cell" width="60%">Event Name / Description</td>
+			<td class="cell" width="10%">Delete</td>
+		</tr>
+	</table>
+	<div class="noData center f14" ng-show="noData">No hot dates created, click on add to create one.</div>
+
+	<!-- Scrollable Content -->
+	<div class="scrollable" ng-show="hotDates">
+		<form name="hotDatesForm">
+			<table class="tabularData">
+				<tr ng-repeat="hotDate in hotDates track by $index">
+					<td width="15%" class="cell">
+						<label for="_from" class="input rel hack" ng-click="showDatePicker($event)" ng-class="{invalid: hotDate.from_date_valid === false}">{{hotDate.from_date | dateDDMMMYYYY}}</label>
+						<input id="_from" type="hidden" ng-model="hotDate.from_date" value="{{hotDate.from_date}}" readonly="true" />
+						<div class="settingsPicker abs none" date-picker set-date="hotDate.from_date" ng-model="hotDate.from_date" min-date="currentDate"></div>
+						<span class="inlBlk icons cal month pointer dark" ng-click="showDatePicker($event)"></span>
+					</td>
+					<td width="15%" class="cell" ng-class="{invalid: hotDate.to_date_invalid}">
+						<label for="_to" class="input rel hack" ng-click="showDatePicker($event)" ng-class="{invalid: hotDate.to_date_valid === false}">{{hotDate.to_date | dateDDMMMYYYY}}</label>
+						<input id="_to" type="hidden" ng-model="hotDate.to_date" value="{{hotDate.to_date}}" readonly="true" />
+						<div class="settingsPicker abs none" date-picker set-date="hotDate.to_date" ng-model="hotDate.to_date" min-date="hotDate.from_date"></div>
+						<span class="inlBlk icons cal month pointer dark" ng-click="showDatePicker($event)"></span>
+					</td>
+					<td width="60%" class="cell">
+						<input type="text" ng-model="hotDate.description" ng-required="true" />
+					</td>
+					<td width="10%" class="cell">
+						<span class="inlBlk pointer icons thrash" ng-click="removeHotDate(hotDate, $index)"></span>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<div class="blk addRow noSelect clearfix" ng-show="noData || contentLoading || hotDates">
+		<span class="fl"><span class="inlBlk center plus pointer" ng-click="addHotDate()">+</span>Add Hot Date</span>
+		<div class="inlBlk fr">
+			<div class="rel fr pointer submit-btn fb14 center" ng-click="saveHotDates()" ng-class="{blocked: !isUpdatePossible}">
+				<div class="spin"></div>
+				Save
+			</div>
+		</div>
+	</div>
+</section>
+
+
+

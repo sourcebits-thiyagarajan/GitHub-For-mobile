@@ -1,0 +1,71 @@
+
+<div class="quickClose" ng-controller="QuickCloseCtrl">
+
+	<div class="clearfix mb12">
+		<h2 class="fl30 fl caps" ng-show="navCrumbList">
+			<span ng-repeat="item in navCrumbList | limitTo: navCrumbList.length - 1"><a class="pointer navigationCrumb noSelect" href="{{item.url}}">{{item.name}} </a>&gt; </span> {{navCrumbList[navCrumbList.length - 1].name}}
+		</h2>
+
+		<div class="fr inlBlk" ng-hide="closedDateDetails && closedDateDetails.hide">
+			<ul class="fr statsBtn">
+				<li class="btn fr fb14 pointer rel" ng-click="switchSuiteDashboardView('manage_rates')">Manage Rates</li>
+			</ul>
+			<div id="quickCloseDropdown" class="customSelect rel inlBlk">
+				<div dropdown class="w100 arrowWrapper inlBlk rel pointer noSelect">
+					<div class="rangeChk inlBlk noSelect" ng-click="checkAllSites()">
+						<input id="{{closedDateDetails.allSiteChecked.id}}" type="checkbox" ng-model="closedDateDetails.allSiteChecked.checked" checked="{{allSiteChecked.checked}}"/>
+						<label class="icheckbox noSelect" for="{{closedDateDetails.allSiteChecked.id}}"></label>
+						<span class="checkLabel">{{closedDateDetails.allSiteChecked.showText}}</span>
+					</div>
+					<span class="arrowSection">
+					</span>
+				</div>
+				<ul class="ddmenu fb14 mLeft customSelectMenu w100 rel">
+					<li class="noSelect" ng-repeat="site in closedDateDetails.availableSites track by $index" ng-click="siteClick(site)">
+						<div class="rangeChk">
+							<input id="{{site.dcode}}" type="checkbox" ng-model="site.checked" checked="{{site.checked}}"/>
+							<label class="icheckbox noSelect" for={{site.dcode}}></label>
+							<span class="checkLabel inlBlk ellipsisText" title="{{site.dname}}">{{site.dname}}</span>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	<div class="quick-close">
+		<div class="spin"></div>
+		<h4 class="noDataMsg center white mt15" ng-show="closedDateDetails && closedDateDetails.hide == 'err'">Date selection invalid. Reselect dates.</h4>
+
+
+		<div>
+			<div quick-close-pagination>
+				<ul class="months clearfix" ng-hide="closedDateDetails && closedDateDetails.hide">
+					<li class="calendar" ng-repeat="item in paginationDetails.data | startFrom:paginationDetails.currentPage*paginationDetails.pageSize | limitTo:paginationDetails.pageSize track by item"  full-calendar month-index="{{item}}"></li>
+				</ul>
+				
+				<div ng-show="getDots().length > 1">
+					<span class="slideBtn slideNext inlBlk abs pointer" ng-click="paginateData(true)" ng-class="{blocked: paginationDetails.currentPage == paginationDetails.totalPages()-1}">
+						<span class="icons arrowNext inlBlk"></span>
+					</span>
+					<span class="slideBtn slidePrev inlBlk abs pointer" ng-click="paginateData(false)" ng-class="{blocked: paginationDetails.currentPage == 0}">
+						<span class="icons arrowPrev inlBlk"></span>
+					</span>	
+				</div>
+
+				<div class="chartDataView" ng-hide="getDots().length <= 1">
+					<div class="navigate center">
+						<span ng-repeat="dot in getDots() track by $index" ng-click="dotClicked($index)" ng-class="{active: $index==paginationDetails.currentPage}" class="inlBlk"></span>
+					</div>
+				</div>
+
+			</div>
+			
+			<div class="legends" ng-hide="closedDateDetails && closedDateDetails.hide">
+				<span class="inlBlk rel red cross"></span><span class="inlBlk text">All room types are closed on all channels</span>
+				<span class="inlBlk rel orange cross"></span><span class="inlBlk text">All room types are closed on selected channels</span>
+
+				<span id="updateButton" class="btn fr fb14 pointer Update rel" ng-class="{blocked: discardChangesMade}" ng-click="updateCloseDetails($event)"><div class="spin"></div>Update</span>
+			</div>
+		</div>
+	</div>
+</div>

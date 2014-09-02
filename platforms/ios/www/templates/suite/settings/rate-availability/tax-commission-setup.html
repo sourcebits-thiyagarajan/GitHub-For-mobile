@@ -1,0 +1,104 @@
+
+<h3 class="setHdr">Tax &amp; Commission Setup</h3>
+
+<section class="taxCommissionSetup" ng-controller="TaxCommissionSetupCtrl" >
+	<div class="taxCommission spin"></div>
+
+	<span class="no-data abs" ng-show="channelTaxCommissionDetails.hasLoaded && (!channelTaxCommissionDetails.channelTaxCommission || !channelTaxCommissionDetails.channelTaxCommission.length)">No data available</span>
+
+
+	<div ng-show="channelTaxCommissionDetails.hasLoaded && channelTaxCommissionDetails.channelTaxCommission && channelTaxCommissionDetails.channelTaxCommission.length" page-double-scroll>
+		<table class="tabularData">
+			<tr class="thead">
+				<td width="20%">Channel</td>
+				<td width="20%">Commission</td>
+				<td width="20%">Tax 1</td>
+				<td width="20%">Tax 2</td>
+				<td width="20%">Tax 3</td>
+			</tr>
+		</table>
+
+		<!-- Scrollable Content -->
+		<form class="rel" name="taxCommissionSetUp">
+			<div class="scrollable main-content">
+					<table class="tabularData">
+						<tr ng-repeat="item in channelTaxCommissionDetails.channelTaxCommission track by $index">
+							<td width="20%">{{item.dname}}</td>
+							<td width="20%">
+								<input type="text" class="wMedium textAlignRight" ng-model="item.commission" value="{{item.commission}}" ng-pattern="validator.number" />
+								<span class="inlBlk center f12 weight pointer" toggle-text="item.commission_is_percentage" ng-model="item.commission_is_percentage">.00</span>
+							</td>
+							<td width="20%" ng-repeat="taxItem in item.tax | limitTo: 3 track by $index">
+								<input type="text" class="wMedium textAlignRight"  ng-model="taxItem.value" ng-pattern="validator.number" value="{{taxItem.value}}"/>
+								<span class="inlBlk center f12 weight pointer" toggle-text="taxItem.is_percentage" ng-model="taxItem.is_percentage">.00</span>
+							</td>
+						</tr>
+					</table>
+			</div>
+			<div class="blk addRow noSelect clearfix">
+				<div class="rel fr pointer submit-btn fb14 center" ng-click="saveTaxCommissionChanges($event)" ng-class="{blocked: !channelTaxCommissionDetails.channelTaxCommission || !channelTaxCommissionDetails.channelTaxCommission.length || !taxCommissionSetUp.$valid || discardChangesMade}">
+					<div class="spin"></div>
+					Save
+				</div>
+				<div class="rel fr pointer submit-btn fb14 center" ng-class="{blocked: !channelTaxCommissionDetails.originalData.channelTaxCommission || !channelTaxCommissionDetails.originalData.channelTaxCommission.length}" show-daterange-popup create-daterange="true">
+					<div class="spin"></div>
+					Add Date Range
+				</div>
+			</div>
+		</form>
+
+		<div class="tableOptions inlBlk w100">
+			<div class="blk f14">
+				<p>To add tax or commission before sending rate to a website, please provide the value/ % for the same. Provide the value / % in negative if you want to deduct.</p>
+			</div>
+			<div class="dateRangeAddContainer scrollable secondary-content">
+				<div class="dateRangeAdded" ng-repeat= "dateRangeItem in channelTaxCommissionDetails.dateRanges track by $index">
+					<label class="inlBlk rel f14">Date Range Added</label>
+					<span class="currentDateRange f14">From: {{dateRangeItem.from_date | dateDDMMMYYYY }} To: {{dateRangeItem.to_date | dateDDMMMYYYY }}</span>
+
+					<span class="rel inlBlk fr pointer icons thrash small" ng-click="deleteDateRange(dateRangeItem, $event)"></span>
+					<span class="inlBlk fr pointer icons editDateRange" show-daterange-popup edit-daterange="{{dateRangeItem}}"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+
+
+		<!-- ***************** Date range Popup Tabular Layout hidden in the page always. ******************* -->
+		<div id="dateRangeLayout" class="none">
+			<textarea unbind-scope>
+				<table class="tabularData">
+					<tr class="thead">
+						<td width="20%">Channel</td>
+						<td width="20%">Commission</td>
+						<td width="20%">Tax 1</td>
+						<td width="20%">Tax 2</td>
+						<td width="20%">Tax 3</td>
+					</tr>
+				</table>
+			</textarea>
+
+			<textarea unbind-scope>
+				<form name="updateForm" class="taxCommissionSetupUpdateForm">
+					<table class="tabularData">
+						<tr ng-repeat="item in dateRangePoupContent.tabularContent track by $index">
+
+							<td width="20%"><input type="text" class="wMedium channelNameUpdateCls" ng-model="item.dname" value="{{item.dname}}" disabled/></td>
+
+							<td width="20%">
+								<input type="text" class="wMedium textAlignRight" ng-model="item.commission" ng-pattern="validator.number" value="{{item.commission}}" />
+								<span class="inlBlk center f12 weight pointer" toggle-text="item.commission_is_percentage" ng-model="item.commission_is_percentage">%</span>
+							</td>
+							<td width="20%" ng-repeat="taxItem in item.tax | limitTo: 3 track by $index">
+								<input type="text" class="wMedium textAlignRight"  ng-model="taxItem.value" ng-pattern="validator.number" value="{{taxItem.value}}"/>
+								<span class="inlBlk center f12 weight pointer" toggle-text="taxItem.is_percentage" ng-model="taxItem.is_percentage">%</span>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</textarea>
+
+		</div>
+</section>

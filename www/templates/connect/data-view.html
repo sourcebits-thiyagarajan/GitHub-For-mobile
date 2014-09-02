@@ -1,0 +1,63 @@
+
+<div class="catgToolbar clearfix fb16">
+	<span class="caps" ng-show="navCrumbList">{{navCrumbList[0].name}} {{navCrumbList[0].hotelCount | hotelCount}}, {{navCrumbList[navCrumbList.length - 1].name}} {{navCrumbList[navCrumbList.length - 1].hotelCount | hotelCount}}</span>
+</div>
+
+<section class="chartDataWrap clearfix rel">
+	<div class="spin"></div>
+	<div view-size id="dataContent" class="center">
+		<table>
+			<thead>
+				<tr>
+					<th class="empty">&nbsp;</th>
+					<th colspan="2">Revenue <span>({{currencyCodeFromAPI}})</span></th>
+					<th colspan="2">Room Night Sold</th>
+					<th colspan="2">Average Rate</th>
+					<th colspan="2">Market Index</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr class="dataLabel pointer">
+					<td ng-click="reverse=!reverse; sortTable(reverse, 'date')">Date</td>
+
+					<td ng-click="reverse=!reverse; sortTable(reverse, 'daily_revenue', 'this_year')">Current Year</td>
+					<td ng-click="reverse=!reverse; sortTable(reverse, 'daily_revenue', 'last_year')">Last Year</td>
+
+					<td ng-click="reverse=!reverse; sortTable(reverse, 'rooms_sold',    'this_year')">Current Year</td>
+					<td ng-click="reverse=!reverse; sortTable(reverse, 'rooms_sold',    'last_year')">Last Year</td>						
+					
+					<td ng-click="reverse=!reverse; sortTable(reverse, 'average_rate',  'this_year')">Current Year</td>
+					<td ng-click="reverse=!reverse; sortTable(reverse, 'average_rate',  'last_year')">Last Year</td>
+					
+					<td ng-click="reverse=!reverse; sortTable(reverse, 'market_average_rate', 'this_year')">Current Year</td>
+					<td ng-click="reverse=!reverse; sortTable(reverse, 'market_average_rate', 'last_year')">Last Year</td>
+				</tr>
+				<tr ng-repeat="item in paginationDetails.data | startFrom:paginationDetails.currentPage*paginationDetails.pageSize | limitTo:paginationDetails.pageSize">
+					<td>{{item.date | dateDDMMMYYYY}}</td>
+					<td>{{item.daily_revenue.this_year | number:2}}</td>
+					<td>{{item.daily_revenue.last_year | number:2}}</td>
+					<td>{{item.rooms_sold.this_year}}</td>
+					<td>{{item.rooms_sold.last_year}}</td>
+					<td>{{item.average_rate.this_year | number:2}}</td>
+					<td>{{item.average_rate.last_year | number:2}}</td>
+					<td>{{item.market_average_rate.this_year | number:2}}</td>
+					<td>{{item.market_average_rate.last_year | number:2}}</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="navigate center">
+			<span ng-repeat="dot in getDots() track by $index" ng-click="dotClicked($index)" ng-class="{active: $index==paginationDetails.currentPage}" class="inlBlk"></span>
+		</div>
+		
+	</div>
+
+	<span class="slideNext inlBlk abs pointer" ng-hide="paginationDetails.currentPage == paginationDetails.totalPages()-1" ng-click="paginateData(true)">
+		<span class="icons arrowNext inlBlk"></span>
+	</span>
+	<span class="slidePrev inlBlk abs pointer" ng-hide="paginationDetails.currentPage == 0" ng-click="paginateData(false)">
+		<span class="icons arrowPrev inlBlk"></span>
+	</span>
+</section>
+
+

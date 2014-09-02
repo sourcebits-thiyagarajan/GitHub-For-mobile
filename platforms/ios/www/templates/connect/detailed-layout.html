@@ -1,0 +1,20 @@
+
+<div class="chartDataView" ng-controller="ChartDataDetailedCtrl">
+	
+	<div class="clearfix">
+		<h2 class="fl30 fl caps" ng-show="navCrumbList">
+			<span class="pointer" ng-repeat="item in navCrumbList" ng-click="crumbItemClicked(item)">{{item.name | appendArrow : $index < navCrumbList.length - 1}}</span>
+			<span ng-hide="currentLevelDetail.reference.type == 'Hotel'">({{currentLevelDetail.reference.hotelCount | hotelCount}})</span>
+		</h2>
+		<div class="fr">
+			<span ng-click="exportToPdf()" class="exportDoc fl pointer"><span class="icons newdoc inlBlk"></span></span>
+			<ul class="statsBtn fb14 hidden fl">
+				<li ng-click="toggleChartView('chart')" ng-class="{active: isGraphView}">Graph View</li>
+				<li ng-click="toggleChartView('data')"  ng-class="{active: !isGraphView}">Data View</li>
+			</ul>
+		</div>
+	</div>
+
+	<div ui-view></div>
+		
+</div>

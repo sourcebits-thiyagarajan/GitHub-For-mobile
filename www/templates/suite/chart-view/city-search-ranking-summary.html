@@ -1,0 +1,81 @@
+
+<section class="chartDataWrap clearfix rel">
+
+	<div class="clearfix" ng-show="detailedContent.chartData">
+		<ul class="statsBtn fb14 hidden fr mb12 suite-legends">
+			<li ng-class="{active: show_in_first_page}" ng-click="toggleFirstPage(true)">On First Page</li>
+			<li ng-class="{active: show_not_in_first_page}" ng-click="toggleFirstPage(false)">Not in First Page</li>
+		</ul>
+
+		<div class="switchShowPosition fr">
+			<div on-off-switch="showLocation" switch-label="Show Position"></div>
+		</div>
+	</div>
+
+	<div class="spin"></div>
+	<span class="no-data abs" ng-hide="isSpinnerShowing || detailedContent">No data available</span>
+	<div id="dataContent" class="center">
+		
+
+		<!-- Left Slide pagination arrow -->
+		<span class="slidePrev inlBlk abs pointer noSelect" ng-click="paginateData(false)" ng-hide="paginationDetails.currentPage == 0">
+			<span class="icons arrowPrev inlBlk"></span>
+		</span>
+
+		<!-- Right Slide pagination arrow -->
+		<span class="slideNext inlBlk abs pointer noSelect" ng-click="paginateData(true)" ng-hide="paginationDetails.currentPage == paginationDetails.totalPages()-1 || paginationDetails.data.length == 0">
+			<span class="icons arrowNext inlBlk"></span>
+		</span>
+
+		<div class="inlBlk w100 rel" ng-show="detailedContent.chartData">
+
+			<div id="singleTableFormat" class="medium" ng-class="{singleColumn: detailedContent.chartData.length == 1}">
+				<table class="w100">
+					<!-- Dates in the Table Header -->
+					<thead class="dates w100">
+						<tr>
+							<th class="latoBold"></th>
+							<th ng-repeat="item in detailedContent.chartData | startAt:paginationDetails.currentPage*paginationDetails.pageSize : paginationDetails.pageSize | limitTo:paginationDetails.pageSize" ng-init="hotdateItem = isHotDate(item.date)" ng-class="{weekend: isWeekend(item.date), hotDateHighlightHorizontal: hotdateItem}" title="{{hotdateItem.description}}">
+								{{item.date | dateDDMMMYYYY:true}}
+							</th>
+						</tr>
+					</thead>
+				</table>
+				<!-- Main Scrollable Content -->
+				<div ma-page-size class="scrollableContent">
+					<table>
+						<tbody>
+								<tr ng-repeat="channelDetail in detailedContent.pageRankChannelList">
+
+									<td>
+										{{channelDetail.dname}} ({{channelDetail.hotel_per_page}})
+									</td>
+
+									<td class="cellValue" ng-repeat="dateWiseItem in detailedContent.chartData | startAt:paginationDetails.currentPage*paginationDetails.pageSize : paginationDetails.pageSize | limitTo:paginationDetails.pageSize">
+										<span class="blk rel" ng-if="dateWiseItem[channelDetail.dcode] && dateWiseItem[channelDetail.dcode].length" ng-show="showPageNumber(dateWiseItem[channelDetail.dcode][0].page_no)">
+											<span class="inlBlk sp circle" ng-class="{green: dateWiseItem[channelDetail.dcode][0].page_no == '1', 'red': dateWiseItem[channelDetail.dcode][0].page_no != '1',  'cross': dateWiseItem[channelDetail.dcode][0].page_no == 'X'}"> 
+												<span ng-if="dateWiseItem[channelDetail.dcode][0].page_no != 'X'">{{dateWiseItem[channelDetail.dcode][0].page_no}}</span>
+											</span>
+											<span class="abs chLocation" ng-show="showLocation"> 
+												{{dateWiseItem[channelDetail.dcode][0].location}} 
+											</span>
+										</span>
+										<div ng-if="!dateWiseItem[channelDetail.dcode] || !dateWiseItem[channelDetail.dcode].length" ng-show="!showPageNumber(dateWiseItem[channelDetail.dcode][0].page_no)">
+											-
+										</div>
+									</td>
+								</tr>
+						</tbody>
+					</table>
+				</div>
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<div class="navigate center" ng-show="detailedContent.chartData">
+			<span ng-repeat="dot in getDots() track by $index" ng-click="dotClicked($index)" ng-class="{active: $index==paginationDetails.currentPage}" class="inlBlk"></span>
+		</div>
+		
+	</div>
+</section>
+

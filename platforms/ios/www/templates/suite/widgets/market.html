@@ -1,0 +1,23 @@
+
+		<!-- Market Widget -->
+		<li id="market" class="rel pointer" ng-click="marketSummary.hide || switchSuiteDashboardView('market-chart')" show-widget-spinner="{{marketSummary==null}}" ng-class="{pointer: !marketSummary.hide}">
+			
+			<h3 class="fb18">Market</h3>
+			<div class="spin"></div>
+
+			<ol class="dataLists market" ng-show="marketSummary" ng-hide="marketSummary.hide">
+				<li>
+					<span class="label">City Average</span>
+					<span class="value f24">{{marketSummary.market_average | currencyCode:marketSummary.currency}}</span>
+				</li>
+				<li>
+					<span class="label">Reserved</span>
+					<div class="circularChart fr rel">
+						<input type="text" value="{{marketSummary.market_reserved}}" circular-chart bg-color="#10538a" fg-color="#5fbbff"/>
+					</div>
+				</li>
+			</ol>
+
+			<h4 ng-show="marketSummary.hide" class="noDataMsg center">No data available for the selected date range</h4>
+		</li>
+		

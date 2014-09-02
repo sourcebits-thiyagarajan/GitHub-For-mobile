@@ -1,0 +1,133 @@
+<section class="lar rel" id="exportPdf" class="noData">
+	<div class="spin"></div>
+
+	<div >
+	<!-- Wrapper -->
+	<div ng-show="detailedContent" ng-controller="CitySearchRankingCtrl">
+		<!-- Chart View -->
+		<div class="chartDataView">
+			<header class="pdf-header clearfix">
+				<img src="../images/erevmax-logo.png" class="logo" />
+				<div class="details">
+					<h1 class="fb24">{{hotelDetail.name}}, {{hotelDetail.city}}, {{hotelDetail.country}}</h1>
+					<span>
+						{{currentDate}}
+					</span>
+				</div>		
+			</header>
+			<div class="sub-details">
+				<div class="item clearfix fb16">
+					<span class="tag fl">Regions:</span>
+					<span class="value fl">{{hotelDetail.city}}, {{hotelDetail.country}}</span>
+				</div>
+				<div class="item clearfix fb16">
+					<span class="tag fl">Date Range:</span>
+					<span class="value fl">{{currentFilterDetails.startDate}} to {{currentFilterDetails.endDate}}</span>
+				</div>
+				<div class="item legends clearfix fb16 pageRankingLegends">
+					<span class="tag fl">Legends:</span>
+					<div class="value fl">
+						<ul class="f14 fl">
+							<li class="pointer" ng-class="{active: show_in_first_page}" ng-click="toggleFirstPage(true)">On First Page</li>
+							<li class="pointer" ng-class="{active: show_not_in_first_page}" ng-click="toggleFirstPage(false)">Not in First Page</li>
+						</ul>
+
+						<div class="switchShowPosition fr">
+							<div on-off-switch="showLocation" switch-label="Show Position"></div>
+						</div>
+					</div>
+
+					
+				</div>
+			</div>
+
+			<!-- Summary Report -->
+			<h1 class="fb24 catHead">Summary Report - City Search Ranking</h1>
+			<div class="spin"></div>
+			<span class="no-data abs" ng-hide="isSpinnerShowing || detailedContent">No data available</span>
+
+			<div class="chartDataWrap">
+				<div id="dataContent" class="center">
+					<div class="inlBlk w100 rel" ng-show="detailedContent.chartData">
+						<div class="pageRankingDataWrap">
+							<!-- Main Scrollable Content -->
+							<table class="w100 summaryReport">
+								<thead class="dates w100">
+									<tr>
+										<th width="120" class="latoBold"></th>
+										<th ng-repeat="channelDetail in detailedContent.pageRankChannelList">
+											{{channelDetail.dname}} ({{channelDetail.hotel_per_page}})
+										</th>
+									</tr>
+								</thead>
+								<tbody>
+										<tr ng-repeat="dateWiseItem in detailedContent.chartData">
+
+											<td width="120" class="medium" ng-class="{hotDateHighlightVertical: isHotDate(dateWiseItem.date)}">
+												{{dateWiseItem.date | dateDDMMMYYYY:true}}
+											</td>
+
+											<td class="cellValue medium" ng-repeat="channelDetail in detailedContent.pageRankChannelList">
+												<span class="blk rel" ng-if="dateWiseItem[channelDetail.dcode] && dateWiseItem[channelDetail.dcode].length" ng-show="showPageNumber(dateWiseItem[channelDetail.dcode][0].page_no)">
+													<span class="inlBlk sp circle" ng-class="{green: dateWiseItem[channelDetail.dcode][0].page_no == '1', red: dateWiseItem[channelDetail.dcode][0].page_no != '1'}"> 
+														{{dateWiseItem[channelDetail.dcode][0].page_no}}
+													</span>
+													<span class="abs chLocation" ng-show="showLocation"> 
+														{{dateWiseItem[channelDetail.dcode][0].location}}
+													</span>
+												</span>
+												<!-- <div ng-if="!dateWiseItem[channelDetail.dcode] || !dateWiseItem[channelDetail.dcode].length" ng-show="!showPageNumber(dateWiseItem[channelDetail.dcode][0].page_no)">
+													-
+												</div> -->
+											</td>
+										</tr>
+								</tbody>
+							</table>
+						</div>
+						<div class="clear"></div>
+					</div>
+
+				<h1 class="fb24 catHead">Detail Report - City Search Ranking</h1>
+				<div class="spin"></div>
+				<span class="no-data abs" ng-hide="isSpinnerShowing || detailedContent">No data available</span>
+
+				<div id="dataContent" class="center" ng-show="isSpinnerShowing || paginationDetails.data" ng-controller="SuiteDataViewCtrl">
+					<!-- Scrollable Content -->
+					<div class="pageRankingDataWrap inlBlk w100 rel">
+						<!-- Hotel names on the LHS -->
+						<div class="pageRankingDataLabel fl">
+							<ul>
+								<li>Channels</li>
+								<li ng-repeat="date in detailedContent.dates" ng-class="{hotDateHighlightVertical: isHotDate(date)}"><span class="tableCell">{{date | dateDDMMMYYYY:true}}</span></li>
+							</ul>
+						</div>
+
+						<!-- Actual Table -->
+						<div class="pageRankingData fl rel">
+							<table class="w100">
+								<thead>
+									<tr>
+										<th colspan="2" ng-repeat="channel in detailedContent.pageRankChannelList">{{channel.dname}} ({{channel.hotel_per_page}})</th>
+									</tr>
+									<tr class="pagPos">
+										<td ng-repeat-start="date in detailedContent.dates | startFrom:paginationDetails.currentPage*paginationDetails.pageSize | limitTo:detailedContent.pageRankChannelList.length">Page
+										</td>
+										<td ng-repeat-end>Position</td>
+									</tr>
+								</thead>
+								<tbody>
+									<tr ng-repeat="date in detailedContent.dates">
+										
+										<td ng-repeat-start="channel in detailedContent.pageRankChannelList">{{detailedContent.dataView[channel.dname][date].page}}</td>
+										<td ng-repeat-end>{{detailedContent.dataView[channel.dname][date].position}}</td>
+									</tr>
+								</tbody>
+							</table>			
+						</div>
+						<div class="clear"></div>
+					</div>
+				</div>
+
+			</div>
+	</div>
+</section>

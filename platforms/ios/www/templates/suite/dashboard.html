@@ -1,0 +1,29 @@
+
+<section class="dashBoardSuite" ng-controller="DashboardSuiteCtrl">
+	
+	<h2 class="fl30">Dashboard</h2>
+	<div class="spin"></div>
+
+	<ul class="f14 clearfix" id="sortable" suite-pagination re-order>
+
+		<li class="widgetWrapper pointer"  ng-repeat="widgetItem in widgetList" widgetId="{{widgetItem.id}}" ng-include src="widgetItem.widgetHTMLFilePath">
+		</li>
+
+	</ul>
+	
+	<!-- Next -->
+	<span class="slideBtn slideNext inlBlk abs pointer noSelect suiteMainPagArrows" ng-click="paginateSuiteDashboard(true)" ng-hide="!suitePagination.maxPages || (suitePagination.maxPages == suitePagination.currentPage)">
+		<span class="icons arrowNext inlBlk"></span>
+	</span>
+	<!-- Prev -->
+	<span class="slideBtn slidePrev inlBlk abs pointer noSelect suiteMainPagArrows" ng-click="paginateSuiteDashboard(false)" ng-hide="suitePagination.currentPage == 1">
+		<span class="icons arrowPrev inlBlk"></span>
+	</span>	
+
+	<!-- Hiding the dots permanently as of now -->
+	<!-- <div class="chartDataView" ng-hide="getDots().length <= 1">
+		<div class="navigate center">
+			<span ng-repeat="dot in getDots() track by $index" ng-click="dotClicked($index)" ng-class="{active: ($index + 1) == suitePagination.currentPage}" class="inlBlk"></span>
+		</div>
+	</div> -->
+</section>

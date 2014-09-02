@@ -1,0 +1,18 @@
+		<!-- Competition Analysis Widget -->
+		<li id="compAnalysis" class="rel pointer" ng-click="compSummaryDetail.hide || switchSuiteDashboardView('market_analysis')" show-widget-spinner="{{compSummaryDetail==null}}" ng-class="{pointer: !compSummaryDetail.hide}">
+
+			<h3 class="fb18 sml">Market Analysis</h3>
+			<div class="spin"></div>
+
+			<ol class="barChart valRight suite-box tableCell" ng-hide="compSummaryDetail.hide">
+				<li ng-repeat="item in compSummaryDetail.hotelCompList | limitTo: 7">
+					<span class="label" title="{{item.hotel_name}}">{{item.hotel_name}}</span>
+					<span class="bar" bar-chart="{{(item.average_rate / maxAvg) * 100}}" offset="20" ng-class="{green: item.hotel_code == suiteHotelCode}"></span>
+					<span class="chartValue">{{item.average_rate | numberFormat: 2 | humanReadableNumber | currencyCode: compSummaryDetail.currency}}</span>
+				</li>
+			</ol>
+
+			<h4 ng-show="compSummaryDetail.hide" class="noDataMsg center">No data available for the selected date range</h4>
+		</li>
+
+		

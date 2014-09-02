@@ -1,0 +1,44 @@
+
+		<!-- Budget Widget -->
+		<li id="budget" class="rel pointer" ng-click="budgetSummary.hide || switchSuiteDashboardView('budget-chart')" show-widget-spinner="{{budgetSummary==null}}" ng-class="{pointer: !budgetSummary.hide}">
+			
+			<h3 class="fb18">Budget</h3>
+			<div class="spin"></div>
+
+			<ol class="barChart small" ng-show="budgetSummary" ng-hide="budgetSummary.hide">
+				<li>
+					<span class="label" title="Budgeted Rooms">Budgeted Rooms</span>
+					<span class="bar" bar-chart="{{(budgetSummary.budgeted_rooms / budgetSummary.maxRooms) * 100}}" offset="20"></span>
+					<span class="chartValue">{{budgetSummary.budgeted_rooms | numberFormat: 0}}</span>
+				</li>
+				<li>
+					<span class="label" title="Actual Rooms Sold">Actual Rooms Sold</span>
+					<span class="bar red" bar-chart="{{(budgetSummary.actual_rooms / budgetSummary.maxRooms) * 100}}" offset="20"></span>
+					<span class="chartValue">{{budgetSummary.actual_rooms | numberFormat: 0}}</span>
+				</li>
+				<li>
+					<span class="label">Gap</span>
+					<span class="bar green" bar-chart="{{(budgetSummary.room_gap / budgetSummary.maxRooms) * 100}}" offset="20"></span>
+					<span class="chartValue">{{budgetSummary.room_gap | numberFormat: 0 : true : true }}</span>
+				</li>
+				<li class="divider"></li>
+				<li>
+					<span class="label" title="Budgeted Price">Budgeted Price</span>
+					<span class="bar" bar-chart="{{(budgetSummary.budgeted_price / budgetSummary.maxPrice) * 100}}" offset="20"></span>
+					<span class="chartValue">{{budgetSummary.budgeted_price | numberFormat: 2 | currencyCode: budgetSummary.currency}}</span>
+				</li>
+				<li>
+					<span class="label" title="Actual Price Sold">Actual Price Sold</span>
+					<span class="bar red" bar-chart="{{(budgetSummary.actual_price / budgetSummary.maxPrice) * 100}}" offset="20"></span>
+					<span class="chartValue">{{budgetSummary.actual_price | numberFormat: 2 | currencyCode: budgetSummary.currency}}</span>
+				</li>
+				<li>
+					<span class="label">Gap</span>
+					<span class="bar green" bar-chart="{{(budgetSummary.price_gap / budgetSummary.maxPrice) * 100}}" offset="20"></span>
+					<span class="chartValue">{{budgetSummary.price_gap | numberFormat: 2 : false : true | currencyCode: budgetSummary.currency}}</span>
+				</li>
+			</ol>
+
+			<h4 ng-show="budgetSummary.hide" class="noDataMsg center">No data available for the selected date range</h4>
+		</li>
+		

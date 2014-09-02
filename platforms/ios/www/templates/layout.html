@@ -1,0 +1,325 @@
+<!-- <div class="updateStatusOver updateSatusSuccessBg none">Updated successfully</div>
+ -->
+<div class="appBg fix"></div>
+<div id="appWrapper" web-socket ng-controller="MainController">
+	
+	<!-- update staus popover-->
+	<div class="updateStatusOver none"></div>
+
+	<!-- HEADER -->
+	<div id="headerWrap" ng-controller="HeaderCtrl">
+		<header id="headerGrid">
+			<div id="headerContent" class="clearfix">
+				<a id="logo" ng-click="resetToGlobal()" class="fl inlBlk noUnderline pointer fb21" title="{{chainName}}">{{chainName}}</a>
+				<div class="fl rel brandWrapper">
+					<span dropdown class="arrowWrapper inlBlk rel pointer noSelect" ng-show="brandList && !isSuite" ng-class="{'blocked': isSuite}" ng-disabled="isSuite">
+						<span  class="icons arrowDownWhite inlBlk rel"></span>
+					</span>
+					
+					<ul class="ddmenu fb14 mLeft">
+						<li ng-repeat="brand in brandList" ng-click="selectedBrand(brand)">{{brand.name}}</li>
+					</ul>
+				</div>
+				<span class="brandName inlBlk f21" ng-class="{'hasBdr': !brandList }" ng-show="!isSuite">{{brandName}}</span>
+				<a ng-href="#/suite/dashboard/{{suiteHotelCode}}" class="noUnderline hotelName inlBlk f21" ng-class="{'hasBdr': connectEnabledUser}" ng-show="isSuite" >{{hotelDetail.name}}</a>
+				<div class="fr rel">
+					<span class="txtSp connect indent fl rel" title="Connect" ng-hide="isSuite">Connect</span>
+					<span class="txtSp suite indent fl rel" title="Rate Tiger Live" ng-show="isSuite">RateTiger</span>
+					<span dropdown class="icons settings fr pointer indent"></span>
+					<ul class="ddmenu fb14 mRight">
+						<li ng-click="settingsView('settings')" ng-show="isSuite">Settings</li>
+						<li ng-click="logout()">Sign Out</li>
+					</ul>
+				</div>
+			</div>
+		</header>
+	</div>
+
+	<!-- CONTENT -->
+	<div id="contentWrap">
+		<div id="conentGrid">
+			
+			<div id="toolBar" class="clearfix" ng-hide="isSettings">
+				<span sidepanel-toggle class="icons sidePanelBtn fl pointer rel" ng-show="!isSettings"></span>
+				
+				<ul class="statsBtn fl fb14" ng-hide="isSuite">
+					<li ng-class="{active: bookingType == 'Arrival'}" ng-click="changeBookingType('Arrival')">Arrival</li>
+					<li ng-class="{active: bookingType == 'Booked'}"  ng-click="changeBookingType('Booked')">Booked</li>
+				</ul>
+				
+				<nav class="fb14 fl rel" ng-controller="CalendarPickerCtrl" ng-hide="isSettings">
+					<ul id="calendarType" class="fl">
+						<li class="inlBlk icons cal {{item.name}} pointer rel noSelect" ng-repeat="item in calendarList" ng-click="setCalendarState(item)" ng-class="{active: item.active == true}" title = "{{item.name.capitalizeFirstLetter()}}" popover="bottom" ng-hide="item.isHotDate && !isSuite">
+
+							<div class="popover-box scrollable hotdatePopover" ng-if="item.isHotDate">
+								<div class="title">Hot Dates</div>
+								<div class="spin"></div>
+								<ul class="" ng-hide="hotDateModel.noData" style="display: block;" settings-size>
+									<li ng-repeat="hotdate in hotDateModel.list" ng-click="changeDateRangeWithHotDate(hotdate)">
+										<div class="desc inlBlk">{{hotdate.description}}</div>
+										<div class="date-range inlBlk">{{hotdate.from_date | dateDDMMMYYYY}} to {{hotdate.to_date | dateDDMMMYYYY}}</div>
+									</li>
+								</ul>
+
+								<div class="noData" ng-show="hotDateModel.noData">No Hot Dates available.</div>
+							</div>
+						</li>
+					</ul>
+					
+					<div id="calendarPicker" class="fl rel">
+						<span class="prevBtn inlBlk abs pointer" ng-click="calendarNavigate('prev')"><span class="icons prev inlBlk"></span></span>
+						
+						<input type="hidden" name="" value="" id="erDatepicker" class="center"/>
+						<div id="dateOverlay" class="center pointer hidden fl" ng-click="getOverlay()"></div>
+						
+						<!-- Picker: From-->
+						<div id="pickerWrap" class="abs none">
+							<div id="pickFrom" class="fl"><span class="w50 center abs">From</span></div>
+							<div id="pickTo" class="fr"><span class="w50 center abs">To</span></div>
+							<div class="red right getNotified">{{setNotification}}</div>
+						</div>
+						<!-- Picker: To -->
+						
+						<!-- <span class="icons arrowUpWhite inlBlk abs pointer none"></span> -->
+						<span class="nextBtn inlBlk abs pointer" ng-click="calendarNavigate('next')"><span class="icons next inlBlk"></span></span>
+					</div>
+				</nav>
+
+				<!-- Mini Chart -->
+				
+<!-- Mini Chart -->
+<div class="rel">
+	<div id="minichart" class="abs fr noSelect" ng-show="isSuite && !isSettings" ng-controller="MiniChartCtrl">
+		<ol>
+			<div class="spin"></div>
+			<div class="percentage-line" ng-show="miniChartDetails.length">
+				<span class="bar">
+					<div ng-hide="cutOffPercentage == 0" class="tip" ng-style="{'bottom': offset.height + '%'}"><span class="f10 text">{{offset.percentage}}%</span></div>
+				</span>
+			</div>
+            <li class="fl" ng-repeat="item in miniChartDetails | limitTo:paginateMiniChart.end | startFrom:paginateMiniChart.start" ng-class="{weekend: item.day == 'S'}" ng-init="hotdateItem = isHotDate(item.dateInYMD)">
+
+                <div class="percentage-wrapper rel">
+					<span class="percentage blk abs" title="{{hotdateItem ? item.room_sold + ', ' + hotdateItem.description : item.room_sold}}" ng-style="{'height': item.rooms_sold_percentage + '%'}" ng-class="{hotDateBarHighlight: hotdateItem}"></span>
+				</div>
+				<span class="month-name" ng-show="(item.date > 29) ? false : item.date== 1 || $index == 0" ng-class="{noLine: $index == 0}">{{item.month}}</span>
+                <div class="info abs" ng-class="{hotDateHighlight: hotdateItem}" title="{{hotdateItem.description}}">
+                	<span class="date blk">{{item.date}}</span>
+                	<span class="day blk">{{item.day}}</span>
+                </div>
+            </li>
+        </ol>
+
+        <!-- Back Slide -->
+        <span class="prevBtn inlBlk abs pointer" ng-hide="paginateMiniChart.start == 0 || !miniChartDetails" ng-click="paginateMiniChart(false)">
+        	<span class="icons prev inlBlk"></span>
+        </span>
+        
+        <!-- Forward Slide -->
+        <span class="nextBtn inlBlk abs pointer" ng-hide="paginateMiniChart.end >= miniChartDetails.length || !miniChartDetails" ng-click="paginateMiniChart(true)">
+        	<span class="icons next inlBlk"></span>
+        </span>
+	</div>
+</div>
+	
+				<!-- Map / Dashboard Toggle Button -->
+				<ul class="viewTool fr" ng-hide="isSuite">
+					<li ng-class="{active: currentState == 'connect.map' || currentState == 'connect.map-level'}">
+						<span class="blk" ng-click="switchView('map')"><span class="icons map inlBlk rel"></span></span>
+					</li>
+					<li ng-class="{active: currentState == 'connect.dashboard' || currentState == 'connect.dashboard-level' || currentState == 'connect.dashboard-level-transient'}">
+						<span class="blk" ng-click="switchView('dashboard')"><span class="icons dashboard inlBlk rel"></span></span>
+					</li>
+				</ul>
+			</div>
+
+			<!-- Main Content -->
+			<div id="mainConent" class="clearfix" ui-view ng-controller="PaginationCtrl">				
+				<!-- Angular Routing will load content here -->
+			</div>
+
+			<!-- The Main Side Panel -->
+			
+<!-- The Main Side Panel -->
+<div id="sidePanel" class="abs white f16 none" ng-controller="LevelsController">
+	<ul custom-scroll>
+		<li>
+			<h3 class="f24 hidden upper">Region</h3>
+			<ol id="regionList">
+				<div class="spin"></div>
+				<li class="listItem rel scrollable" ng-repeat="region in levels" ng-click="levelSelected($event, region, $last)" ng-class="{expanded: region.isExpanded}">
+					<div class="rowItem">
+						<span class="regionName inlBlk" title="{{region.name}}">{{region.name}}</span>
+						<span class="hotelCount fr">{{region.hotelCount}} Hotels</span>	
+					</div>
+					<ul class="none">
+						<li ng-repeat="item in region.localities" ng-click="subLevelSelected($event, item)">
+							<span class="regionName inlBlk" title="{{item.name}}">{{item.name}}</span>
+							<span class="hotelCount fr">{{item.hotelCount}} Hotels</span>
+						</li>
+					</ul>
+				</li>
+			</ol>
+		</li>
+		
+
+		<!-- Hotels Section -->
+		<li ng-controller="HotelsController">
+			<h3 class="f24 hidden upper">Hotels</h3>
+			
+			<!-- Search Box -->
+			<div class="searchHotel rel hidden">
+				
+				<div class="searchHotelInp rel hidden inlBlk w100" ng-class="{w70: selectedHotels.length}">
+					<span class="icons search inlBlk abs"></span>
+					<input type="text" ng-model="search" name="" placeholder="Type Hotel Name or Location"  class="f16 fr"/>
+				</div>
+
+				<!-- Additional view button added-->
+				<span class="fr view pointer fb14" ng-show="selectedHotels.length" ng-click="getAggregatData()">View<span>
+			</div>
+									
+			<!-- Hotel List -->
+			<ol id="hotelList" class="listHotels" ng-init="search == ''">
+				
+				<!-- Selected Hotels -->
+				<li class="rowItem scrollable" ng-class="{active: isActiveHotel(hotel)}" ng-repeat="hotel in allSelectedHotels | orderBy: 'name' | filter:{'name':  search}" title="{{hotel.name}}">
+					
+					<a ng-href="#/suite/dashboard/{{hotel.code}}" class="fl hotelListName">{{hotel.name}}</a>
+					
+					<!-- Custom Checkbox -->
+					<div class="rangeChk inlBlk fr">									
+						<input id="{{hotel.code}}" checklist-model="selectedHotels" checklist-value="hotel.code" type="checkbox" />
+						<label class="icheckbox noSelect" for="{{hotel.code}}"></label>
+					</div>
+				</li>
+
+				<!-- Non Selected Hotels -->
+				<li class="rowItem scrollable" ng-class="{active: isActiveHotel(hotel)}" ng-repeat="hotel in nonSelectedHotels | orderBy: 'name' | filter:{'name':  search}" title="{{hotel.name}}">
+					
+					<a ng-href="#/suite/dashboard/{{hotel.code}}" class="fl hotelListName">{{hotel.name}}</a>
+					
+					<!-- Custom Checkbox -->
+					<div class="rangeChk inlBlk fr">									
+						<input id="{{hotel.code}}" checklist-model="selectedHotels" checklist-value="hotel.code" type="checkbox" />
+						<label class="icheckbox noSelect" for="{{hotel.code}}"></label>
+					</div>
+				</li>
+
+				<li class="rowItem scrollable"  ng-repeat="location in allLocations | orderBy: 'name' | filter:{'name':  search}" title="{{location.name}}" ng-click="hideSidebar()">								
+					<a ng-href="#/connect/dashboard/{{location.id}}" class="fl hotelListName">{{location.name}}</a>
+				</li>
+			</ol>
+		</li>
+	</ul>
+</div>
+
+
+
+
+			<!-- Suite side panel -->
+			
+<!-- Suite side panel -->
+<div id="suiteSidePanel" class="suite-side-panel abs white f16 none" ng-controller="SuiteSidebarCtrl" ng-show="!isSettings">
+
+		<h3 class="f24 hidden upper"><a ng-href="#/suite/dashboard/{{suiteHotelCode}}">Dashboard</a></h3>
+		<ul ng-click="hideSidePanel($event)">
+			<li ng-class="{blocked: isBlocked(WIDGETS.COMPETITION_ANALYSIS)}">
+				<a ng-href="#/suite/dashboard/{{suiteHotelCode}}/market-analysis" ng-class="{blocked: isShopperHotel}">Market Analysis</a>
+				<ol>
+					<li><a ng-href="#/suite/dashboard/{{suiteHotelCode}}/market-analysis/rate-benchmark/chart">Rate Banchmarking</a></li>
+					<li><a ng-href="#/suite/dashboard/{{suiteHotelCode}}/market-analysis/city-search-ranking/summary">City Search Ranking</a></li>
+					<li><a ng-href="#/suite/dashboard/{{suiteHotelCode}}/market-analysis/availability-status/summary">Availability Status</a></li>
+					<li><a ng-href="#/suite/dashboard/{{suiteHotelCode}}/market-analysis/lar/summary">LAR</a></li>
+					<li><a ng-href="#/suite/dashboard/{{suiteHotelCode}}/market-analysis/price-position/chart">Price Point At Convertion</a></li>
+				</ol>
+			</li>
+			<li ng-class="{blocked: isBlocked(WIDGETS.RESERVATION)}">
+				<a ng-href="#/suite/dashboard/{{suiteHotelCode}}/reservation/chart">Reservations</a>
+			</li>
+			<!-- <li ng-class="{blocked: isBlocked(WIDGETS.MARKET)}">
+				<a ng-href="#/suite/dashboard/{{suiteHotelCode}}/market/chart">Market</a>
+			</li> -->
+			<li ng-class="{blocked: isBlocked(WIDGETS.BUDGET)}">
+				<a ng-href="#/suite/dashboard/{{suiteHotelCode}}/budget/chart">Budget</a>
+			</li>
+			<li ng-class="{blocked: isBlocked(WIDGETS.PACE)}">
+				<a ng-href="#/suite/dashboard/{{suiteHotelCode}}/pace/chart">Pace</a>
+			</li>
+			<li ng-class="{blocked: isBlocked(WIDGETS.COMPLIANCE)}">
+				<a ng-href="#/suite/dashboard/{{suiteHotelCode}}/compliance/chart">Compliance</a>
+			</li>
+			<li ng-class="{blocked: isBlocked(WIDGETS.REPUTATION)}">
+				<a ng-href="#/suite/dashboard/{{suiteHotelCode}}/reputation">Reputation</a>
+			</li>
+			<li ng-class="{blocked: isBlocked(WIDGETS.ALERTS)}">
+				<a ng-href="#/suite/dashboard/{{suiteHotelCode}}/alerts">Alerts</a>
+			</li>
+			<li ng-class="{blocked: isBlocked(WIDGETS.CLOSED_DATES)}">
+				<a ng-href="#/suite/dashboard/{{suiteHotelCode}}/quick-close">Property Quick Close</a>
+			</li>
+			<li ng-class="{blocked: isBlocked(WIDGETS.MANAGE)}">
+				<a ng-href="#/suite/dashboard/{{suiteHotelCode}}/manage-rates">Manage Rates</a>
+			</li>
+			<li ng-class="{blocked: isBlocked(WIDGETS.MANAGE)}">
+				<a ng-href="#/suite/dashboard/{{suiteHotelCode}}/manage-availability">Manage Availability</a>
+			</li>
+			
+			<li ng-class="{blocked: isBlocked(WIDGETS.MANAGED_REPORTS)}">
+				<a ng-href="#/suite/dashboard/{{suiteHotelCode}}/managedreports">Managed Reports Archive</a>
+			</li>
+		</ul>
+</div>
+		</div>
+	</div>
+
+	<!-- FOOTER -->
+	
+<!-- FOOTER -->
+<div id="footerWrap" class="fix" ng-hide="isSettings || hideChannels">
+	<footer id="footerGrid">
+		<div id="footerContent" class="clearfix" ng-controller="ChannelsController">
+			
+			<span ng-click='slide(false)' class="inlBlk prev pointer abs" ng-hide="leftBlocked == true">
+				<span class="icons arrowPrev inlBlk"></span>
+			</span>
+			<span ng-click='slide(true)' class="inlBlk next pointer abs" ng-hide="rightBlocked == true">
+				<span class="icons arrowNext inlBlk"></span>
+			</span>
+			
+			<div class="sliderWrapper rel">
+				<div class="spin"></div>
+				<ul class="hidden" id="slider">
+					<li class="rel" ng-repeat="channel in channelList | orderBy: ['-revenue', 'id']" ng-class="{active: channel._active == true}" ng-click="channelSelectedIs($event, channel)">
+						<h4 title="{{channel.name}}">{{channel.name}}</h4>
+						<div class="hidden">
+							<span class="roomSold fl" title="{{channel.rooms_sold | number}}">{{channel.rooms_sold | number}}</span>
+							<span class="grossVal fr right" title="{{channel.revenue | numberFormat: 0 | currencyCode:'USD'}}">{{channel.revenue  | numberFormat: 0 | currencyCode: channelCurrencyCode}}</span>
+						</div>
+						<span class="liveUpdate abs none" ng-class="{active: channel.liveUpdate == true}"></span>
+					</li>
+				</ul>
+			</div>
+			
+		</div>
+	</footer>
+</div>
+
+</div>
+
+<div class="overlay none"></div>
+
+
+<!-- Generic Popup -->
+
+<!-- Popup -->
+<div id="mainPopup" class="addDateRangePopUp  none rateAvailability">
+	<div class="bgOverLay"></div>
+	<div class="spin"></div>
+	
+	<div id="popupContainer" class="popUpBox">
+		<!-- Popup will come dynamically here from AJAX -->
+	</div>
+</div>
+
+

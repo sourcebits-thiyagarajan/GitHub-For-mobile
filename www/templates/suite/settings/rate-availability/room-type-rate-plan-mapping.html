@@ -1,0 +1,39 @@
+<section class="rel mapping roomTypeRatePlanMapping" ng-controller="RoomTypeRatePlanMappingCtrl">
+	<div class="spin"></div>
+	<h3 class="setHdr">Room Type Rate Plan Mapping</h3>
+
+	<div class="no-data" ng-show="noData">No Property Room type/Rate Plan created.</div>
+	<div class="roomChannelMapping white rel clearfix" ng-show="roomTypeRatePlanMapping.pms_rate_plan">
+
+		<div class="linkFrom fl">
+			<h4>Room Type</h4>
+			<ul class="scrollable" room-type-mapping settings-max-height>
+				<li drag-mapping="true" ng-repeat="roomType in roomTypeRatePlanMapping.pms_room_type track by $index" data-id="{{roomType.id}}"><span class="textWithEllipsis">{{roomType.name}}</span><span class="icons ui-icon drag dragHandle move inlBlk abs"></span><!-- <span class="sp dragHandle move inlBlk abs"></span> --></li>
+			</ul>
+		</div>
+
+		<span class="sp arrowXLRight inlBlk"></span>
+
+		<div class="linkTo fr">
+			<h4>Rate Plan</h4>
+			<ul class="scrollable accordionContainer" settings-max-height>
+				<li ng-repeat="ratePlan in roomTypeRatePlanMapping.pms_rate_plan track by $index" class="ratePlans" channel-weight-accordion data-plan-id="{{ratePlan.id}}">
+					<div class="listHead rel panel-trigger pointer">
+						<span class="icons arrowDownWhite abs inlBlk"></span>{{ratePlan.name}} ({{getMappingCount(ratePlan.id)}})
+					</div>
+					<ol room-type-mapping class="panel-body">
+						<li class="ui-state-disabled"></li>
+						<li ng-repeat="roomPlanMapping in getRoomPlanMappings(ratePlan.id) track by $index" data-id="{{roomPlanMapping.room_id}}">{{roomPlanMapping.room_name}}<span class="icons close inlBlk abs pointer" ng-click="removeMapping(roomPlanMapping.room_rate_id)"></span></li>
+					</ol>
+				</li>
+			</ul>
+		</div>
+		<div class="controls right">
+			<p class="fl">Drag and drop the appropriate Room Type to the Rate Plan</p>
+			<span class="btn pointer inlBlk rel" ng-click="saveMappings()" ng-class="{blocked: !roomMapping.newMappings.length > 0}">
+				<div class="spin"></div>
+				Save
+			</span>
+		</div>
+	</div>
+</section>

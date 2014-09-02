@@ -1,0 +1,24 @@
+/*===================================
+			Common styles
+=====================================*/
+
+h1 {
+	color: green;
+}
+
+#mapContainer{
+	background-color: #E5E3DF;
+	overflow: hidden;
+	position: absolute;
+	top: 162px;
+	right: 362px;
+	bottom: 84px;
+	left: 42px;
+	height: 400px;
+}
+/**=========================================================
+	1. Import all sass files like below
+		eg: @import "file-name"; --> (No .sass)
+	2. All CSS files will appear as in order in the app/css
+============================================================**/
+/**============== end of SASS files ======================*/

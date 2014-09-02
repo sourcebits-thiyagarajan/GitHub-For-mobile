@@ -1,0 +1,113 @@
+
+<section class="settingsAlerts" ng-controller="AlertsSettingsCtrl">
+
+	<div class="spin"></div>
+
+	<div class="no-data abs" ng-hide="isSpinnerShowing || alertSettingDetails.alertsList.length">No data</div>
+
+	<ul class="accordion">
+		<li ng-repeat="alert in alertSettingDetails.alertsList">
+			<div accordion class="accordionHead pointer">
+				<span class="icons arrowDownWhite inlBlk rel"></span>
+				<h3>
+					<span class="accordionTitle inlBlk pointer">{{alert.alert_name}}</span>
+					<div on-off-switch="alert.Status"></div>
+					<div class="rel fr pointer submit-btn fb14 center" ng-click="updateToServer($event, alert)" ng-class="{blocked: !alertSettingDetails.changeAvailableIn[alert.alert_name]}">
+						Save
+						<div class="spin"></div>	
+					</div>
+				</h3>
+			</div>
+			<div class="accordionContent none">
+				<p>{{alert.description}}</p>
+				<form class="settingsAlertsForm">
+					<ul>
+						<li ng-if="alert.alert_name == 'Alerts on position change'">
+							<label>Position</label>
+							<div class="customSelect rel inlBlk">	
+								<div dropdown class="arrowWrapper inlBlk rel pointer noSelect">
+									{{alert.Position}}
+								</div>
+								<ul class="ddmenu fb14 mLeft customSelectMenu w100 rel">
+									<li ng-repeat="pos in totalPositions track by $index" ng-click="updateEntry(alert, 'Position', $index + 1)">{{$index + 1}}</li>
+									
+								</ul>
+							</div>
+						</li>
+						<li ng-if="alert.alert_name == 'Alerts on change in variance'">
+							<label>Select Variance</label>
+							<div class="customSelect rel inlBlk">	
+								<div dropdown class="arrowWrapper inlBlk rel pointer noSelect">
+									{{alert.variance_type}}
+								</div>
+								<ul class="ddmenu fb14 mLeft customSelectMenu w100 rel">
+									<li ng-click="updateEntry(alert, 'variance_type', 'Percentage')">Percentage</li>
+									<li ng-click="updateEntry(alert, 'variance_type', 'Value')">Value</li>
+								</ul>
+							</div>
+						</li>
+						<li ng-if="alert.alert_name == 'Alerts on change in variance'">
+							<label>Value</label>
+							<div class="customSelect rel inlBlk">	
+								<input value="{{alert.variance_value}}" ng-model="alert.variance_value" class="arrowWrapper inlBlk rel entryBox" placeholder="Enter Value"/>
+							</div>
+						</li>
+						<!-- <li class="availabilityAlert" ng-if="alert.alert_name == 'Availability Alert'">
+							<div><label>Standard Room</label>
+								<div class="customSelect rel inlBlk">	
+									<input value="" class="arrowWrapper inlBlk rel entryBox"/>
+								</div>
+							</div>
+							<div>
+								<label>Deluxe Room</label>
+								<div class="customSelect rel inlBlk">	
+									<input value="" class="arrowWrapper inlBlk rel entryBox"/>
+								</div>	
+							</div>
+							<div>
+								<label>Executive Suite</label>
+								<div class="customSelect rel inlBlk">	
+									<input value="" class="arrowWrapper inlBlk rel entryBox"/>
+								</div>
+							</div>
+						</li> -->
+						<!-- <li ng-if="alert.alert_name == 'Availability Alert'">
+							
+						</li>
+						<li ng-if="alert.alert_name == 'Availability Alert'">
+							
+						</li> -->
+						<li ng-hide="alert.alert_name == 'Availability Alert'">
+							<label>Priority</label>
+							<div class="customSelect rel inlBlk">	
+								<div dropdown class="arrowWrapper inlBlk rel pointer noSelect">
+									{{alert.Priority}}
+								</div>
+								<ul class="ddmenu fb14 mLeft customSelectMenu w100 rel">
+									<li ng-click="updateEntry(alert, 'Priority', 'Low')">Low</li>
+									<li ng-click="updateEntry(alert, 'Priority', 'High')">High</li>
+								</ul>
+							</div>
+						</li>
+						<li ng-hide="alert.alert_name == 'Availability Alert'">
+							<label>Type</label>
+							<div class="customSelect rel inlBlk">	
+								<div dropdown class="arrowWrapper inlBlk rel pointer noSelect">
+									{{alert.Type}}
+								</div>
+								<ul class="ddmenu fb14 mLeft customSelectMenu w100 rel">
+									<li ng-click="updateEntry(alert, 'Type', 'Information')">Information</li>
+									<li ng-click="updateEntry(alert, 'Type', 'Action')">Action</li>
+								</ul>
+							</div>
+						</li>
+
+					</ul>
+				</form>	
+			</div>
+		</li>		
+	</ul>
+
+</section>
+
+

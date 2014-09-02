@@ -1,0 +1,44 @@
+
+<!--  SuiteDataViewCtrl: comes from the routes in app.js -->
+
+<section class="chartDataWrap clearfix rel">
+	<div class="spin"></div>
+	<span class="no-data abs" ng-hide="isSpinnerShowing || detailedContent">No data available</span>
+	<div view-size="suite" id="dataContent" class="center" ng-show="isSpinnerShowing || paginationDetails.data">
+		<table ng-show="paginationDetails.data">
+			<thead ng-show="paginationDetails.data">
+				<tr class="pointer noSelect" ng-show="paginationDetails.data">
+					<th ng-click="reverse=!reverse; sortTable(reverse, 'date')" ng-show="paginationDetails.data"> Date </th>
+					<th ng-click="reverse=!reverse; sortTable(reverse, 'lowest')" ng-show="paginationDetails.data"> Lowest ADR </th>
+					<th ng-click="reverse=!reverse; sortTable(reverse, 'average')" ng-show="paginationDetails.data"> Avg ADR </th>
+					<th ng-click="reverse=!reverse; sortTable(reverse, 'highest')" ng-show="paginationDetails.data"> Highest ADR </th>
+					<th ng-click="reverse=!reverse; sortTable(reverse, 'my_hotel_average')" ng-show="paginationDetails.data"> My Brand Site </th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="item in paginationDetails.data | startFrom:paginationDetails.currentPage*paginationDetails.pageSize | limitTo:paginationDetails.pageSize" ng-init="hotdateItem = isHotDate(item.date)">
+					<td ng-class="{hotDateHighlightVertical: hotdateItem}" title="{{hotdateItem.description}}">{{item.date | dateDDMMMYYYY}}</td>
+					<td>{{item.lowest | numberFormat: 2 }}</td>
+					<td>{{item.average | numberFormat: 2 }}</td>
+					<td>{{item.highest | numberFormat: 2 }}</td>
+					<td>{{item.my_hotel_average | numberFormat: 2 }}</td>
+				</tr>
+			</tbody>
+		</table>
+
+		<div class="navigate center noSelect" ng-show="isSpinnerShowing || paginationDetails.data">	
+			<span ng-repeat="dot in getDots() track by $index" ng-click="dotClicked($index)" ng-class="{active: $index==paginationDetails.currentPage}" class="inlBlk"></span>
+		</div>
+	</div>
+
+	<!-- Right Button -->
+	<span class="slideNext inlBlk abs pointer noSelect" ng-click="paginateData(true)"
+		ng-hide="paginationDetails.currentPage == paginationDetails.totalPages()-1 || paginationDetails.data.length == 0">
+		<span class="icons arrowNext inlBlk"></span>
+	</span>
+	<!-- Left Button -->
+	<span class="slidePrev inlBlk abs pointer noSelect" ng-click="paginateData(false)"
+		ng-hide="paginationDetails.currentPage == 0">
+		<span class="icons arrowPrev inlBlk" ></span>
+	</span>
+</section>

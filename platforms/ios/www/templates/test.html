@@ -1,0 +1,82 @@
+<style type="text/css">
+  
+  input, button {
+    padding: 5px;
+  }
+
+</style>
+
+<div ng-controller="apiTestCtrl" style="position: absolute; padding: 20px">
+  <button ng-click="getHotelInfo()">Hotel Info</button>
+  <button ng-click="getLevelInfo()">Level Info</button>
+  <button ng-click="getChannelInfo()">Channel Info</button>
+  <button ng-click="getHotelWidgetInfo()">Hotel Widget Info</button>
+  <button ng-click="logOut()">Log Out</button>
+  <hr>
+  <button ng-click="getLevels()">Get Levels</button>
+  <button ng-click="getAllLevels()">Get All Levels</button>
+  <button ng-click="getFlattenedList()">Get Flattened</button>
+  <button ng-click="getLevelByPath(level_path)">Get Level by Path</button> <input type="text" ng-model="level_path">
+  <br>
+  <button ng-click="getLevelById(leve_id)">Get Level by Id</button> <input type="text" ng-model="leve_id">
+  <hr>
+  <button ng-click="reservationSummary()">Reservation Summary</button>
+  <button ng-click="reservationDetails()">Reservation Detail</button>
+  <hr>
+  <button ng-click="getLevelType(level_type_query)">Get Level Type</button> <input type="text" ng-model="level_type_query">
+  <hr>
+  <button ng-click="localitiesArray(locality_id)">Localities Array</button> <input type="text" ng-model="locality_id">
+  <hr>
+  <button ng-click="getMapWidgetData(true)">getMapWidgetData:global</button> 
+  <button ng-click="getMapWidgetData()">getMapWidgetData:8</button>
+  <hr>
+  <button ng-click="getDashboardWidgetData(true)">getDashboardWidgetData:global</button> 
+  <button ng-click="getDashboardWidgetData()">getDashboardWidgetData:8</button>
+  <hr>
+  <button ng-click="authWs()">Auth WebSocket</button>
+  <button ng-click="closeWs()">Close WebSocket</button>
+  <hr>
+  <button ng-click="hotelById(hotel_id)">Get Hotel by Id</button> <input type="text" ng-model="hotel_id">
+  <hr>
+  <button ng-click="getDetailsPaneData(level_id)">getDetailsPaneData</button> <input type="text" ng-model="level_id">
+  <hr>
+  <button ng-click="levelTypeFilter(level_type)">levelTypeFilter</button> <input type="text" ng-model="level_type" ng-init="level_type='Global'">
+  <hr>
+  <button ng-click="showFilters()">Show Current Filter States</button>
+
+  <hr><hr><hr><hr>
+  <h1>SuiteBI</h1>
+  <hr><hr><hr><hr>
+  <button ng-click="getPaceInfo()">getPaceInfo()</button>
+  <button ng-click="getBudgetInfo()">getBudgetInfo()</button>
+  <button ng-click="getMarketInfo()">getMarketInfo()</button>
+  <button ng-click="getPricePositionInfo()">getPricePositionInfo()</button>
+  <button ng-click="updateComplianceSettings()">updateComplianceSettings()</button>
+  <button ng-click="getParityInfo()">getParityInfo()</button>
+  <hr>
+  <input type="text" ng-model="hotel_code" placeholder="hotel code">
+  <input type="text" ng-model="startDate" placeholder="start date in format yyyy-mm-dd">
+  <input type="text" ng-model="endDate" placeholder="End date in format yyyy-mm-dd">
+  <input type="text" ng-model="selectedChannels" placeholder="selected channels separated by ,">
+  <button ng-click="reputation_summary(hotel_code, startDate, endDate)">Get reputation summary by hotelCode</button>
+  <button ng-click="reputation_detail(hotel_code, startDate, endDate)">Get reputation detail by hotelCode</button>
+  <hr>
+  <button ng-click="reputation_compliance_summary(hotel_code, startDate, endDate)">Get reputation Compliance summary by hotelCode</button>
+  <button ng-click="reputation_compliance_detail(hotel_code, startDate, endDate)">Get reputation compliance detail by hotelCode</button>
+  <hr>
+  <button ng-click="page_ranking_summary(hotel_code, startDate, endDate)">Get pageRanking summary by hotelCode</button>
+  <button ng-click="page_ranking_detail(hotel_code, startDate, endDate)">Get pageRanking detail by hotelCode</button>
+  <hr>
+  <button ng-click="comp_analysis_summary(hotel_code, startDate, endDate, selectedChannels)">Get competitionAnalysis summary by hotelCode</button>
+  <hr>
+  <button ng-click="alert_summary(hotel_code)">Get alert summary by hotelCode</button>
+  <button ng-click="alert_detail(hotel_code)">Get alert detail by hotelCode</button>
+  <input type="text" ng-model="hotel_code">
+
+  <hr><hr><hr><hr>
+  <h1>Settings</h1>
+  <hr><hr><hr><hr>
+  
+  <button ng-click="getBudgetSettingsInfo()">getBudgetSettingsInfo()</button>
+
+</div>

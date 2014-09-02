@@ -1,0 +1,46 @@
+
+<section class="chartDataWrap clearfix rel">
+	<div class="spin"></div>
+	<span class="no-data abs" ng-hide="isSpinnerShowing || (detailedContent && detailedContent.chartData)">No data available</span>
+	<div view-size="suite" id="dataContent" class="center" ng-show="isSpinnerShowing || paginationDetails.data">
+		<table>
+			<thead ng-show="paginationDetails.data">
+				<tr class="pointer noSelect">
+					<th ng-click="reverse=!reverse; sortTable(reverse, 'date')">Date</th>
+					<th>Allowed Parity variance</th>
+					<th ng-click="reverse=!reverse; sortTable(reverse, 'parity_percentage')">Current Parity</th>
+					<th ng-click="reverse=!reverse; sortTable(reverse, 'violation_percentage')">Parity Violation</th>
+					<th ng-click="reverse=!reverse; sortTable(reverse, 'target_budget')">Budget targeted</th>
+					<th ng-click="reverse=!reverse; sortTable(reverse, 'actual_budget')">Acutal Budget</th>
+					<th ng-click="reverse=!reverse; sortTable(reverse, 'budget_variance')">Budget Variance</th>
+					<th ng-click="reverse=!reverse; sortTable(reverse, 'avg_reputation_compliance')">Reputation Variance</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr ng-repeat="item in paginationDetails.data | startFrom:paginationDetails.currentPage*paginationDetails.pageSize | limitTo:paginationDetails.pageSize" ng-init="hotdateItem = isHotDate(item.date)">
+					<td ng-class="{hotDateHighlightVertical: hotdateItem}" title="{{hotdateItem.description}}">{{item.date | dateDDMMMYYYY}}</td>
+					<td>{{detailedContent.parityVariance}}</td>
+					<td>{{item.parity_percentage}}</td>
+					<td>{{item.violation_percentage}}</td>
+					<td>{{item.target_budget | numberFormat: 2}}</td>
+					<td>{{item.actual_budget | numberFormat: 2}}</td>
+					<td>{{item.budget_variance | numberFormat: 2}}</td>
+					<td>{{item.avg_reputation_compliance}}</td>
+				</tr>
+			</tbody>
+		</table>
+		<div class="navigate center noSelect">	
+			<span ng-repeat="dot in getDots() track by $index" ng-click="dotClicked($index)" ng-class="{active: $index==paginationDetails.currentPage}" class="inlBlk"></span>
+		</div>
+	</div>
+	<span class="slideNext inlBlk abs pointer noSelect" ng-click="paginateData(true)"
+		ng-class="{blocked: paginationDetails.currentPage == paginationDetails.totalPages()-1}">
+		<span class="icons arrowNext inlBlk"></span>
+	</span>
+	<span class="slidePrev inlBlk abs pointer noSelect" ng-click="paginateData(false)"
+		ng-class="{blocked: paginationDetails.currentPage == 0}">
+		<span class="icons arrowPrev inlBlk"></span>
+	</span>
+</section>
+
+

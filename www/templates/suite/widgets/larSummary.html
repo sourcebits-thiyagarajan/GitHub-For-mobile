@@ -1,0 +1,16 @@
+
+		<!-- LAR Widget -->
+		<li id="larSummary" class="rel" ng-click="larSummary.hide || switchSuiteDashboardView('market_analysis-lar-summary')" ng-class="{pointer: !larSummary.hide}" show-widget-spinner="{{larSummary==null}}">
+			
+			<h3 class="fb18 sml">Lowest Available Rate</h3>
+			<div class="spin"></div>
+			<ol class="barChart ca-box tableCell" ng-hide="larSummary.hide">
+				<li ng-repeat="hotel in larSummary.hotel_lar_List | limitTo: 7">
+					<span class="label" title="{{hotel.hotel_name}}">{{hotel.hotel_name}}</span>
+					<span class="bar" bar-chart="{{((hotel.average_rate / larSummary.maxAvgRate)*100)}}" ng-class="{green: hotel.hotel_code == suiteHotelCode}" offset="20"></span>
+					<span class="chartValue">{{hotel.average_rate | numberFormat: 2 | humanReadableNumber | currencyCode: larSummary.currency }}</span>
+				</li>				
+			</ol>
+
+			<h4 ng-show="larSummary.hide" class="noDataMsg center">No data available for the selected date range</h4>
+		</li>

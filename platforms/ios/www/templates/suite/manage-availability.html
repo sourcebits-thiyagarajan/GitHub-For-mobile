@@ -1,0 +1,102 @@
+<div class="chartDataView" ng-controller="ManageAvailability">
+	<div class="clearfix mb12">
+		<h2 class="fl30 fl caps">
+			<a href="{{suiteDashboardRouteHREF('dashboard')}}" class="pointer noSelect navigationCrumb">Dashboard</a>
+			&gt; Manage Availability
+		</h2>
+
+		<div class="fb14 fr">
+			<a href="{{suiteDashboardRouteHREF('manage_rates')}}" class="fl btn">Manage Rates</a>
+			<span ng-click="exportToPdf()" class="exportDoc fr pointer" ng-class="{blocked: error || manageAvailability.contentLoading}">
+				<span class="icons newdoc inlBlk"></span>
+			</span>
+		</div>
+	</div>
+	<div class="manageAvailability chartDataWrap clearfix rel">
+		<div class="spin"></div>
+		<span class="no-data" ng-show="error">{{errorMessage}}</span>
+
+		<div id="dataContent" class="rel" ng-show="manageAvailability.hash && !manageAvailability.contentLoading">
+
+			<!-- Left Slide pagination arrow -->
+			<span class="slidePrev inlBlk abs pointer noSelect" ng-click="paginateData(false)" ng-hide="paginationDetails.currentPage == 0">
+				<span class="icons arrowPrev inlBlk"></span>
+			</span>
+
+			<span class="slideNext inlBlk abs pointer noSelect" ng-click="paginateData(true)" ng-hide="paginationDetails.currentPage == paginationDetails.totalPages()-1 || paginationDetails.data.length == 0 || error">
+				<span class="icons arrowNext inlBlk"></span>
+			</span>
+
+			<!-- Right Slide pagination arrow -->
+
+			<div class="inlBlk w100 rel">
+				<div id="singleTableFormat" class="lightBlueTheme h40" ng-class="{singleColumn: availabilityContent.length == 1}">
+					<table no-of-columns="125">
+						<!-- Dates in the Table Header -->
+						<thead class="dates" ng-hide="manageAvailability.contentLoading">
+							<tr>
+								<th class="latoBold">
+									<div><div on-off-switch="manageAvailability.isWeekendFilterOn" switch-label="Weekend" ng-click="toggleWeekend()"></div></div>
+								</th>
+								<th ng-repeat="date in manageAvailability.dates | weekend:manageAvailability.isWeekendFilterOn | startAt:paginationDetails.currentPage*paginationDetails.pageSize:pageSize | limitTo:paginationDetails.pageSize track by $index" ng-init="hotdateItem = isHotDate(date)" title="{{hotdateItem.description}}" ng-class="{weekend: date.isWeekend, hotDateHighlightHorizontal: hotdateItem}" class="data">
+									<div class="groupItems clearfix">{{date | dateDDMMMYYYY:true}}</div>
+								</th>
+								<th class="noWeekend" ng-show="noWeekend"></th>
+							</tr>
+						</thead>
+					</table>
+					<!-- Main Scrollable Content -->
+					<div ma-page-size="manage-availability" class="scrollableContent">
+						<form name="manageAvailabilityForm">
+							<table no-of-columns="125" class="fillDropdownAvailable">
+								<tbody>
+										<tr ng-repeat="roomType in manageAvailability.rooms track by $index">
+											<td>
+												<div class="groupItems clearfix">
+													<span title="{{roomType.roomName}}">{{roomType.roomName}}</span>
+													<input class="size55 blueBorder roomsRequired autoFill transparentBox" type="text" ng-model="manageAvailability[roomType.roomId]" ng-change="smartFill(manageAvailability[roomType.roomId], roomType)" ng-disabled="!roomType.isMapped" ng-pattern="validator.positiveIntegerTo999" />
+												</div>
+											</td>
+											<td ng-repeat="date in manageAvailability.dates | weekend:manageAvailability.isWeekendFilterOn | startAt:paginationDetails.currentPage*paginationDetails.pageSize:pageSize | limitTo:paginationDetails.pageSize track by $index" ng-class="{weekend: item.isWeekend, block: !roomType.isMapped}" class="data">
+												<div class="groupItems clearfix">
+													<input class="size55 roomsRequired transparentBox availableRoomTextCls" type="text" ng-model="manageAvailability.hash[roomType.roomId][date].roomsAvailable" ng-disabled="!roomType.isMapped" ng-pattern="validator.positiveIntegerTo999" fill-select-dropdown="smartFill" ng-change="updateSmartFill(roomType, manageAvailability.hash[roomType.roomId][date].roomsAvailable)"/>
+													<span class="fr green roomsSold soldRoomSpanCls">
+														{{manageAvailability.hash[roomType.roomId][date].roomsSold ? manageAvailability.hash[roomType.roomId][date].roomsSold : '0'}}
+													</span>
+												</div>
+											</td>
+											<td ng-show="noWeekend" rowspan="{{manageAvailability.rooms.length}}" ng-if="$index === 0" class="noWeekend">
+												No weekends available in the selected date range.
+											</td>
+										</tr>
+								</tbody>
+							</table>
+						</form>
+					</div>
+					
+				</div>
+			</div>
+			<div class="clear"></div>
+
+			<div class="expansionList rel" >
+				<div class="horScrollContent">				
+					<ul class="fl mt15">
+						<li><div class="f14">SOLD values are showing in <span class="green">Green</span></div></li>
+					</ul>
+				</div>
+				<div class="abs infoBg pointer fr center" ng-click="fadeToggle()"><span class="icons info inlBlk"></span></div>
+			</div>
+
+			<div class="navigate center" ng-hide="paginationDetails.totalPages() <= 1">
+				<span ng-repeat="dot in getDots() track by $index" ng-click="dotClicked($index)" ng-class="{active: $index==paginationDetails.currentPage}" class="inlBlk"></span>
+			</div>
+
+			<div>
+				<div class="updateBtn fr btn pointer rel" ng-click="updateAvailabilty()" ng-class="{blocked: !isUpdatePossible, mt25: paginationDetails.totalPages() <= 1}">
+					<div class="spin"></div>
+					Update
+				</div>
+			</div>
+		</div>
+	</div>
+</div>

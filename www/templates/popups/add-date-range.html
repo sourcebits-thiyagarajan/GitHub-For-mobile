@@ -1,0 +1,61 @@
+<h3>
+	Adding Date Range
+	<span close-popup class="closePopUpBox pointer center fr">x</span>
+</h3>
+<div class="spin"></div>
+<div class="popUpBoxHeader clearfix">
+	<ul class="fl">
+		<li class="from">
+			<label>From</label>
+			<label for="_from" class="input" ng-click="showDatePicker($event)">{{dateRangePoupContent.fromDate | dateDDMMMYYYY}}</label>
+			<input id="_from" type="hidden" ng-model="dateRangePoupContent.fromDate" value="{{dateRangePoupContent.fromDate}}" readonly="true"/>
+			<div class="settingsPicker abs none" date-picker set-date="dateRangePoupContent.fromDate" ng-model="dateRangePoupContent.fromDate" min-date="dateRangePoupContent.defaultMinDate"></div>
+			<span class="inlBlk icons cal month pointer active" ng-click="showDatePicker($event)"></span>
+		</li>
+		<li class="to">
+			<label>To</label>
+			<label for="_to" class="input" ng-click="showDatePicker($event)">{{dateRangePoupContent.toDate | dateDDMMMYYYY}}</label>
+			<input id="_to" type="hidden" ng-model="dateRangePoupContent.toDate" value="{{dateRangePoupContent.toDate}}" readonly="true"/>
+			<div class="settingsPicker abs none toDate" date-picker set-date="dateRangePoupContent.toDate" ng-model="dateRangePoupContent.toDate"  min-date="dateRangePoupContent.fromDate"></div>
+			<span class="inlBlk icons cal month pointer active" ng-click="showDatePicker($event)"></span>
+		</li>
+	</ul>
+
+	<!-- Days selection for the daterange -->
+	<ol class="fl" ng-hide="isTaxCommission">
+		<li ng-repeat="day in shortDays">
+			<div class="rangeChk inlBlk noSelect" ng-class="{blocked: dateRangePoupContent.allowedDays[day] != 'true', closeSelection: dateRangePoupContent.allowedDays[day] == 'block'}">	
+				<input id="{{day}}" type="checkbox" ng-model="dateRangePoupContent.selectedDays[day]" ng-disabled="dateRangePoupContent.allowedDays[day] != 'true'"/>
+				<label class="icheckbox noSelect green" for="{{day}}"></label>
+				<span class="checkLabel f12 upper">{{day}}</span>
+			</div>
+		</li>
+	</ol>
+</div>
+
+<div id="popupHeader" class="clearfix scrollable">
+	<!-- Table Data Loads Here -->
+</div>
+
+<div id="popupContent" class="clearfix scrollable" accordion-content="180">
+	<!-- Table Data Loads Here -->
+</div>
+
+<div id="datePopupSaveBtn" class="rel fr pointer submit-btn fb14 center" ng-class="{blocked: !dateRangePoupContent.isDaterangeValid}" ng-click="saveDateRangeChanges($event, updateForm)">
+	<div class="spin"></div>
+	Save
+	
+</div>
+
+<div id="subMainPopup" class="none addDateRangePopUp">
+	<div class="bgOverLay"></div>
+	<div class="spin"></div>
+	
+	<div id="popupContainer" class="popUpBox">
+		<!-- Popup will come dynamically here from AJAX -->
+	</div>
+</div>
+
+<h6 class="fb16 fr userMsg errorMsg" ng-show="dateRangePoupContent.errMsg">{{dateRangePoupContent.errMsg}}</h6>
+<h6 class="fb16 fr userMsg successMsg" ng-show="dateRangePoupContent.successMsg">{{dateRangePoupContent.successMsg}}</h6>
+

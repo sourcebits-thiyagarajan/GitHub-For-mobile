@@ -1,0 +1,29 @@
+
+
+		
+		<!-- Managed Reports Archive -->		
+		<li id="managedReports" class="rel pointer managedReports" ng-click="managedReports.hide || switchSuiteDashboardView('managedreports')" show-widget-spinner="{{managedReports==null}}" ng-class="{pointer: !managedReports.hide}">
+			
+			<h3 class="fb18">Managed Reports Archive <span ng-show="managedReports.data.length">({{managedReports.data.length}})</span></h3>
+			<div class="spin"></div>
+
+			<ol class="dataLists alerts">
+				<li ng-repeat="item in managedReports.data | limitTo:3">
+
+					<span class="label date fl">{{item.report_date | cutAt:6}}</span>
+
+					<div class="middle-content fl">
+						<span class="big">{{item.days_out}}<ng-pluralize count="item.days_out" when="{'1': ' Day', 'other': ' Days'}"></ng-pluralize></span>
+						<span class="range">{{item.report_start_date}}  &nbsp; to &nbsp; {{item.report_end_date}}</span>
+					</div>
+					
+					<span ng-click="downloadReport(item.report_id, $event)" class="icons download fr"></span>
+				</li>
+			</ol>
+
+			<div ng-show="managedReports.data.length > 3" class="more-items">
+				<span class="dots"></span>	
+			</div>
+
+			<h4 ng-show="managedReports.hide" class="noDataMsg center">No data available for the selected date range</h4>
+		</li>

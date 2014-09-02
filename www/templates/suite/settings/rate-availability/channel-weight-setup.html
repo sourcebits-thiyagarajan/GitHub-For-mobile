@@ -1,0 +1,157 @@
+
+<h3 class="setHdr">Channel Rate Weight Setup</h3>
+
+<section class="channelWeight" ng-controller="ChannelWeightSetupCtrl" >
+	<div class="channelWeightSetUp spin"></div>
+	<span class="no-data abs" ng-show="channelWeightSetUpDetailsEmpty">No data available</span>
+	
+	<div ng-show="channelWeightSetUpDetails.hasLoaded && !channelWeightSetUpDetailsEmpty" page-double-scroll>
+		<table class="tableChannelWeightSetup w100 tabularData">
+			<tr class="thead">
+				<td width="260">Hotel Room Type - Rate Plan</td>
+				<td>
+					<ul class="tdPartials">
+						<li>Channel Room Type</li>
+						<li>Channel Name</li>
+						<li>Weight 00 / %</li>
+					</ul>
+				</td>
+			</tr>
+		</table>
+
+		<form class="rel" name="createChannelWeightSetUpForm">
+			<div class="scrollable main-content tabularData">
+				<table class="tableChannelWeightSetup w100 ">
+					<tr ng-repeat="genericRoomWeight in channelWeightSetUpDetails.genericRoomsWeights track by $index">
+						<td width="260">{{genericRoomWeight.gr_name}}</td>
+						<td>
+							<ul class="accordion accordionContainer channelWeightAccordianContainer">
+								<li ng-repeat="roomWeight in genericRoomWeight.channel_room_weight track by $index" channel-weight-accordion>
+									<div class="accordionHead panel-head">
+										<span class="icons arrowDownWhite inlBlk rel"></span>
+										<ul class="tdPartials">
+											<li class="panel-trigger pointer">{{roomWeight.extranet_room_name}}</li>
+											<li>{{roomWeight.dname}}</li>
+											<ul ng-repeat="paramWeights in roomWeight.param_weight track by $index">
+												<div ng-show="paramWeights.param_id == 1">
+													<li class="roomTypeHeader">
+														<input type="text" class="wSmall textAlignRight" ng-pattern="validator.number" ng-model="paramWeights.value" value="{{paramWeights.value}}" />
+														<span class="inlBlk center f12 weight pointer" toggle-text="paramWeights.is_percentage" ng-model="paramWeights.is_percentage">.00</span>
+													</li>
+												</div>
+											</ul>
+										</ul>
+									</div>
+									<ol class="panel-body">
+										<li class="ui-state-disabled"></li>
+										<ul class="tdPartials" ng-repeat="paramWeight in roomWeight.param_weight track by $index">
+											<div ng-show="paramWeight.param_id != 1">
+												<li>{{paramWeight.param_name}}</li>
+												<li>{{roomWeight.dname}}</li>
+												<li>
+													<input type="text" class="wSmall textAlignRight" ng-model="paramWeight.value" ng-pattern="validator.number" value="{{paramWeight.value}}" />
+													<span class="inlBlk center f12 weight pointer" toggle-text="paramWeight.is_percentage" ng-model="paramWeight.is_percentage">.00</span>
+												</li>
+											</div>
+										</ul>
+									</ol>
+								</li>
+							</ul>
+						</td>
+					</tr>
+				</table>	
+			</div>	
+		
+
+			<div class="blk addRow noSelect clearfix">
+				<div class="rel fr pointer submit-btn fb14 center" ng-click="saveChannelWeightChanges($event)" ng-class="{blocked: !channelWeightSetUpDetails.genericRoomsWeights || !channelWeightSetUpDetails.genericRoomsWeights.length || !createChannelWeightSetUpForm.$valid || discardChangesMade}">
+					<div class="spin"></div>
+					Save
+				</div>
+				<div class="rel fr pointer submit-btn fb14 center" ng-class="{blocked: !channelWeightSetUpDetails.originalData.genericRoomsWeights || !channelWeightSetUpDetails.originalData.genericRoomsWeights.length}" show-daterange-popup create-daterange="true">
+					<div class="spin"></div>
+					Add Date Range
+				</div>
+			</div>
+		</form>
+
+
+		<div class="tableOptions inlBlk w100">
+			<div class="dateRangeAddContainer scrollable secondary-content">
+				<div class="dateRangeAdded" ng-repeat= "dateRangeItem in channelWeightSetUpDetails.dateRanges track by $index">
+					<label class="inlBlk rel f14">Date Range Added</label>
+					<span class="currentDateRange f14">From: {{dateRangeItem.from_date | dateDDMMMYYYY }} To: {{dateRangeItem.to_date | dateDDMMMYYYY }} :</span>
+
+					<span class="white">&nbsp;(<span class="day" ng-repeat="day in dateRangeItem.selectedRange track by $index">{{day}}</span> &nbsp;)</span>
+
+					<span class="rel inlBlk fr pointer icons thrash small" ng-click="deleteDateRange(dateRangeItem, $event)"></span>
+					<span class="inlBlk fr pointer icons editDateRange" show-daterange-popup edit-daterange="{{dateRangeItem}}"></span>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- ***************** Date range Popup Tabular Layout hidden in the page always. ******************* -->
+		<div id="dateRangeLayout" class="none">
+			<textarea unbind-scope>
+				<table class="tableChannelWeightSetup w100 tabularData">
+					<tr class="thead">
+						<td width="260">Hotel Room Type - Rate Plan</td>
+						<td>
+							<ul class="tdPartials">
+								<li>Channel Room Type</li>
+								<li>Channel Name</li>
+								<li>Weight 00 / %</li>
+							</ul>
+						</td>
+					</tr>
+				</table>
+			</textarea>
+
+			<textarea unbind-scope>
+				<form name="updateForm">
+					<table class="tableChannelWeightSetup w100 ">
+						<tr ng-repeat="genericRoomWeight in dateRangePoupContent.tabularContent track by $index">
+							<td width="260"><input type="text" class="wMedium channelWeightInRoomType channelNameUpdateCls" ng-model="genericRoomWeight.gr_name" value="{{genericRoomWeight.gr_name}}" title="{{genericRoomWeight.gr_name}}" disabled/></td>
+							<td>
+								<ul class="accordion accordionContainer channelWeightAccordianContainer">
+									<li ng-repeat="roomWeight in genericRoomWeight.channel_room_weight track by $index" channel-weight-accordion>
+										<div class="accordionHead panel-head">
+											<span class="icons arrowDownWhite inlBlk rel"></span>
+											<ul class="tdPartials">
+												<li class="panel-trigger pointer"><input type="text" class="wSmall channelWeightInRoomType" title= "{{roomWeight.extranet_room_name}}"ng-model="roomWeight.extranet_room_name" value="{{roomWeight.extranet_room_name}}" disabled/></li>
+												<li><input type="text" class="wSmall channelWeightInNameWe" ng-model="roomWeight.dname" value="{{roomWeight.dname}}" disabled/></li>
+												<ul ng-repeat="paramWeights in roomWeight.param_weight track by $index">
+													<div ng-show="paramWeights.param_id == 1">
+														<li class="roomTypeHeader">
+															<input type="text" class="wSmall textAlignRight" ng-pattern="validator.number" ng-model="paramWeights.value" value="{{paramWeights.value}}" />
+															<span class="inlBlk center f12 weight pointer" toggle-text="paramWeights.is_percentage" ng-model="paramWeights.is_percentage">.00</span>
+														</li>
+													</div>
+												</ul>
+											</ul>
+										</div>
+										<ol class="panel-body">
+											<li class="ui-state-disabled"></li>
+											<ul class="tdPartials" ng-repeat="paramWeight in roomWeight.param_weight track by $index">
+												<div ng-show="paramWeight.param_id != 1">
+													<li><input type="text" class="wSmall channelWeightInRoomType" ng-model="paramWeight.param_name" value="{{paramWeight.param_name}}" disabled/></li>
+													<li><input type="text" class="wSmall channelWeightInNameWe" ng-model="roomWeight.dname" value="{{roomWeight.dname}}" disabled/></li>
+													<li>
+														<input type="text" class="wSmall textAlignRight" ng-model="paramWeight.value" ng-pattern="validator.number" value="{{paramWeight.value}}" />
+														<span class="inlBlk center f12 weight pointer" toggle-text="paramWeight.is_percentage" ng-model="paramWeight.is_percentage">.00</span>
+													</li>
+												</div>
+											</ul>
+										</ol>
+									</li>
+								</ul>
+							</td>
+						</tr>
+					</table>	
+				</form>
+			</textarea>
+		</div>
+
+</section>

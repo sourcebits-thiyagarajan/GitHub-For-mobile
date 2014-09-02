@@ -1,0 +1,62 @@
+<div class="appBg fix"></div>
+
+<section class="login clearfix" ng-controller="AuthCtrl">
+
+	<div class="wrapper">
+		<span class="txtSp inlBlk live"></span>
+
+		<div class="inner-wrapper">
+			<header class="fb16">Sign In</header>
+			<div class="form-box" ng-hide="isForceLogin">
+				<h2 class="f14">
+					<!-- <span ng-if="!isErr">
+						You are one step away from accessing your hotel analytics.
+					</span> -->
+					<span class="red" ng-if="isErr">
+						{{isErr}}
+					</span>
+				</h2>
+
+				<form name="loginForm" ng-submit="loginUser($event, loginForm, name, pass)">
+					<div class="field rel">
+
+						<input type="text" placeholder="User Name" required ng-model="name" ng-pattern="validator.space" class="f12">
+						<i class="icons user"></i>
+						<div class="input-help">
+				      		<h4>Invalid User Name</h4>
+				    	</div>
+					</div>
+					
+					<div class="field rel">						
+						<input type="password" placeholder="Password" required ng-model="pass" class="f12">
+						<i class="icons pwd"></i>
+					</div>
+					
+					<div class="rel">
+					    <div class="spin"></div>					    
+						<input type="submit" ng-disabled="isDisabled" class="submit fb14" value="Sign In">				    	
+				    </div>
+					<div class="hidden">
+						<a href="http://www.erevmax.com/ratetiger/privacy-policy-terms-use.html" target="_blank" class="terms fl">Privacy Policy</a>
+				    	<a href="#/forgot-pass" class="forgot f14">Forgot Password?</a>
+				    </div>
+				</form>
+			</div>
+			<div class="form-box" ng-show="isForceLogin">
+				<form name="forceLoginForm" class="force-login">
+					<h2 class="f14">
+						You are currently logged in from another location. Do you want to continue?
+					</h2>
+					
+					<div class="rel fl w50">
+					    <div class="spin"></div>
+						<input type="button" class="submit fb14 fl" value="Yes" ng-click="proceedLogin($event)">
+				    </div>
+				    <div class="rel fr w50">
+					    <div class="spin"></div>
+						<input type="button" class="submit fb14 fr" value="No" ng-click="stopLogin()">
+				</form>
+			</div>
+		</div>
+	</div>
+</section>

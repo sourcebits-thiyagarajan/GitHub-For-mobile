@@ -1,0 +1,25 @@
+
+		<!-- Close Report Widget -->
+		<li id="closeRepSummary" class="rel" ng-click="closeCount.hide || switchSuiteDashboardView('market_analysis-availability_status-summary')" ng-class="{pointer: !closeCount.hide}" show-widget-spinner="{{closeCount==null}}">
+			
+			<h3 class="fb18">Availability Status</h3>
+			<h3 class="fb18 center red">Not Found</h3>
+			<div class="spin"></div>
+
+			<ol class="closedReport" ng-show="closeCount">
+				<li ng-hide="closeCount.hide">
+					<div class="w50 center fl pb30">
+						<div class="title bold">Any Website</div>
+						<div class="count fl48" title="{{closeCount.my_hotel_closed_count}}">{{closeCount.my_hotel_closed_count}}</div>
+						<div ng-pluralize count="closeCount.my_hotel_closed_count" when="{'1': 'Instance', 'other': 'Instances'}"></div>
+					</div>
+					<div class="w50 center fl">
+						<div class="title bold">Brand.com</div>
+						<div class="count fl48" title="{{closeCount.my_brand_site_closed_count}}">{{closeCount.my_brand_site_closed_count}}</div>
+						<div ng-pluralize count="closeCount.my_brand_site_closed_count" when="{'1': 'Instance', 'other': 'Instances'}"></div>
+					</div>
+				</li>
+
+				<h4 ng-show="closeCount.hide" class="noDataMsg center">No data available for the selected date range</h4>
+			</ol>
+		</li>

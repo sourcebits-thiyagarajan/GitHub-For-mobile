@@ -1,0 +1,129 @@
+<section class="lar rel" id="exportPdf" class="noData">
+	<div class="spin"></div>
+
+	<div >
+	<!-- Wrapper -->
+	<div ng-show="detailedContent" ng-controller="SuiteDataViewCtrl">
+		<!-- Chart View -->
+		<div class="chartDataView">
+			<header class="pdf-header clearfix">
+				<img src="../images/erevmax-logo.png" class="logo" />
+				<div class="details">
+					<h1 class="fb24">{{hotelDetail.name}}, {{hotelDetail.city}}, {{hotelDetail.country}}</h1>
+					<span>
+						{{currentDate}}
+					</span>
+				</div>		
+			</header>
+			<div class="sub-details">
+				<div class="item clearfix fb16">
+					<span class="tag fl">Regions:</span>
+					<span class="value fl">{{hotelDetail.city}}, {{hotelDetail.country}}</span>
+				</div>
+				<div class="item clearfix fb16">
+					<span class="tag fl">Date Range:</span>
+					<span class="value fl">{{currentFilterDetails.startDate}} to {{currentFilterDetails.endDate}}</span>
+				</div>
+				<div class="item legends clearfix fb16">
+					<span class="tag fl">Legends:</span>
+					<div class="value fl">
+						<ul class="fl f14">
+							<li ng-repeat="channel in detailedContent.channelList">
+								<span class="fb14">{{channel.sname}}</span>{{channel.dname}}
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+
+			<!-- Summary Report -->
+			<h1 class="fb24 catHead">Summary Report - Availability Status</h1>
+
+
+			<h1 class="fb24 catHead">My Hotel</h1>
+
+			<div class="spin"></div>
+			<span class="no-data abs" ng-hide="isSpinnerShowing || detailedContent">No data available</span>
+			<div class="chartDataWrap">
+				<div id="dataContent" class="center availabilityStatus" ng-show="detailedContent.chartData">
+					<div class="closedReportDataWrap inlBlk w100 rel">
+						<!-- Main Scrollable Content -->
+						<table class="w100">
+							<thead class="dates w100">
+								<tr>
+									<th width="120" class="latoBold"></th>
+									<th ng-repeat="channel in detailedContent.channelList">
+										{{channel.dname}}
+									</th>
+								</tr>
+							</thead>
+							<tbody>
+								<tr ng-repeat="item in detailedContent.chartData">
+									<td  width="120" ng-class="{weekend: isWeekend(item.date), hotDateHighlightVertical: isHotDate(item.date)}">{{item.date | dateDDMMMYYYY:true}}</td>
+									<td ng-repeat="channel in detailedContent.channelList" ng-class="{weekend: isWeekend(item.date)}">
+										<span class="sp circle red cross inlBlk" ng-if="item.closed_channels[channel.dname]"></span>
+									</td>
+								</tr>
+							</tbody>
+						</table>
+						<div class="clear"></div>
+					</div>
+				
+
+				<h1 class="fb24 catHead">All Hotels</h1>
+				<div class="closedReportDataWrap inlBlk w100 rel">
+					<div class="spin"></div>
+					<!-- Main Scrollable Content -->
+					<table class="w100">
+						<thead class="dates w100">
+							<tr>
+								<th width="120" class="latoBold"></th>
+								<th ng-repeat="hotel in detailedContent.competitorHotelDetails">
+									{{hotel.hotel_name}}
+								</th>
+							</tr>
+						</thead>
+						<tbody>
+								<tr ng-repeat="item in detailedContent.chartData">
+									<td width="120" ng-class="{weekend: isWeekend(item.date), hotDateHighlightVertical: isHotDate(item.date)}">{{item.date | dateDDMMMYYYY:true}}</td>
+									<td ng-repeat="hotel in detailedContent.competitorHotelDetails" ng-class="{weekend: isWeekend(item.date)}">
+										<span class="sp circle red cross inlBlk" ng-if="item.closed_hotels[hotel.hotel_name]"></span>
+									</td>
+								</tr>
+						</tbody>
+					</table>
+					<div class="clear"></div>
+				</div>
+
+				<h1 class="fb24 catHead">Detail Report - Availability Status</h1>
+
+				<!-- Scrollable Content -->
+				<div class="closedReportDataWrap" class="inlBlk w100 rel">
+					<!-- Main Scrollable Content -->
+					<table class="w100">
+						<thead class="dates w100">
+						<tr>
+							<th width="120" class="latoBold"></th>
+							<th ng-class="{weekend: isWeekend(item.date)}" ng-repeat="hoteldetail in detailedContent.competitorHotelDetails | orderBy: '-my_hotel'">
+								{{hoteldetail.hotel_name}}
+							</th>
+						</tr>
+						</thead>
+						<tbody>
+								<tr ng-repeat="item in detailedContent.chartData">
+									<td width="120" ng-class="{hotDateHighlightVertical: isHotDate(item.date)}">
+										{{item.date | dateDDMMMYYYY:true}}
+									</td>
+									<td class="cellValue closedValue" ng-repeat="hoteldetail in detailedContent.competitorHotelDetails | orderBy: '-my_hotel'">
+										{{item[hoteldetail.hotel_code].closedInChannelList.length == detailedContent.channelListLength ? 'ALL' : item[hoteldetail.hotel_code].clubbedChannelName}}
+									</td>
+								</tr>
+						</tbody>
+					</table>
+				
+					<div class="clear"></div>
+				</div>
+			</div>
+			
+	</div>
+</section>

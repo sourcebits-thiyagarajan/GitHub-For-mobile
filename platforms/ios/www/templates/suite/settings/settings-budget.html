@@ -1,0 +1,52 @@
+
+<section class="settingsBudget rel" ng-controller="BudgetSettingsCtrl">
+
+	<!-- Settings Toolbar Start -->
+	<div id="settingsToolBar" class="fl" ng-show="isSettings">
+		<form class="settingsBudgetToolbarForm">
+			<div class="customSelect rel inlBlk year">	
+				<div dropdown class="arrowWrapper inlBlk rel pointer noSelect">
+					{{currentYear}}
+				</div>
+				<ul class="ddmenu fb14 mLeft customSelectMenu w100 rel">
+					<li ng-repeat="year in years" ng-click="changeFilter('year', year)">{{year}}</li>
+				</ul>
+			</div>
+			<div class="customSelect rel inlBlk month">	
+				<div dropdown class="arrowWrapper inlBlk rel pointer noSelect">
+					{{currentMonth}}
+				</div>
+				<ul class="ddmenu fb14 mLeft customSelectMenu w100 rel">
+					<li ng-repeat="month in months" ng-click="changeFilter('month', month)">{{month}}</li>
+				</ul>
+			</div>
+			<div class="priceRoomUpdate rel inlBlk">
+				<span class="rel noSelect fl">
+					Reservation Average Price:
+				</span>
+				<span class="updateInputWrapper abs fr"><span class="priceUpdateInp inlBlk rel"><input type="number" ng-model="updatePriceValue" min="0" step="any"/></span></span>
+			</div>
+			<div class="priceUpdate rel inlBlk">
+				<span class="rel noSelect fl">
+					Number of Rooms:
+				</span>
+				<span class="updateInputWrapper abs fr"><span class="priceUpdateInp inlBlk rel"><input type="number" ng-model="updateRoomValue" min="0" /></span></span>
+			</div>
+			<div class="rangeChk inlBlk">	
+				<span class="checkLabel">Weekends:</span>								
+				<input id="selectWeekend" type="checkbox" ng-model="updateWeekends" />
+				<label class="icheckbox noSelect" for="selectWeekend"></label>
+			</div>
+			<input class="pointer" type="submit" value="Update" ng-click="updateValues()" />
+		</form>	
+	</div>	
+	<!-- Settings Toolbar End -->
+
+	<div class="calendarWrap">
+		<div class="spin"></div>
+		<div id="budgetCalendar"></div>
+		
+		<span class="btn fr fb14 pointer update rel" ng-class="{blocked: discardChangesMade}" ng-class="{blocked: discardChangesMade}" ng-click="saveSettings($event)"><div class="spin"></div>Save</span>
+	</div>
+
+</section>

@@ -1,0 +1,80 @@
+
+<h3 class="setHdr">Channel Information</h3>
+
+<section class="channelInformation">
+	<div class="spin"></div>
+	<table class="tabularData" ng-show="channels">
+		<tr class="thead">
+			<td width="60">Active</td>
+			<td width="22%">Channel</td>
+			<td width="10%">Currency</td>
+			<td width="22%">Rate Rounding Method
+				<div popover="bottom" class="rel icons inlBlk fr pointer question">
+					<div class="popover-box scrollable">
+						<span class="fb14 black">None: </span>No rounding applied.<br /><br />
+						<span class="fb14 black">Nearest Value: </span>The rate is rounded up or down to the nearest price point for e.g. If the rate is 99.4$ then it will be rounded to 99$ and if it is 99.8$ then it will rounded to 100$.<br /><br />
+						<span class="fb14 black">Next Value: </span>The rate is rounded up to the next price point for e.g. if the rate is 99.4$ or 99.8$ it will be rounded up to 100$.<br /><br />
+						<span class="fb14 black">Previous Value: </span>The rate is rounded up to the previous price point for e.g. if the rate is 99.4$ or 99.8$ it will be rounded up to 99$.<br /><br />
+					</div>
+				</div>
+			</td>
+			<td width="20%">User Name</td>
+			<td width="20%">Password</td>
+		</tr>
+	</table>
+
+	<!-- Scrollable Content -->
+	<div class="scrollable" ng-show="channels" settings-max-height>
+		<form name="channelInformation">
+			<table class="tabularData">
+				<tr ng-repeat="channel in channels track by $index">
+					<td width="60">
+						<div class="rangeChk inlBlk">
+							<input id="{{$index}}isActiveCheckbox" type="checkbox" ng-model="channel.is_active" />
+							<label class="icheckbox noSelect green" for="{{$index}}isActiveCheckbox"></label>
+						</div>
+					</td>
+					<td width="22%" class="channelName">{{channel.name}}</td>
+					<td width="10%"><input currency-validate class="wSmall" type="text" placeholder="USD" ng-model="channel.currency" list="currencies" /></td>
+					<td width="22%">
+						<div class="customSelect rel inlBlk">
+							<div dropdown class="arrowWrapper inlBlk rel pointer noSelect" ng-model="channel.rounding_method">
+								{{channel.rounding_method}}
+								<span class="arrowSection">
+									<span class="arrow"></span>
+								</span>
+							</div>
+							<ul class="ddmenu fb14 mLeft customSelectMenu w100 rel">
+								<li ng-click="selectRoundingMethod(channel.dcode, 'Nearest Value')">Nearest Value</li>
+								<li ng-click="selectRoundingMethod(channel.dcode, 'Next Value')">Next Value</li>
+								<li ng-click="selectRoundingMethod(channel.dcode, 'Previous Value')">Previous Value</li>
+							</ul>
+						</div>
+					</td>
+					<td width="20%" ng-class="{'invalidAccess': !channel.is_valid_access}"><input type="text" placeholder="User Name" ng-model="channel.user_name" /></td>
+					<td width="20%">
+						<div class="rel pointer submit-btn fb14 center" ng-click="showPasswordPopup($event, channel.dcode)" ng-show="channel.is_password_present">
+							<div class="spin"></div>
+							Change Password
+						</div>
+						<div ng-hide="channel.is_password_present" toggle-password>
+							<span class="icons eye inlBlk pointer trigger"></span>
+							<input class="wMedium" type="password" placeholder="Password" ng-model="channel.password"/>
+						</div>
+					</td>
+				</tr>
+			</table>
+		</form>
+	</div>
+
+	<datalist id="currencies">
+		<option ng-repeat="currency in currencies" value="{{currency}}"/>
+	</datalist>
+
+	<div class="tableOptions inlBlk w100 formSubmit" ng-show="channels">
+		<div class="rel fr pointer submit-btn fb14 center" ng-click="saveChannelInformationOnClick('channelInformation')" ng-class="{blocked: discardChangesMade}">
+			<div class="spin"></div>
+			Save
+		</div>
+	</div>
+</section>

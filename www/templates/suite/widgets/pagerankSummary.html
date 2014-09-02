@@ -1,0 +1,18 @@
+
+
+		<!-- Page Ranking Widget -->
+		<li id="pagerankSummary" class="rel" ng-click="pagerankSummary.hide || switchSuiteDashboardView('market_analysis-city_search_ranking-summary')" ng-class="{pointer: !pagerankSummary.hide}" show-widget-spinner="{{pagerankSummary==null}}">
+			
+			<h3 class="fb18">City Search Ranking <span class="lato"> (On 1st Page)</span></h3>
+			<div class="spin"></div>
+
+			<ol class="barChart ca-box tableCell" ng-hide="pagerankSummary.hide">
+				<li ng-repeat="channel in rankDisplaySummary | orderBy: '-percent' | limitTo: 7">
+					<span class="label" title="{{channel.name}}">{{channel.name}}</span>
+					<span class="bar" bar-chart="{{channel.percent}}" offset="40"></span>
+					<span class="chartValue">{{channel.percent | numberFormat:2:true}} %</span>
+				</li>
+			</ol>
+
+			<h4 ng-show="pagerankSummary.hide" class="noDataMsg center">No data available for the selected date range</h4>
+		</li>

@@ -1,0 +1,13 @@
+
+		<!-- Price Position Widget -->
+		<li id="priceposSummary" class="rel" ng-click="pricePositionSummary.hide || switchSuiteDashboardView('market_analysis-price_position-chart')" ng-class="{pointer: !pricePositionSummary.hide}" show-widget-spinner="{{pricePositionSummary==null}}">
+			
+			<h3 class="fb18">Price Position At Conversion</h3>
+			<div class="spin"></div>
+			<!-- <div class="pricepos-overlay pointer"></div> -->
+			<ol class="conversion" ng-hide="pricePositionSummary.hide">
+				<li class="pie-chart clearfix" pie-chart></li>
+			</ol>
+
+			<h4 ng-show="pricePositionSummary.hide" class="noDataMsg center">No data available for the selected date range</h4>
+		</li>

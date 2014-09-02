@@ -1,0 +1,65 @@
+
+<section class="chartDataWrap clearfix rel">
+	<div class="spin"></div>
+	<span class="no-data abs" ng-hide="isSpinnerShowing || detailedContent">No data available</span>
+	<div id="dataContent" class="center" ng-show="isSpinnerShowing || paginationDetails.data">
+		<table class="pageRankingDataDates w100">
+			<tr>
+				<td class="th-blue" ng-show="paginationDetails.data">Channels</td>
+				<td>
+					<table>
+						<tr>
+							<th colspan="2" ng-repeat="date in detailedContent.dates | startAt:paginationDetails.currentPage*paginationDetails.pageSize:5 | limitTo:paginationDetails.pageSize" ng-init="hotdateItem = isHotDate(date)" ng-class="{weekend: isWeekend(date), hotDateHighlightHorizontal: hotdateItem}" title="{{hotdateItem.description}}">{{date | dateDDMMMYYYY:true}}</th>
+						</tr>
+						<tr>
+							<td ng-repeat-start="date in detailedContent.dates | startAt:paginationDetails.currentPage*paginationDetails.pageSize:5 | limitTo:paginationDetails.pageSize" ng-class="{weekend: isWeekend(date)}">Page</td>
+							<td ng-repeat-end ng-class="{weekend: isWeekend(date)}">Position</td>
+						</tr>
+					</table>
+				</td>
+			</tr>
+		</table>
+		<!-- Scrollable Content -->
+		<div class="pageRankingDataWrap inlBlk w100 rel" ma-page-size>
+
+			<!-- Hotel names on the LHS -->
+			<div class="pageRankingDataLabel fl">
+				<ul>
+					<li ng-repeat="channel in detailedContent.pageRankChannelList"><span class="tableCell">{{channel.dname}} ({{channel.hotel_per_page}})</span></li>					
+				</ul>
+			</div>
+
+			<!-- Actual Table -->
+			<div class="pageRankingData fl rel">
+				<table class="w100">
+					<tbody>
+						<tr ng-repeat="channel in detailedContent.pageRankChannelList">
+							
+							<td ng-repeat-start="date in detailedContent.dates | startAt:paginationDetails.currentPage*paginationDetails.pageSize:5 | limitTo:paginationDetails.pageSize">{{detailedContent.dataView[channel.dname][date].page}}</td>
+							<td ng-repeat-end>{{detailedContent.dataView[channel.dname][date].position}}</td>
+						</tr>
+					</tbody>
+				</table>			
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<div class="navigate center">
+			<span ng-repeat="dot in getDots() track by $index" ng-click="dotClicked($index)" ng-class="{active: $index==paginationDetails.currentPage}" class="inlBlk"></span>
+		</div>
+		
+	</div>
+
+	<span class="slideNext inlBlk abs pointer noSelect" ng-click="paginateData(true)"
+		ng-hide="paginationDetails.currentPage == paginationDetails.totalPages()-1">
+		<span class="icons arrowNext inlBlk"></span>
+	</span>
+	<span class="slidePrev inlBlk abs pointer noSelect" ng-click="paginateData(false)"
+		ng-hide="paginationDetails.currentPage == 0">
+		<span class="icons arrowPrev inlBlk"></span>
+	</span>
+</section>
+
+
+
+

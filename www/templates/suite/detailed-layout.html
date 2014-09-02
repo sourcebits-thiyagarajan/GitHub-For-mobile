@@ -1,0 +1,25 @@
+
+<div class="chartDataView" ng-controller="ChartDataDetailedCtrl">
+	
+	<div class="clearfix mb12">
+		<h2 class="fl30 fl caps" ng-show="navCrumbList">
+			<span ng-repeat="item in navCrumbList | limitTo: navCrumbList.length - 1"><a class="pointer navigationCrumb noSelect" href="{{item.url}}">{{item.name}} </a>&gt; </span> {{navCrumbList[navCrumbList.length - 1].name}}
+		</h2>
+		<div class="fr" ng-hide="isDetailView">
+			<span ng-click="exportToPdf()" class="exportDoc fl pointer"><span class="icons newdoc inlBlk"></span></span>
+			<ul class="statsBtn fb14 hidden fl">
+				<li ng-click="toggleSuiteGraphView('chart')" ng-class="{active: isGraphView}">Graph View</li>
+				<li ng-click="toggleSuiteGraphView('data')" ng-class="{active: !isGraphView}">Data View</li>
+			</ul>
+		</div>
+		<div class="fr" ng-show="isDetailView">
+			<span ng-click="switchSuiteDashboardView('manage_rates/lar')" class="fl pointer btn manageRates" ng-show="isLARView" ng-if="!isBlocked(WIDGETS.CLOSED_DATES) && !isBlocked(WIDGETS.MANAGE)">Manage Rates</span>
+			<span ng-click="exportToPdf()" class="exportDoc fl pointer"><span class="icons newdoc inlBlk"></span></span>
+			<ul class="statsBtn fb14 hidden fl">
+				<li ng-click="toggleSuiteGraphView('summary')" ng-class="{active: isGraphView}">Summary</li>
+				<li ng-click="toggleSuiteGraphView('data')" ng-class="{active: !isGraphView}">Detail</li>
+			</ul>
+		</div>
+	</div>
+	<div ui-view></div>
+</div>

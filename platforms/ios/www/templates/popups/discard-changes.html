@@ -1,0 +1,18 @@
+<h3>
+	Confirm
+	<span close-popup from-discard-so-close="true" class="closePopUpBox pointer center fr">x</span>
+</h3>
+
+<div id="popContent" class="clearfix center">
+	<h3>You have unsaved changes in the page.<br> Are you sure you want to continue without saving?</h3>
+</div>
+
+<div class="rel fr pointer submit-btn fb14 center no" close-popup from-discard-so-close="true">
+	<div class="spin"></div>
+	No
+</div>
+
+<div class="rel fr pointer submit-btn fb14 center yes" ng-click="discardChanges($event)">
+	<div class="spin"></div>
+	Yes
+</div>

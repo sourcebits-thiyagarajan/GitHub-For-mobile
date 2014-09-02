@@ -1,0 +1,115 @@
+<section class="rel mapping">
+	<div class="spin"></div>
+	<h3 class="setHdr">RMS Room Type Mapping</h3>
+
+	<div class="roomChannelMapping white rel clearfix" ng-controller="RMSRoomTypeMappingCtrl">
+
+		<div class="linkFrom fl">
+			<h4>RMS Room Type</h4>
+			<ul class="scrollable" settings-max-height>
+				<li drag-mapping>
+					<span class="textWithEllipsis">Room1</span>
+					<span class="icons ui-icon drag dragHandle move inlBlk abs"></span>
+				</li>
+				<li drag-mapping>
+					<span class="textWithEllipsis">Room2</span>
+					<span class="icons ui-icon drag dragHandle move inlBlk abs"></span>
+				</li>
+				<li drag-mapping>
+					<span class="textWithEllipsis">Room3</span>
+					<span class="icons ui-icon drag dragHandle move inlBlk abs"></span>
+				</li>
+				<li drag-mapping>
+					<span class="textWithEllipsis">Room4</span>
+					<span class="icons ui-icon drag dragHandle move inlBlk abs"></span>
+				</li>
+				<li drag-mapping>
+					<span class="textWithEllipsis">Room5</span>
+					<span class="icons ui-icon drag dragHandle move inlBlk abs"></span>
+				</li>
+				<li drag-mapping>
+					<span class="textWithEllipsis">Room6</span>
+					<span class="icons ui-icon drag dragHandle move inlBlk abs"></span>
+				</li>
+			</ul>
+		</div>
+
+		<span class="sp arrowXLRight inlBlk"></span>
+
+		<div class="linkTo fr">
+			<h4>Property Room Type</h4>
+			<ul class="scrollable accordionContainer" settings-max-height>
+				<li class="ratePlans" channel-weight-accordion>
+					<div class="listHead rel panel-trigger pointer">
+						Standard Room (3)
+						<span class="icons arrowDownWhite abs inlBlk"></span>
+					</div>
+					<ol room-type-mapping class="panel-body">
+						<li class="ui-state-disabled"></li>
+						<li>Room 1
+							<span class="icons close inlBlk abs pointer" ng-click="removeMapping(roomPlanMapping.room_rate_id)"></span>
+						</li>
+						<li>Room 2
+							<span class="icons close inlBlk abs pointer" ng-click="removeMapping(roomPlanMapping.room_rate_id)"></span>
+						</li>
+						<li>Room 3
+							<span class="icons close inlBlk abs pointer" ng-click="removeMapping(roomPlanMapping.room_rate_id)"></span>
+						</li>
+					</ol>
+				</li>
+				<li class="ratePlans" channel-weight-accordion>
+					<div class="listHead rel panel-trigger pointer">
+						Standard Room (2)
+						<span class="icons arrowDownWhite abs inlBlk"></span>
+					</div>
+					<ol room-type-mapping class="panel-body">
+						<li class="ui-state-disabled"></li>
+						<li>Room 1
+							<span class="icons close inlBlk abs pointer" ng-click="removeMapping(roomPlanMapping.room_rate_id)"></span>
+						</li>
+						<li>Room 2
+							<span class="icons close inlBlk abs pointer" ng-click="removeMapping(roomPlanMapping.room_rate_id)"></span>
+						</li>
+					</ol>
+				</li>
+				<li class="ratePlans" channel-weight-accordion>
+					<div class="listHead rel panel-trigger pointer">
+						Deluxe Room (2)
+						<span class="icons arrowDownWhite abs inlBlk"></span>
+					</div>
+					<ol room-type-mapping class="panel-body">
+						<li class="ui-state-disabled"></li>
+						<li>Room 1
+							<span class="icons close inlBlk abs pointer" ng-click="removeMapping(roomPlanMapping.room_rate_id)"></span>
+						</li>
+						<li>Room 2
+							<span class="icons close inlBlk abs pointer" ng-click="removeMapping(roomPlanMapping.room_rate_id)"></span>
+						</li>
+					</ol>
+				</li>
+				<li class="ratePlans" channel-weight-accordion>
+					<div class="listHead rel panel-trigger pointer">
+						Suite Room (2)
+						<span class="icons arrowDownWhite abs inlBlk"></span>
+					</div>
+					<ol room-type-mapping class="panel-body">
+						<li class="ui-state-disabled"></li>
+						<li>Room 1
+							<span class="icons close inlBlk abs pointer" ng-click="removeMapping(roomPlanMapping.room_rate_id)"></span>
+						</li>
+						<li>Room 2
+							<span class="icons close inlBlk abs pointer" ng-click="removeMapping(roomPlanMapping.room_rate_id)"></span>
+						</li>
+					</ol>
+				</li>
+			</ul>
+		</div>
+		<div class="controls right">
+			<p class="fl">Drag and drop the appropriate Room Type to the RMS Room Type</p>
+			<span class="btn pointer inlBlk rel" ng-click="saveMappings()" ng-class="{blocked: !roomMapping.newMappings.length > 0}">
+				<div class="spin"></div>
+				Save
+			</span>
+		</div>
+	</div>
+</section>

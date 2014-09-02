@@ -1,0 +1,55 @@
+
+<style>
+	.appBg{background-color:#0c54a6;}
+	.browser .wrapper{background:#e9ecf1; width:700px; margin:100px auto 0;}
+	.browser .wrapper .head{background:#e3eaf0; height:70px; border-bottom:1px solid #acb0b3; box-shadow:0 0 1px #dde2e6}
+	.browser .wrapper .head .connectLrg{top:12px;}
+	.browser .wrapper .bwContent{padding:25px 48px; line-height:20px;}
+	.browser .wrapper .bwContent h2{font-family:'lato bold'; font-size:25px; color:#b94945; margin-bottom:15px;}
+	.browser .wrapper .bwContent h3{font-family:'lato bold'; font-size:18px; margin-bottom:15px;}
+	.browser .wrapper .bwContent p{margin-bottom:15px; font-size:14px;}
+	.browser .wrapper .bwContent a{font-family:'lato bold'; color:#06315c;}
+	.browser .wrapper .bwContent ul{}
+	.browser .wrapper .bwContent ul li{overflow:hidden; line-height:40px;}
+	.browser .wrapper .bwContent ul li span{float:left;}
+	.browser .wrapper .bwContent ul li a{}
+	.browser .wrapper .bwContent .bwDesc{width:280px;}
+	.browser .wrapper .bwContent .bwLists{width:240px;}
+</style>
+
+<div class="appBg fix"></div>
+
+<section class="browser clearfix">
+
+	<div class="wrapper">
+		<div class="head center"><span class="txtSp connectLrg inlBlk rel indent" title="Connect by eRevMax">Connect by eRevMax</span></div>
+		<div class="bwContent clearfix">
+			<div class="bwDesc fl">
+				<h2>Unsupported Browser.</h2>
+				<h3 ng-if="browserName">Your current browser is {{browserName}} {{browserVersion}} ({{os}})</h3>
+				<h3 ng-if="!browserName">You are currently using a older version of Internet Explorer (Windows)</h3>
+				<p>
+					This product has detected that you are using a non-compatible browser. It works best with 
+					Internet Explorer 10 onwards, Chrome 32 and above, Firefox 29 and above and Safari 6 and above.
+				</p>
+				<p>
+					To use this application you will be required to upgrade your browser to a supported version.
+				</p>
+				<p>
+					If you require any assistance please contact <a href="mailto:support@erevmax.com">support@erevmax.com</a>
+				</p>
+			</div>
+			<div class="bwLists fr">
+				<h3>Download Supported Browser</h3>
+				<p>Install the latest version of:</p>
+				<ul>
+					<li><span class="brsLogo chrome inlBlk rel"></span> <a href="https://www.google.com/intl/en_in/chrome/browser/" target="_blank">Download Google Chrome</a></li>
+					<li><span class="brsLogo firefox inlBlk rel"></span> <a href="http://www.mozilla.org/en-US/" target="_blank">Download Firefox</a></li>
+					<li><span class="brsLogo safari inlBlk rel"></span> <a href="http://support.apple.com/downloads/#safari" target="_blank">Download Safari</a></li>
+					<li><span class="brsLogo ie inlBlk rel"></span> <a href="http://windows.microsoft.com/en-in/internet-explorer/download-ie" target="_blank">Download Internet Explorer</a></li>
+				</ul>
+			</div>
+		</div>
+	</div>
+	
+</section>

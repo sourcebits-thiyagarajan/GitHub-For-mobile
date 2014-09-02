@@ -1,0 +1,290 @@
+<div class="manageRates" ng-controller="ManageRateCtrl">
+
+	<!-- Breadcrumbs -->
+	<div class="clearfix mb12">
+		<h2 class="fl30 fl caps">
+			<a href="{{suiteDashboardRouteHREF('dashboard')}}" class="pointer navigationCrumb noSelect">
+				Dashboard
+			</a>
+			 &gt; Manage Rates
+		</h2>
+
+		<div class="fb14 fr">
+			<span class="exportDoc fr pointer" ng-click="exportToPdf()" ng-class="{blocked: error || manageRates.contentLoading}">
+				<span class="icons newdoc inlBlk"></span>
+			</span>
+			<a href="{{suiteDashboardRouteHREF('manage_availability')}}" class="fr btn">Manage Availability</a>
+			<!-- <a href="{{suiteDashboardRouteHREF('manage_availability')}}" class="fr btn recommendation">Recommendation</a> -->
+		</div>
+	</div>
+
+	<!-- Left Slide pagination arrow -->
+	<span ng-hide="error || paginationDetails.currentPage == 0" class="slideBtn slidePrev inlBlk abs pointer noSelect" ng-click="paginateData(false)">
+		<span class="icons arrowPrev inlBlk"></span>
+	</span>
+
+	<!-- Right Slide pagination arrow -->
+	<span ng-hide="error || (paginationDetails.currentPage == paginationDetails.totalPages()-1 || paginationDetails.data.length == 0)" class="slideBtn slideNext inlBlk abs pointer noSelect" ng-click="paginateData(true)">
+		<span class="icons arrowNext inlBlk"></span>
+	</span>
+
+	<div class="dataTable rel">
+		<div class="spin"></div>
+		<div class="error" ng-show="error">{{errorMessage}}</div>
+		<div ng-show="manageRates.response && !manageRates.contentLoading">
+
+			<!-- Slider -->
+			<div class="rateTabs clearfix rel">
+				<!-- <div class="fl rel recommended">
+					<div on-off-switch="manageRates.recommended" switch-label="Recommended"></div>
+				</div> -->
+				<div class="empty fl">&nbsp;</div>
+				<div class="tabContent white rel" slider>
+					<ul class="clearfix abs" id="tabSlider">
+						<li ng-class="{active: ratePlan == manageRates.currentPlan}" height="40" ng-repeat="ratePlan in manageRates.response.ratePlans track by $index" ng-click="manageRates.currentPlan = ratePlan" title="{{ratePlan.name}}">
+							<div class="rateTabHeaderCls">{{ratePlan.name}}</div>
+							<div class="rangeChk inlBlk fr" check-box>
+								<input id="plan-{{ratePlan.name}}" type="checkbox" ng-model="ratePlan.isSelected" />
+								<label class="icheckbox noSelect green" for="plan-{{ratePlan.name}}"></label>
+							</div>
+							<span class="bdrRight"></span>
+						</li>
+					</ul>
+				</div>
+
+				<span class="inlBlk prevRate pointer abs noSelect" ng-click="slideTabs(false)" ng-hide="slider.isLeftNavigationEnabled">
+					<span class="inlBlk icons arrowPrev"></span>
+				</span>
+				<!-- Slider arrows -->
+				<span class="inlBlk nextRate pointer abs noSelect" ng-click="slideTabs(true)" ng-hide="slider.isRightNaviagtionEnabled">
+					<span class="inlBlk icons arrowNext"></span>
+				</span>
+			</div>
+
+			<!-- Scrollable content -->
+			<div class="manageDataScroll scrollable">
+				<form name="manageRatesForm">
+					<div id="dataContent" class="dataContent clearfix white rel">
+
+						<!-- Header Row - Weekend -->
+						<div class="roomType fl">
+							<ul>
+								<li><div on-off-switch="manageRates.weekend" switch-label="Weekend" ng-click="toggleWeekend()"></div></li>
+							</ul>
+						</div>
+
+						<!-- Header Row - Dates -->
+						<div class="rateTable">
+							<table no-of-columns="125">
+								<thead>
+									<tr>
+										<th ng-repeat="date in manageRates.response.dates | weekend:manageRates.weekend | startAt:paginationDetails.currentPage*paginationDetails.pageSize:7 | limitTo:paginationDetails.pageSize track by $index" ng-init="hotdateItem = isHotDate(date)" ng-class="{hotDateHighlightHorizontal: hotdateItem}" title="{{hotdateItem.description}}">
+											{{date | dateDDMMMYYYY:true}}
+										</th>
+										<th ng-show="noWeekend"></th>
+									</tr>
+								</thead>
+							</table>
+						</div>
+
+						<!-- Actual Table -->
+						<div class="scrollForContent" ma-page-size="manage-rates">
+							<div class="roomType fl">
+								<ul>
+									<li>
+										<div>
+											<span ng-click="accordions.smartFill = !accordions.smartFill" ng-class="{collapse: accordions.smartFill == true}" class="sp expand fl pointer"></span>
+											<div class="floatLeft">Smart Fill</div>
+											<input type="text" currency-format class="smartFill fr" ng-change="smartFill(manageRates.smartFill[manageRates.currentPlan.id], manageRates.currentPlan)" ng-model="manageRates.smartFill[manageRates.currentPlan.id]" run-formatters-on-blur />
+										</div>
+										<!-- <div class="firstRow">
+											<span class="fr occupancy">Occupancy</span>
+										</div> -->
+									</li>
+									<li ng-show="accordions.smartFill" ng-repeat="roomType in manageRates.response.roomTypes | isValidRoom:manageRates.response.manageRatesHash:manageRates.currentPlan track by $index" title="{{roomType.name}}" ng-click="roomType.isPriceSelected = !roomType.isPriceSelected; checkUpdatePossibility()" class="pointer">
+										<div class="rangeChk inlBlk fl">
+											<input id="room-price-{{roomType.id}}" ng-model="roomType.isPriceSelected" type="checkbox" checked="{{roomType.isPriceSelected}}"/>
+											<label class="icheckbox noSelect green" for="room-price-{{roomType.id}}"></label>
+										</div>
+										{{roomType.name}}
+									</li>
+									<li>
+										<div class="floatLeft">Close</div>
+										<div class="rangeChk inlBlk fr">
+											<input id="mlos" type="checkbox" ng-model="manageRates.tmpClosed"/>
+											<label class="icheckbox noSelect close" for="mlos" ng-click="toggleDate(manageRates.currentPlan, manageRates.tmpClosed, null, null)"></label>
+										</div>
+									</li>
+								</ul>
+							</div>
+							<div ng-show="noWeekend" class="noWeekendErrMsg">
+								<span>No weekends available in the selected date range.</span>
+							</div>
+							<div class="rateTable">
+								<table no-of-columns="125">
+									<tbody>
+										<tr>
+											<td ng-repeat="date in manageRates.response.dates | weekend:manageRates.weekend | startAt:paginationDetails.currentPage*paginationDetails.pageSize:7 | limitTo:paginationDetails.pageSize track by $index" ng-class="{minimunRowLengthCls: manageRates.response.dates.length < 3}">
+												<div>
+													<input currency-format type="text" ng-model="manageRates.smartFillData[manageRates.currentPlan.id][date]" ng-change="smartFillColumn(manageRates.currentPlan, date, manageRates.smartFillData[manageRates.currentPlan.id][date]); manageRates.smartFill[manageRates.currentPlan.id] = null;" fill-select-dropdown="smartFill" run-formatters-on-blur />
+												</div>
+												<!-- <div class="firstRow second">
+													<span class="fl rel percentage">79 %</span>
+													<span class="fr rel info">i</span>
+												</div> -->
+											</td>
+										</tr>
+										<tr ng-repeat="roomType in manageRates.response.roomTypes | isValidRoom:manageRates.response.manageRatesHash:manageRates.currentPlan track by $index"  ng-show="accordions.smartFill">
+											<td ng-repeat="date in manageRates.response.dates | weekend:manageRates.weekend | startAt:paginationDetails.currentPage*paginationDetails.pageSize:7 | limitTo:paginationDetails.pageSize track by $index" ng-class="{closeSelection: manageRates.response.manageRatesHash[manageRates.currentPlan.id][roomType.id][date].isClosed, block: !roomType.isPriceSelected, minimunRowLengthCls: manageRates.response.dates.length < 3}">
+												<div class="rel">
+													<input type="text" ng-disabled="!roomType.isPriceSelected" currency-format ng-model="manageRates.response.manageRatesHash[manageRates.currentPlan.id][roomType.id][date].rate" fill-select-dropdown="room" ng-blur="closeOnBlur(manageRates.currentPlan, roomType, date)" get-focus="manageRates.response.manageRatesHash[manageRates.currentPlan.id][roomType.id][date].isActive" run-formatters-on-blur />
+													<span class="inlBlk closeLayer abs pointer" fill-select-dropdown="room" ng-if="manageRates.response.manageRatesHash[manageRates.currentPlan.id][roomType.id][date].isClosed" >
+													</span>
+												</div>
+											</td>
+										</tr>
+										<tr>
+											<td ng-repeat="date in manageRates.response.dates | weekend:manageRates.weekend | startAt:paginationDetails.currentPage*paginationDetails.pageSize:7 | limitTo:paginationDetails.pageSize track by $index">
+												<div class="rangeChk inlBlk">
+													<input id="date-{{date}}" type="checkbox" ng-model="manageRates.isClosed[manageRates.currentPlan.id][date]"/>
+													<label class="icheckbox noSelect close greyBdr" for="date-{{date}}" ng-click="toggleDate(manageRates.currentPlan, manageRates.isClosed[manageRates.currentPlan.id][date], date, null)"></label>
+												</div>
+											</td>
+										</tr>
+									</tbody>
+								</table>
+							</div>
+							
+							<!-- Restrictions Begin Here -->
+							<div class="restrictions">
+								<div class="mgRatesCatg pointer noSelect clear" ng-click="accordions.restriction = !accordions.restriction; accordions.smartFill = accordions.restriction ? false : true">
+									<span ng-class="{collapse: accordions.restriction == true}" class="sp expand fl pointer"></span>
+									Restrictions
+								</div>
+
+								<div class="roomType fl" ng-show="accordions.restriction">
+									<ul>
+										<li ng-repeat="roomType in manageRates.response.roomTypes | isValidRoom:manageRates.response.manageRatesHash:manageRates.currentPlan track by $index">
+											<div class="roomProperties">
+												<div class="restrictionCheck rangeChk inlBlk fl" ng-click="checkUpdatePossibility()">
+													<input id="room-restrictions-{{roomType.id}}" ng-model="roomType.isRestrictionSelected" type="checkbox" checked="{{roomType.isRestrictionSelected}}"/>
+													<label class="icheckbox noSelect green" for="room-restrictions-{{roomType.id}}"></label>
+												</div>
+												<div class="restrictionRoomTypes" title="{{roomType.name}}">{{roomType.name}}</div>
+												<span class="restrictionMlos roomProperties fr f14">MLOS</span>
+											</div>
+											<div class="right roomProperties f14">Cut Off</div>
+											<div class="right roomProperties f14">CTA</div>
+											<div class="right roomProperties f14">CTD</div>
+										</li>
+									</ul>
+								</div>
+
+								<div class="rateTable" ng-show="accordions.restriction">
+									<table no-of-columns="125">
+										<tbody>
+											<tr ng-repeat-start="roomType in manageRates.response.roomTypes | isValidRoom:manageRates.response.manageRatesHash:manageRates.currentPlan track by $index">
+												<td ng-repeat="date in manageRates.response.dates | weekend:manageRates.weekend | startAt:paginationDetails.currentPage*paginationDetails.pageSize:7 | limitTo:paginationDetails.pageSize track by $index" ng-class="{block: !roomType.isRestrictionSelected}">
+													<input type="text" class="minInput" ng-model="manageRates.response.manageRatesHash[manageRates.currentPlan.id][roomType.id][date].mlos" ng-disabled="!roomType.isRestrictionSelected" fill-select-dropdown="mlos" validation-mlos-cutoff />
+												</td>
+											</tr>
+											<tr>
+												<td ng-repeat="date in manageRates.response.dates | weekend:manageRates.weekend | startAt:paginationDetails.currentPage*paginationDetails.pageSize:7 | limitTo:paginationDetails.pageSize track by $index" ng-class="{block: !roomType.isRestrictionSelected}">
+													<input type="text" class="minInput" ng-model="manageRates.response.manageRatesHash[manageRates.currentPlan.id][roomType.id][date].cutOff" ng-disabled="!roomType.isRestrictionSelected" fill-select-dropdown="cutOff" validation-mlos-cutoff />
+												</td>
+											</tr>
+											<tr>
+												<td ng-repeat="date in manageRates.response.dates | weekend:manageRates.weekend | startAt:paginationDetails.currentPage*paginationDetails.pageSize:7 | limitTo:paginationDetails.pageSize track by $index" ng-class="{block: !roomType.isRestrictionSelected}">
+													<div class="rangeChk inlBlk">
+														<input id="cta-{{date}}-{{roomType.id}}" type="checkbox" ng-model="manageRates.response.manageRatesHash[manageRates.currentPlan.id][roomType.id][date].cta" ng-disabled="!roomType.isRestrictionSelected"/>
+														<label class="icheckbox noSelect green greyBdr" for="cta-{{date}}-{{roomType.id}}"></label>
+													</div>
+												</td>
+											</tr>
+											<tr ng-repeat-end>
+												<td ng-repeat="date in manageRates.response.dates | weekend:manageRates.weekend | startAt:paginationDetails.currentPage*paginationDetails.pageSize:7 | limitTo:paginationDetails.pageSize track by $index" ng-class="{block: !roomType.isRestrictionSelected}">
+													<div class="rangeChk inlBlk">
+														<input id="ctd-{{date}}-{{roomType.id}}" type="checkbox" ng-model="manageRates.response.manageRatesHash[manageRates.currentPlan.id][roomType.id][date].ctd" ng-disabled="!roomType.isRestrictionSelected"/>
+														<label class="icheckbox noSelect green greyBdr" for="ctd-{{date}}-{{roomType.id}}"></label>
+													</div>
+												</td>
+											</tr>
+										</tbody>
+									</table>
+								</div>
+							</div>
+
+							<!-- Show Lar Only if you came from LAR -->
+							<div ng-if="showLarDiv">
+								<div class="mgRatesCatg pointer noSelect clear" ng-click="accordions.lar = !accordions.lar">
+									<span ng-class="{collapse: accordions.lar == true}" class="sp expand fl pointer"></span>
+									Competition
+								</div>
+
+								<!-- Lar Container -->
+								<div class="manageLar clearfix" ng-show="accordions.lar">
+									<section class="lar rel">
+										<div class="spin"></div>
+
+										<div class="rel" ng-class="{singleColumn: larSummary.allAvgRates.length == 1}">
+											<!-- Scrollable Content -->
+											<div class="larReportWrap inlBlk w100 rel">
+												
+												<!-- Hotel names on the LHS -->
+												<div class="larReportLabel fl">				
+													<ul>
+														<li ng-repeat="hotel in larSummary.hotels"><span class="tableCell" title="{{hotel}}">{{hotel}}</span></li>
+													</ul>
+												</div>
+
+												<!-- Actual Table -->
+												<div class="larReportData rel">
+													<table no-of-columns="125">
+														<tbody>
+															<tr ng-repeat="hotel in larSummary.hotels">
+																<td ng-repeat="item in manageRates.response.dates | weekend:manageRates.weekend | startAt:paginationDetails.currentPage*8:8 | limitTo:8 track by $index">
+																	<span class="value center blk fb18">{{larSummary.data[item][hotel].price | currencyCode: currencyCodeFromAPI | noText}}</span>
+																	<span class="fl number" ng-class="{red: larSummary.data[item][hotel].isMax, green: larSummary.data[item][hotel].isMin}">{{larSummary.data[item][hotel].position}}</span>
+																	<span class="fr status">{{larSummary.data[item][hotel].sname}}</span>
+																</td>
+															</tr>
+														</tbody>
+													</table>			
+												</div>
+												<div class="clear"></div>
+											</div>
+											<!-- Final Avg Rates (at the bottom)-->
+											<div class="tfootLabel fl" ng-show="larSummary.data && !noWeekend">
+												<ul>
+													<li>Average</li>
+												</ul>
+											</div>
+											<div ng-hide="noWeekend" class="tfootData rel">
+												<table class="tfoot" ng-show="larSummary.data" no-of-columns="125">
+													<tr>
+														<td ng-repeat="avg in manageRates.response.dates | weekend:manageRates.weekend | startAt:paginationDetails.currentPage*8:8 | limitTo:8 track by $index">{{larSummary.dates[$index].averagePrice | currencyCode: currencyCodeFromAPI}}</td>
+													</tr>
+												</table>
+											</div>
+										</div>
+										<span class="no-data abs" ng-show="showDefaultView">No data available for the current date range.</span>
+									</section>
+								</div>
+							</div>
+						</div>
+					</div>
+				</form>
+			</div>
+		</div>
+
+		<div class="navigate center noSelect" ng-hide="paginationDetails.totalPages() <= 1 || manageRates.contentLoading || !manageRates.response">
+			<span ng-repeat="dot in getDots() track by $index" ng-click="dotClicked($index)" ng-class="{active: $index==paginationDetails.currentPage}" class="inlBlk"></span>
+		</div>
+
+		<div ng-hide="error" class="fr btn pointer rel updateBtn mt15" ng-click="updateManageRates()" ng-class="{blocked: !isUpdatePossible}">
+			<div class="spin"></div>
+			Update
+		</div>
+	</div>
+
+</div>

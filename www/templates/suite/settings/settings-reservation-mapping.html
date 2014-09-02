@@ -1,0 +1,145 @@
+
+<!-- Rate Availability WRAPPER -->
+<section class="rateAvailability reservationMapping" ng-controller="ReservationMappingCtrl">
+	<div class="spin"></div>
+	
+	<div ng-show="mappingData.hasLoaded">
+		<h2 class="fl30 caps mgb12 clearfix" >
+			<!-- <span class="pointer" ng-click="settingsView('settings')">Settings &gt; </span> Reservation Mapping -->
+			<span class="filters fr">
+				<input type="radio" ng-click="setFilter('unmapped')" class="pointer" name="filter" value="unmapped" checked/>Unmapped
+				<input type="radio" ng-click="setFilter('mapped')" class="pointer" name="filter" value="mapped"/>Mapped
+				<input type="radio" ng-click="setFilter('all')" class="pointer" name="filter" value="all"/>All
+			</span>
+		</h2>
+		<div class="spin"></div>
+
+		<ul class="accordion noBg" settings-size>
+
+			<li>
+				<div accordion class="accordionHead pointer">
+					<span class="icons arrowDownWhite inlBlk rel"></span>
+					<h3><span class="accordionTitle inlBlk pointer">Summary<span class="circle red" ng-show="mappingData.unmappedItems">{{mappingData.unmappedItems}}</span></span></h3>
+				</div>
+
+				<div class="accordionContent w100 none">
+<section class="reservationMapping">
+	<table class="tabularData" ng-hide="isEmptyTable()">
+		<tr class="thead">
+			<td width="25%">Reservation Room Type Name</td>
+			<td width="15%">Code</td>
+			<td width="10%">Channel</td>
+			<td width="25%">Channel Room Type</td>
+			<td width="25%">Hotel Room Type / Rate Plan</td>
+		</tr>
+	</table>
+
+	<form name="summaryForm">
+		
+		<div class="scrollable">
+
+			<table class="tabularData">
+				<tr ng-repeat="item in mappingData.channelsInfo | filterBy:mappingData.filterName track by $index">
+					<td width="25%">{{item.res_room_name}}</td>
+					<td width="15%">{{item.res_room_code}}</td>
+					<td width="10%">{{item.dname}}</td>
+					<td width="25%">
+						<div ng-show="item.is_auto_mapped" class="autoMappedDivCls">
+							<div class="autoMappedTextCls" title="{{item.extranet_room_name}}">{{item.extranet_room_name}}</div><span ng-show="item.is_auto_mapped"class="green circle fr">A</span>
+						</div>
+
+						<div class="customSelect rel inlBlk" ng-hide="item.is_auto_mapped">
+							<div dropdown class="arrowWrapper inlBlk rel pointer noSelect summarySelectWidth">
+								<div class="summarySelectDiv" title="{{item.extranet_room_name}}">{{item.extranet_room_name}}</div>
+								<span class="arrowSection">
+									<span class="arrow"></span>
+								</span>
+							</div>
+							<ul class="ddmenu fb14 mLeft customSelectMenu w100 rel">
+								<li ng-click="updateChannelRoomType($event, undefined, item)">None</li>
+								<li ng-repeat="menuItem in mappingData.channelRooms | filter: {'dname': item.dname} track by $index" ng-click="updateChannelRoomType($event, menuItem, item)">{{menuItem.room_name}}</li>
+							</ul>
+						</div>
+					</td>
+
+					<td width="25%">{{item.gr_name}}</td>
+				</tr>
+			</table>	
+		</div>
+		
+		<div class="white center no-data" ng-show="isEmptyTable()">No data found.</div>
+
+		<div class="blk addRow noSelect clearfix">
+			<div class="inlBlk fr">
+				<div class="rel fr pointer submit-btn fb14 center" ng-click="updateDetails(summaryForm, $event)" ng-class="{blocked: discardChangesMade}">
+					<div class="spin"></div>
+					Save
+				</div>
+			</div>
+		</div>
+	</form>
+</section></div>
+			</li>
+
+			<li ng-repeat="channel in mappingData.allChannels">
+
+				<div accordion class="accordionHead pointer">
+					<span class="icons arrowDownWhite inlBlk rel"></span>
+					<h3><span class="accordionTitle inlBlk pointer">{{channel}}</span></h3>
+				</div>
+				<div class="accordionContent w100 none">
+<section>
+	<table class="tabularData" ng-hide="isEmptyTable(channel)">
+		<tr class="thead">
+			<td width="30%">Reservation Room Type Name</td>
+			<td width="15%">Code</td>
+			<td width="30%">Channel Room Type</td>
+			<td width="25%">Hotel Room Type / Rate Plan</td>
+		</tr>
+	</table>
+
+	<table class="tabularData">
+
+		<tr ng-repeat="item in mappingData.channelsInfo | filter: { dname: channel } | filterBy:mappingData.filterName">
+			<td width="30%">{{item.res_room_name}}</td>
+			<td width="15%">{{item.res_room_code}}</td>
+
+			<td width="30%">
+				<div ng-show="item.is_auto_mapped" class="autoMappedDivCls">
+					<div class="autoMappedTextCls" title="{{item.gr_name}}">{{item.gr_name}}</div><span ng-show="item.is_auto_mapped"class="green circle fr">A</span>
+				</div>
+
+				<div class="customSelect rel inlBlk" ng-hide="item.is_auto_mapped">
+					<div dropdown class="arrowWrapper inlBlk rel pointer noSelect summarySelectWidth">
+						<div class="summarySelectDiv" title="{{item.extranet_room_name}}">{{item.extranet_room_name}}</div>
+						<span class="arrowSection">
+							<span class="arrow"></span>
+						</span>
+					</div>
+					<ul class="ddmenu fb14 mLeft customSelectMenu w100 rel">
+						<li ng-click="updateChannelRoomType($event, undefined, item)">None</li>
+						<li ng-repeat="menuItem in mappingData.channelRooms | filter: {'dname': channel} track by $index" ng-click="updateChannelRoomType($event, menuItem, item)">{{menuItem.room_name}}</li>
+					</ul>
+				</div>
+			</td>
+
+			<td width="25%">{{item.gr_name}}</td>
+		</tr>
+	</table>
+	
+	<div class="white center no-data" ng-show="isEmptyTable(channel)">No data found.</div>
+
+	<div class="blk addRow noSelect clearfix">
+		<div class="inlBlk fr">
+			<div class="rel fr pointer submit-btn fb14 center" ng-click="updateDetails(createRateTypeForm, $event)" ng-class="{blocked: discardChangesMade}">
+				<div class="spin"></div>
+				Save
+			</div>
+		</div>
+	</div>
+</section></div>
+			</li>
+		</ul>	
+	</div>
+	
+</section>

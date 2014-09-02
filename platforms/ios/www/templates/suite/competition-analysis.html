@@ -1,0 +1,31 @@
+
+<!-- Competition Analysis Dashboard -->
+
+<section class="dashBoardSuite" ng-controller="DashboardSuiteCtrl">
+	
+	<h2 class="fl30">
+		<a class="pointer navigationCrumb noSelect" href="/#/suite/dashboard/{{suiteHotelCode}}">Dashboard</a> &gt; Market Analysis
+	</h2>
+
+	<div class="spin"></div>
+
+	<ul class="f14 innerLevel" suite-pagination>
+		<li class="widgetWrapper pointer" ng-repeat="widgetItem in marketWidgetList" widgetId="{{widgetItem.id}}" ng-include src="widgetItem.widgetHTMLFilePath"></li>
+	</ul>
+
+	<!-- Next -->
+	<span class="slideBtn slideNext inlBlk abs pointer noSelect" ng-click="paginateSuiteDashboard(true)" ng-hide="!suitePagination.maxPages || (suitePagination.maxPages == suitePagination.currentPage)">
+		<span class="icons arrowNext inlBlk"></span>
+	</span>
+	<!-- Prev -->
+	<span class="slideBtn slidePrev inlBlk abs pointer noSelect" ng-click="paginateSuiteDashboard(false)" ng-hide="suitePagination.currentPage == 1">
+		<span class="icons arrowPrev inlBlk"></span>
+	</span>
+
+
+	<div class="chartDataView" ng-hide="getDots().length <= 1">
+		<div class="navigate center">
+			<span ng-repeat="dot in getDots() track by $index" ng-click="dotClicked($index)" ng-class="{active: ($index + 1) == suitePagination.currentPage}" class="inlBlk"></span>
+		</div>
+	</div>	
+</section>

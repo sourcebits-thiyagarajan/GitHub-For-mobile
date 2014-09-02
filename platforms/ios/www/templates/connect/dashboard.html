@@ -1,0 +1,67 @@
+
+<section class="dashBoardList" ng-controller="DashboardController">
+	
+	<h2 class="fl30 caps" ng-show="navCrumbList">
+		<span class="pointer" ng-repeat="item in navCrumbList" ng-click="crumbItemClicked(item)">{{item.name | appendArrow : $index < navCrumbList.length - 1}}</span>
+		({{navCrumbList[navCrumbList.length - 1].hotelCount | hotelCount}})
+	</h2>
+	<div class="spin"></div>
+
+	<ul class="fb14 caps" page-size>
+		<!-- <h1>pageSize = {{paginationDetails.pageSize}}</h1> -->
+		<li ng-repeat="item in paginationDetails.data | orderBy: 'name' | startFrom:paginationDetails.currentPage*paginationDetails.pageSize | limitTo:paginationDetails.pageSize track by $index" ng-click="navigateTo(item)" class="rel pointer">
+			<h3 class="fb16">
+				<span class="listTitle" ng-class="{hotel: item.type == 'Hotel'}" title="{{item.name}}">{{item.name}}</span>
+				<span class="f16" ng-hide="item.type == 'Hotel' " ng-show="item.hotelCount >= 1">: {{item.hotelCount | hotelCount}}</span> 
+				<a href="#/connect/{{item.id}}/chart" ng-click="$event.stopPropagation();"><span class="icons chart fr pointer"></span></a>
+			</h3>
+			
+			<div class="spin"></div>
+
+			<ol ng-hide="item.spin">
+				<li ng-repeat="subItem in item.sections">
+					<h4 class="">
+						{{subItem.name}} 
+						<span class="fr">
+							<span ng-if="subItem.this_year != 0">
+								{{subItem.this_year | numberFormat: (subItem.name == 'Rooms Sold' ? 0 : 2)| currencyCode: (subItem.name == 'Rooms Sold' ? null : currencyCodeFromAPI)}}
+							</span>
+							<span class="gray" ng-if="subItem.this_year == 0">N/A</span>
+						</span>
+					</h4>
+					<div class="{{subItem.net_change}}">
+						<span class="icons arrowUpGreen inlBlk" ng-class="{none: subItem.last_year == 0}"></span>
+						<span class="green">
+							<span ng-if="subItem.last_year != 0">{{subItem.percentage | number:2}}%</span>
+							<span class="gray" ng-if="subItem.last_year == 0">N/A</span>
+						</span>
+						<span class="gray fr">
+							<span ng-if="subItem.last_year != 0">
+								{{subItem.last_year | numberFormat: (subItem.name == 'Rooms Sold' ? 0 : 2)| currencyCode: (subItem.name == 'Rooms Sold' ? null : currencyCodeFromAPI)}}
+							</span>
+							<span ng-if="subItem.last_year == 0">N/A</span>
+						</span>
+					</div>
+				</li>
+			</ol>
+		</li>
+
+		<div ng-show="getDots().length > 1">
+			<span class="slideBtn slideNext inlBlk abs pointer" ng-click="paginateData(true)" ng-hide="paginationDetails.currentPage == paginationDetails.totalPages()-1">
+				<span class="icons arrowNext inlBlk"></span>
+			</span>
+			<span class="slideBtn slidePrev inlBlk abs pointer" ng-click="paginateData(false)" ng-hide="paginationDetails.currentPage == 0">
+				<span class="icons arrowPrev inlBlk"></span>
+			</span>	
+		</div>
+		
+	</ul>
+	
+	<div class="chartDataView" ng-hide="getDots().length <= 1">
+		<div class="navigate center">
+			<span ng-repeat="dot in getDots() track by $index" ng-click="dotClicked($index)" ng-class="{active: $index==paginationDetails.currentPage}" class="inlBlk"></span>
+		</div>
+	</div>
+
+
+</section>

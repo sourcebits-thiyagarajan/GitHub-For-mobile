@@ -1,0 +1,77 @@
+<section class="lar larDetailView clearfix rel" ng-controller="LarCtrl" >
+	<div class="spin"></div>
+	
+	<div ng-show="larDetail.dates" ng-hide="showDefaultView" ng-class="{singleColumn: larDetail.dates.length == 1}">
+		<!-- Channels filter -->
+		<table class="larReportFilter w100">
+			<tr>
+				<td><!-- Blank Space--></td>
+				<td>
+					<ul>
+						<li ng-repeat="channel in larDetail.channels" ng-class="{selected: channel == selectedChannel}" ng-click="setSelectedChannel(channel)">{{channel}}
+						</li>
+					</ul>	
+				</td>	
+			</tr>
+		</table>
+
+		<!-- Dates in the Table Header -->
+		<table class="dates w100">
+			<tr>
+				<th><!-- Blank Space--></th>
+				<th ng-repeat="date in larDetail.dates | startAt:paginationDetails.currentPage*paginationDetails.pageSize:7 | limitTo:paginationDetails.pageSize" ng-init="hotdateItem = isHotDate(date)" ng-class="{weekend: isWeekend(date), hotDateHighlightHorizontal: hotdateItem}" title="{{hotdateItem.description}}">{{date | dateDDMMMYYYY:true}}</th>
+			</tr>
+		</table>
+
+		<!-- Left Slide pagination arrow -->
+		<span class="slidePrev inlBlk abs pointer noSelect" ng-click="paginateData(false)" ng-hide="paginationDetails.currentPage == 0">
+			<span class="icons arrowPrev inlBlk"></span>
+		</span>
+
+		<!-- Right Slide pagination arrow -->
+		<span class="slideNext inlBlk abs pointer noSelect" ng-click="paginateData(true)" ng-hide="paginationDetails.currentPage == paginationDetails.totalPages()-1 || paginationDetails.data.length == 0">
+			<span class="icons arrowNext inlBlk"></span>
+		</span>
+
+		<!-- Scrollable Content -->
+		<div class="larReportWrap inlBlk w100 rel" ma-page-size="lar">
+
+			<!-- Hotel names on the LHS -->
+			<!-- <div class="larReportLabel fl">
+				<ul>
+					<li ng-repeat="hotel in larDetail.hotels"><span class="tableCell">{{hotel}}</span></li>
+				</ul>
+			</div> -->
+
+			<!-- Actual Table -->
+			<div class="larReportData fl rel withSideHeading">
+				<table class="w100">
+					<tbody>
+						<tr ng-repeat="hotel in larDetail.hotels">
+							<td class="tableSideheading"><span class="tableCell">{{hotel}}</span></td>
+							<td ng-repeat="date in larDetail.dates | startAt:paginationDetails.currentPage*paginationDetails.pageSize:7 | limitTo:paginationDetails.pageSize track by $index" ng-class="{weekend: isWeekend(date)}">
+								<span class="value center blk fb18">
+									{{larDetail.data[hotel][date][selectedChannel] | currencyCode: currency | noText | isBlank }}
+								</span>
+							</td>
+						</tr>
+					</tbody>
+				</table>			
+			</div>
+			<div class="clear"></div>
+		</div>
+
+		<!-- Final Avg Rates (at the bottom)-->
+		<table class="tfoot w100" ng-hide="showDefaultView" ng-show="larDetail">
+			<tr ng-hide="showDefaultView" ng-show="larDetail">
+				<td class="lblAvg" ng-show="larDetail">Average</td>
+				<td ng-repeat="date in larDetail.dates | startAt:paginationDetails.currentPage*paginationDetails.pageSize:7 | limitTo:paginationDetails.pageSize track by $index" ng-class="{weekend: isWeekend(date)}">{{larDetail.averages[date][selectedChannel] | currencyCode: currency | noText | isBlank}}</td>
+			</tr>
+		</table>
+
+		<div class="navigate center noSelect" ng-show="larDetail">	
+			<span ng-repeat="dot in getDots() track by $index" ng-click="dotClicked($index)" ng-class="{active: $index==paginationDetails.currentPage}" class="inlBlk"></span>
+		</div>
+	</div>
+	<span class="no-data abs" ng-show="showDefaultView">No data available for the current date range.</span>
+</section>

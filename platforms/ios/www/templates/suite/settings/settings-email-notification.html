@@ -1,0 +1,92 @@
+
+<section class="emailNotification rateAvailability">
+	<div class="spin"></div>
+	<table class="tabularData" ><!-- ng-show="channels" -->
+		<tr class="thead">
+			<td colspan="4" width="50%"><div>Alerts to be sent</div></td>
+			<td colspan="2" width="20%"><div>ARI Alert</div></td>
+			<td colspan="4" width="30%"><div>Reservation Alert</div></td>
+		</tr>
+		<tr class="thead">
+			<td width="8%"><div>Activate</div></td>
+			<td width="12%"><div>First Name<sup>*</sup></div></td>
+			<td width="12%"><div>Last Name<sup>*</sup></div></td>
+			<td width="18%"><div>eMail ID<sup>*</sup></div></td>
+			<td width="10%">
+				<div class="criticalUpdateHeader"><sup>*</sup><div>Critical Updates</div></div>
+				<div popover="bottom" class="rel icons inlBlk fr pointer question">
+					<div class="popover-box scrollable">
+						<span class="fb14 black">At least one user should always be selected to receive Critical Update Notification.</span><br/><br/>
+						<span class="fb14 black">Notification for Critical ARI update failures due to Invalid Access, Channel Down, Open or Close, Channel Connection Error & Rate Update failure are part of mandatory system notification and will automatically be eMailed to selected user(s).</span>
+					</div>
+				</div>
+			</td>
+			<td width="10%"><div>Other Updates</div></td>
+			<td width="7.5%"><div>Delivary Failure</div></td>
+			<td width="7.5%"><div>Mapping Failure</div></td>
+			<td width="7.5%"><div>Availability</div></td>
+			<td width="7.5%"><div>Delete</div></td>
+		</tr>
+	</table>
+
+	<!-- Scrollable Content -->
+	<form class="rel" name="emailNotification">
+		<div class="scrollable main-content">
+			<table class="tabularData">
+				<tr>
+					<td width="8%"><div class="rangeChk inlBlk"><input checked="true" id="checkbox1" type="checkbox" /><label class="icheckbox noSelect green"></label></div></td> 
+					<td width="12%"><div><input type="text" class="wMedium" value="Philip" ng-pattern=""/></div></td>
+					<td width="12%"><div><input type="text" class="wMedium" value="Dol" ng-pattern=""/></div></td>
+					<td width="18%"><div><input type="text" class="wMedium" value="philip@test.com" ng-pattern=""/></div></td>
+					<td width="10%"><div class="rangeChk inlBlk"><input checked="true" id="checkbox6" type="checkbox" /><label class="icheckbox noSelect green"></label></div></td>
+					<td width="10%"><div class="rangeChk inlBlk"><input checked="true" id="checkbox2" type="checkbox" /><label class="icheckbox noSelect green"></label></div></td>
+					<td width="7.5%"><div class="rangeChk inlBlk"><input id="checkbox3" type="checkbox" /><label class="icheckbox noSelect green"></label></div></td>
+					<td width="7.5%"><div class="rangeChk inlBlk"><input checked="true" id="checkbox4" type="checkbox" /><label class="icheckbox noSelect green"></label></div></td>
+					<td width="7.5%"><div class="rangeChk inlBlk"><input id="checkbox5" type="checkbox" /><label class="icheckbox noSelect green"></label></div></td>
+					<td width="7.5%"><div><span ng-click="deleteRoomType(room, $index)" ng-class="" class="inlBlk pointer icons thrash"></span></div></td>
+				</tr>
+			</table>
+		</div>
+		<div class="w100"><div class="fr mandatory"><span>*</span>indicates mandatory setup</div></div>
+		<div class="blk addRow noSelect clearfix">
+			<div class="addButton">
+				<span class="fl"><span class="inlBlk center plus pointer" ng-click="addNewRoomType($event)">+</span>Add</span>
+			</div>
+			<div class="inlBlk w100">
+				<div class="rel fr pointer submit-btn fb14 center" ng-class="{blocked: !roomTypeDetails.roomTypes || !roomTypeDetails.roomTypes.length || createRateTypeForm.$invalid || discardChangesMade}" ng-click="saveDetails(createRateTypeForm, $event)">
+					<div class="spin"></div>
+					Reset
+				</div>
+				<div class="rel fr pointer submit-btn fb14 center" ng-class="{blocked: !roomTypeDetails.originalData.roomTypes || !roomTypeDetails.originalData.roomTypes.length}" show-daterange-popup create-daterange="true">
+					<div class="spin"></div>
+					Save
+				</div>
+				<div class="rel selectOptionsCls">
+					<div class="pd9">
+						<span>Please configure eMail Frequency of ARI update failures(default frequency is 4 hours)</span>
+					</div>
+					<div>
+						<div class="customSelect rel inlBlk">
+							<div dropdown class="arrowWrapper inlBlk rel pointer noSelect">
+								<!-- {{channel.rounding_method}} -->
+								1 Hour
+								<span class="arrowSection">
+									<span class="arrow"></span>
+								</span>
+							</div>
+							<ul class="ddmenu fb14 mLeft customSelectMenu w100 rel">
+								<li ng-click="selectRoundingMethod(channel.dcode, 'Nearest Value')">2 Hour</li>
+								<li ng-click="selectRoundingMethod(channel.dcode, 'Next Value')">3 Hour</li>
+								<li ng-click="selectRoundingMethod(channel.dcode, 'Previous Value')">4 Hour</li>
+							</ul>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</form>
+
+</section>
+
+
+

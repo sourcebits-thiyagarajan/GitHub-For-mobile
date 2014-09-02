@@ -1,0 +1,56 @@
+
+<h2 class="fl30 abs breadCrumbs" ng-show="navCrumbList">
+	<span class="pointer" ng-repeat="item in navCrumbList" ng-click="crumbItemClicked(item)" title="{{item.name}}">{{item.name | appendArrow : $index < navCrumbList.length - 1}}</span>
+	({{navCrumbList[navCrumbList.length - 1].hotelCount | hotelCount}})
+</h2>
+<div id="mapContainer" class="abs" connect-map></div>
+
+<section id="mapWidgets" class="abs" ng-controller="MapWidgetsController">	
+	
+	<span class="fullscreen inlBlk abs pointer" ng-click="toggleFullScreenMap()"><span class="icons expand fl" ng-class="{active: isFullScreen}"></span></span>
+	
+	<div ng-show="!isFullScreen">
+		<h3 class="f24 rel">Performance Quick Stats</h3>
+		<ul id="widgetLists">
+		
+			<li ng-repeat="widget in mapWidgetList" class="rel">
+				<div class="spin"></div>
+				<div class="listContent" ng-hide="widget.spin">
+					<h4 class="fb16">
+						{{widget.name}}
+						<span class="fr green {{widget.net_change}}">
+							<span class="icons arrowUpGreenLrg inlBlk rel" ng-class="{none: widget.last_year == 0}"></span> 
+							<span ng-if="widget.last_year != 0">
+								{{widget.percentage | number:2}}%
+							</span>
+							<span class="gray" ng-if="widget.last_year == 0">
+								N/A
+							</span>
+						</span>
+					</h4>
+					<div>
+						<span ng-if="widget.this_year != 0">
+							{{widget.this_year | numberFormat: (widget.name == 'Rooms Sold' ? 0 : 2)| currencyCode: (widget.name == 'Rooms Sold' ? null : currencyCodeFromAPI)}}
+						</span>
+						<span class="gray" ng-if="widget.this_year == 0">N/A</span>
+						<span class="fr">Current Period</span>
+					</div>
+					<div class="gray">
+						<span ng-if="widget.last_year != 0">
+							{{widget.last_year | numberFormat: (widget.name == 'Rooms Sold' ? 0 : 2)| currencyCode: (widget.name == 'Rooms Sold' ? null : currencyCodeFromAPI)}}
+						</span>
+						<span ng-if="widget.last_year == 0">N/A</span>
+						<span class="fr">Last Year</span>
+					</div>
+				</div>	
+			</li>
+			<li class="rel" ng-show="mapWidgetList.length == 0">
+				<div class="listContent">
+					<h4 class="fb16">
+						No Data Available
+					</h4>
+				</div>
+			</li>
+		</ul>
+	</div>
+</section>

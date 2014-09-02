@@ -1,0 +1,30 @@
+
+
+		<!-- Pace Widget -->
+		<li id="pace" class="rel pointer" ng-click="paceSummaryDetail.hide || switchSuiteDashboardView('pace-chart')" show-widget-spinner="{{paceSummaryDetail==null}}" ng-class="{pointer: !paceSummaryDetail.hide}">
+			
+			<h3 class="fb18">Pace</h3>
+			<div class="spin"></div>
+
+			<ol class="dataLists pace" ng-show="paceSummaryDetail" ng-hide="paceSummaryDetail.hide">
+				<li>
+					<span class="label">Rooms Required</span>
+					<span class="value">{{budgetSummary.budgeted_rooms | numberFormat: 0 | isBlank}}</span>
+				</li>
+				<li>
+					<span class="label">Pace Required</span>
+					<span class="value">{{paceSummaryDetail.required_pace | numberFormat : 0}} <span class="blk">Rooms / Day</span></span>
+				</li>
+				<li>
+					<span class="label">Current Pace</span>
+					<span class="value">{{paceSummaryDetail.current_pace | numberFormat : 0}} <span class="blk">Rooms / Day</span></span>
+				</li>
+				<li>
+					<span class="label">Pace Gap</span>
+					<span class="value red">{{paceSummaryDetail.gap | numberFormat : 0}} <span class="blk">Rooms</span></span>
+				</li>
+			</ol>
+
+			<h4 ng-show="paceSummaryDetail.hide" class="noDataMsg center">No data available for the selected date range</h4>
+		</li>
+		

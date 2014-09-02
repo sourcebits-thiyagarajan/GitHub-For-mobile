@@ -1,0 +1,162 @@
+
+<div class="alerts" ng-controller="AlertsCtrl">
+	<div class="spin"></div>
+	<div>
+		<h2 class="fl30">
+			<a class="pointer navigationCrumb noSelect" href="/#/suite/dashboard/{{suiteHotelCode}}">Dashboard</a> &gt; Alerts 
+			<span class="btn fr fb14 pointer markRead rel" ng-class="{blocked: inbox.msgs.length < 1}" ng-click="markAsRead($event)">Mark As Read
+				<div class="spin"></div>
+			</span>
+		</h2>
+
+		<!-- <div class="tabContainer clearfix rel">
+			<div class="tabContent white rel">
+				<ul class="clearfix abs" id="tabSlider">
+					<li height="40" ng-class="{active: currentTab === 'shopper'}" ng-click="navigateTabs('shopper')">
+						<div>
+							Shopper
+							<span class="count inlBlk fr rel"></span>
+						</div>
+						<span class="bdrRight"></span>
+					</li>
+					<li height="40" ng-class="{active: currentTab === 'availability'}" ng-click="navigateTabs('availability')">
+						<div>
+							Availability
+							<span class="count inlBlk fr rel"></span>
+						</div>
+						<span class="bdrRight"></span>
+					</li>
+					<li height="40" ng-class="{active: currentTab === 'unmapped'}" ng-click="navigateTabs('unmapped')">
+						<div class="unmapped">
+							Unmapped Reservation Room Type
+							<span class="count inlBlk fr rel"></span>
+						</div>
+					</li>
+				</ul>
+			</div>
+		</div> -->
+		
+		<!-- Shoppers Tab -->
+		<!-- <div ng-show="currentTab === 'shopper'" class="shopper"> -->
+			<!-- Table Header -->
+			<table class="fb16 thead center">
+				<tr>
+					<td width="44">
+						<!-- Custom Checkbox -->					
+						<div class="rangeChk inlBlk">									
+							<input id="allAlerts" ng-model="allAlerts" ng-click="toggleAll(allAlerts)" type="checkbox" />
+							<label class="icheckbox noSelect" for="allAlerts"></label>
+						</div>
+					</td>
+					<td width="130">Level</td>
+					<td width="130">Type</td>
+					<td>Subject</td>
+					<td width="150">Date</td>
+					<td width="130">Time</td>
+				</tr>
+			</table>
+
+			<table class="f14 tbody center" view-size="dont-add-fixed-height">
+
+				<!-- All Messages (Rows) -->
+				<tr ng-repeat="msg in paginationDetails.data | startFrom:paginationDetails.currentPage*paginationDetails.pageSize | limitTo:paginationDetails.pageSize" ng-class="{selected: isSelected(msg.alert_id), unread: msg.read == 'false'}">
+
+					<td width="44">
+						<!-- Custom Checkbox -->					
+						<div class="rangeChk inlBlk">									
+							<input id="{{msg.alert_id}}" checklist-model="inbox.msgs" checklist-value="msg.alert_id" type="checkbox" />
+							<label class="icheckbox noSelect" for="{{msg.alert_id}}"></label>
+						</div>
+					</td>
+					<td width="130" class="upper">
+						<div class="levelType rel">{{msg.level}} <span class="level abs" ng-class="{high: msg.level == 'Critical', medium: msg.level == 'High', low: msg.level == 'Medium'}"></span>
+						</div>
+					</td>
+					<td width="130">{{msg.type}}</td>
+					<td>{{msg.subject}}</td>
+					<td width="150">{{msg.date | dateDDMMMYYYY}}</td>
+					<td width="130">{{msg.time}}</td>
+				</tr>
+			</table>
+
+			<h4 ng-show="inbox.noData" class="noDataMsg white mt15 center">No Alerts available for the selected date range</h4>
+
+			<div id="pagination" class="fix">
+				
+				<!-- Right Button -->
+				<span class="btn fr pointer noSelect" ng-click="paginateData(true); uncheckGlobal();" ng-class="{blocked: paginationDetails.currentPage == paginationDetails.totalPages()-1 || paginationDetails.data.length == 0}">
+					<span class="icons next inlBlk"></span>
+				</span>
+
+				<!-- Left Button-->
+				<span class="btn fr pointer noSelect" ng-click="paginateData(false); uncheckGlobal();" ng-class="{blocked: paginationDetails.currentPage == 0}">
+					<span class="icons prev inlBlk"></span>
+				</span>
+			</div>
+		<!-- </div> -->
+		
+		<!-- Availability Tab -->
+		<!-- <div ng-show="currentTab === 'availability'" class="availability">
+			<table class="tabularData">
+				<tr class="thead">
+					<td width="170">Date</td>
+					<td>Property Room Type</td>
+					<td width="130" class="center">Treshold</td>
+					<td width="180" class="center">Remaining Avail Value</td>
+					<td width="170" class="center">New Avail Value</td>
+				</tr>
+			</table>
+			<table class="tabularData">
+				<tbody>
+					<tr ng-repeat="item in [1, 2, 3, 4, 5, 6, 7]">
+						<td width="170">
+							13 Aug 2014
+						</td>
+						<td>
+							Executive Suite
+						</td>
+						<td width="130" class="center">
+							2
+						</td>
+						<td width="180" class="center">
+							2
+						</td>
+						<td width="170" class="center">
+							<input type="text" class="wSmall" />
+						</td>
+					</tr>
+				</tbody>
+			</table>
+
+			<div class="tableOptions inlBlk w100 formSubmit">
+				<div class="rel fr pointer submit-btn fb14 center" ng-class="{blocked: discardChangesMade}">
+					<div class="spin"></div>
+					Update
+				</div>
+			</div>
+		</div> -->
+
+		<!-- Unmpaaed Tab -->
+		<!-- <div ng-show="currentTab === 'unmapped'" class="unmapped">
+			<table>
+				<thead>
+					<tr>
+						<th>Websites</th>
+					</tr>
+				</thead>
+
+				<tbody>
+					<tr ng-repeat="website in websites track by $index" ng-click="" class="pointer">
+						<td>
+							<div>
+								{{website.name}} 
+								<span class="count inlBlk fr rel">{{website.unmapped}}</span> 
+							</div>
+						</td>
+					</tr>
+				</tbody>
+			</table>
+		</div> -->
+
+	</div>
+</div>

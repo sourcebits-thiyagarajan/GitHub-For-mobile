@@ -1,0 +1,22 @@
+		
+		<!-- Manage Widget -->
+		<li id="manage" class="rel" show-widget-spinner="{{manageWidgetInfo==null}}">
+			
+			<h3 class="fb18">Manage</h3>
+			<div class="spin"></div>
+
+			<ol class="dataLists manage" ng-hide="manageWidgetInfo.hide">
+				<li>
+					<span ng-hide="manageWidgetInfo.rate_last_updated == '-'">Rates last updated on {{manageWidgetInfo.rate_last_updated | dateDDMMMYYYY}}</span>
+					<span ng-show="manageWidgetInfo.rate_last_updated == '-'">Rates not yet updated</span>
+					<div class="btn pointer" ng-click="switchSuiteDashboardView('manage_rates')">Manage Rates</div>
+				</li>
+				<li>
+					<span ng-hide="manageWidgetInfo.avail_last_updated == '-'">Availability last updated on {{manageWidgetInfo.avail_last_updated | dateDDMMMYYYY}}</span>
+					<span ng-show="manageWidgetInfo.avail_last_updated == '-'">Availability not yet updated</span>
+					<div class="btn pointer" ng-click="switchSuiteDashboardView('manage_availability')">Manage Availability</div>
+				</li>
+			</ol>
+
+			<h4 ng-show="manageWidgetInfo.hide" class="noDataMsg center">No data available for the selected date range</h4>
+		</li>

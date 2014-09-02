@@ -1,0 +1,128 @@
+
+<h3 class="setHdr">Create Rate Plan</h3>
+
+<section class="createRatePlan" ng-controller="RatePlanCtrl" page-double-scroll>
+	<div class="ratePlan spin"></div>
+
+
+	<div ng-show="ratePlanDetails.hasLoaded">
+
+		<!-- Any change on the Tabular Layout might need change in the popup, Please Update in the DateRange Layout also, available at the end of the file -->
+
+		<table class="tabularData">
+			<tr class="thead">
+				<td width="50">Base Rate</td>
+				<td width="15%">Hotel Rate Code</td>
+				<td width="45%">Hotel Rate Type Name</td>
+				<td width="15%">Weight 00/%</td>
+				<td width="50">Delete</td>
+			</tr>
+		</table>
+
+
+
+		<!-- Any change on the Tabular Layout might need change in the popup, Please Update in the DateRange Layout also, available at the end of the file -->
+
+		<form class="rel" name="createRatePlanForm">
+			<!-- Scrollable Content -->
+			<div class="scrollable main-content">
+				<table class="tabularData">	
+					<tr ng-repeat="rate in ratePlanDetails.ratePlans track by $index" id="{{rate.id}}">
+						<td width="50">
+							<input type="radio" name="base" class="pointer" ng-model="ratePlanDetails.baseRatePlan" ng-value="rate"/>
+						</td>
+						<td width="15%">
+							<input class="input wSmall" value="{{rate.code}}" ng-model="rate.code" validate-duplicate="code" validate-src="ratePlanDetails.ratePlans" required>
+						</td>
+						<td width="45%">
+							<input class="input" value="{{rate.name}}" ng-model="rate.name" validate-duplicate="name" validate-src="ratePlanDetails.ratePlans" required/>
+						</td>
+						<td width="15%" ng-class="{disabled: rate.is_base_rate && ratePlanDetails.ratePlans.length > 1}">
+							<input type="text" class="wSmall textAlignRight" ng-model="rate.weight" value="{{rate.weight}}" ng-pattern="validator.number" ng-disabled="rate.is_base_rate && ratePlanDetails.ratePlans.length > 1"/>
+							<span class="inlBlk center f12 weight pointer toggleBtn" toggle-text="rate.is_weight_percentage" ng-model="rate.is_weight_percentage" ng-class="{disabled: rate.is_base_rate && ratePlanDetails.ratePlans.length > 1}"></span>
+						</td>
+						<td width="50">
+							<span class="rel inlBlk pointer icons thrash" ng-class="{blocked: rate.is_base_rate && ratePlanDetails.ratePlans.length > 1}" ng-click="deleteRatePlan(rate, $index, $event)">
+								<div class="spin"></div>
+							</span>
+						</td>
+					</tr>
+				</table>
+			</div>
+			<div class="noData center f14" ng-hide="ratePlanDetails.ratePlans.length">No Rate plan Available. Click on Add to create one.</div>
+
+			<div class="blk addRow noSelect clearfix">
+				<span class="fl"><span class="inlBlk center plus pointer" ng-click="addNewRatePlan($event)">+</span>Add</span>
+				<div class="inlBlk fr">
+					<div class="rel fr pointer submit-btn fb14 center" ng-class="{blocked: !ratePlanDetails.ratePlans || !ratePlanDetails.ratePlans.length || createRatePlanForm.$invalid || discardChangesMade}" ng-click="saveDetails(createRatePlanForm, $event)">
+						<div class="spin"></div>
+						Save
+					</div>
+					<div class="rel fr pointer submit-btn fb14 center" ng-class="{blocked: !ratePlanDetails.originalData.ratePlans || !ratePlanDetails.originalData.ratePlans.length}" show-daterange-popup create-daterange="true">
+						<div class="spin"></div>
+						Add Date Range
+					</div>
+				</div>
+			</div>
+		</form>
+		
+
+		<div class="tableOptions inlBlk w100">
+			
+			<!-- Scrollable Content -->
+			<div class="dateRangeAddContainer scrollable secondary-content">
+
+				<div class="dateRangeAdded" ng-repeat= "dateRangeItem in ratePlanDetails.dateRanges | dateRange track by $index">
+					<label class="inlBlk rel f14">Date Range Added</label>
+					<span class="currentDateRange f14">From: {{dateRangeItem.from_date | dateDDMMMYYYY }} To: {{dateRangeItem.to_date | dateDDMMMYYYY }} :</span>
+
+					<span class="white">&nbsp;(<span class="day" ng-repeat="day in dateRangeItem.selectedRange">{{day}}</span> &nbsp;)</span>
+
+					<span class="rel inlBlk fr pointer icons thrash small" ng-click="deleteDateRange(dateRangeItem, $event)"></span>
+					<span class="inlBlk fr pointer icons editDateRange" show-daterange-popup edit-daterange="{{dateRangeItem}}"></span>
+				</div>
+				
+
+			</div>
+		</div>
+
+
+
+
+
+
+
+		<!-- ***************** Date range Popup Tabular Layout hidden in the page always. ******************* -->
+		<div id="dateRangeLayout" class="none">
+			<textarea unbind-scope>
+				<table class="tabularData">
+					<tr class="thead">
+						<td class="disabled" width="20%">Hotel Rate Code</td>
+						<td class="disabled" width="45%">Hotel Rate Type Name</td>
+						<td width="25%">Weight 00/%</td>
+					</tr>
+				</table>
+			</textarea>
+
+			<textarea unbind-scope>
+				<form name="updateForm">
+					<table class="tabularData">	
+						<tr ng-repeat="item in dateRangePoupContent.tabularContent track by $index" id="{{item.id}}">
+							<td width="20%" class="disabled">
+								<input class="input wSmall" value="{{item.code}}" ng-model="item.code" disabled>
+							</td>
+							<td width="45%" class="disabled">
+								<input class="input" value="{{item.name}}" ng-model="item.name" disabled/>
+							</td>
+							<td width="25%" ng-class="{disabled: item.is_base_rate || dateRangePoupContent.basePlanId == item.id}">
+								<input type="text" class="wSmall textAlignRight" ng-model="item.weight" value="{{item.weight}}" ng-pattern="validator.number" ng-disabled="item.is_base_rate || dateRangePoupContent.basePlanId == item.id"/>
+								<span class="inlBlk center f12 weight pointer noSelect" toggle-text="item.is_weight_percentage" ng-model="item.is_weight_percentage" ng-class="{disabled: item.is_base_rate || dateRangePoupContent.basePlanId == item.id}"></span>
+							</td>
+						</tr>
+					</table>
+				</form>
+			</textarea>
+
+		</div>
+	</div>
+</section>

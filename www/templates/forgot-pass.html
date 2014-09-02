@@ -1,0 +1,52 @@
+<div class="appBg fix"></div>
+
+<section class="login clearfix" ng-controller="AuthCtrl">
+
+	<div class="wrapper">
+		<span class="txtSp inlBlk live"></span>
+
+		<div class="inner-wrapper">
+			<header class="fb16">Recover Password</header>
+			<div class="form-box">
+				<h2 class="f14">
+					<span ng-if="!isErr && !isMsg">
+						You are one step away from recovering your password
+					</span>
+					<span class="red" ng-if="isErr && !isMsg">
+						{{isErr}}
+					</span>
+					<span class="green" ng-if="isMsg && !isErr">
+						{{isMsg}}
+					</span>
+				</h2>
+
+				<form name="recoverForm" ng-submit="recoverPassword($event, recoverForm, uid, email)">
+					<div class="field rel">
+						
+						<input type="text" placeholder="User Name" ng-model="uid" required ng-pattern="validator.space" class="f12">
+						<i class="icons user"></i>
+						<div class="input-help">
+				      		<h4>Invalid User Name</h4>
+				    	</div>
+					</div>
+					
+					<div class="field rel">						
+						<input type="text" placeholder="Email" ng-model="email" required ng-pattern="validator.email" class="f12">
+						<i class="icons user"></i>
+						<div class="input-help">
+				      		<h4>Invalid Email</h4>
+				    	</div>
+					</div>
+
+					<div class="rel">
+					    <div class="spin"></div>					    
+						<input type="submit" ng-disabled="isDisabled" class="submit fb14" value="Recover">
+				    </div>
+
+				    <a href="#/login" class="forgot f14">Login</a>
+				</form>
+			</div>
+		</div>
+
+	</div>
+</section>

@@ -1,0 +1,80 @@
+
+<div id="exportPdf" class="noData">
+
+	<!-- Chart View -->
+	<div class="chartDataView">
+	
+		<header class="pdf-header clearfix">
+			<img src="../images/erevmax-logo.png" class="logo" />
+			<div class="details">
+				<h1 class="fb24">{{hotelDetail.name}}, {{hotelDetail.city}}, {{hotelDetail.country}}</h1>
+				<span>
+					{{currentDate}}
+				</span>
+			</div>		
+		</header>
+
+		<div class="sub-details">
+			<div class="item clearfix fb16">
+				<span class="tag fl">Regions:</span>
+				<span class="value fl">{{hotelDetail.city}}, {{hotelDetail.country}}</span>
+			</div>
+			<div class="item clearfix fb16">
+				<span class="tag fl">Date Range:</span>
+				<span class="value fl">{{currentFilterDetails.startDate}} to {{currentFilterDetails.endDate}}</span>
+			</div>
+		</div>
+	</div>
+
+
+
+	<div class="spin pdf"></div>
+
+
+	<div class="dataTable rel manage-rates-data">
+		
+		<div class="error" ng-show="error">No Room Type/Rate plan mapping found</div>
+		
+		<div ng-show="manageRates.response && !manageRates.contentLoading">
+
+			<div class="manageDataScroll scrollable"  ng-init="showLar = true; showSmartFill = true;">
+				<!-- Each Tab -->
+
+				<div ng-repeat="ratePlan in manageRates.response.ratePlans track by $index">
+
+					<h1 class="plan-name fb21 black">{{ratePlan.planName}}</h1>
+					<div class="dataContent clearfix white dataContentPdf">
+
+						<div class="rateTablePdf">
+							<table lass="w100">
+								<tbody>
+									<tr>
+										<td class="maCell black maPdfHeaderCls"><div>Dates/</div><div>RoomType</div></td>
+										<td class="maCell black" ng-repeat="roomType in manageRates.response.roomTypes track by $index" ng-if="isValidRoom(roomType, ratePlan)"><div class="maPdfHeaderCls">{{roomType.roomName}}</div></td>
+									</tr>
+									<tr class="maCell" ng-repeat="date in manageRates.response.dates | weekend:manageRates.weekend track by $index">
+										<td class="black cell">
+											{{date | dateDDMMMYYYY}}
+										</td>
+										<td ng-class-odd="'bg'" class="maCell black" ng-repeat="roomType in manageRates.response.roomTypes track by $index" ng-class="{closeSelection: manageRates.isClosed[ratePlan.planId][date]}" ng-if="isValidRoom(roomType, ratePlan)">
+
+											<p ng-hide="manageRates.isClosed[manageRates.currentPlan.planId][date]" class="pdfTextCls">{{manageRates.response.manageRatesHash[ratePlan.planId][roomType.roomId][date].rate | isBlank}}</p>
+											<span class="inlBlk closeLayer abs pointer" ng-if="manageRates.isClosed[manageRates.currentPlan.planId][date]">
+ 												<p class="pdfTextCls">{{manageRates.response.manageRatesHash[ratePlan.planId][roomType.roomId][date].rate | isBlank}}</p>
+ 											</span>
+										</td>
+									</tr>
+								</tbody>
+							</table>
+						</div>
+
+						<div class="navigate center noSelect" ng-show="manageRates.response && !manageRates.contentLoading">
+							<span ng-repeat="dot in getDots() track by $index" ng-click="dotClicked($index)" ng-class="{active: $index==paginationDetails.currentPage}" class="inlBlk"></span>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	
+</div>

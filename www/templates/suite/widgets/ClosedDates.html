@@ -1,0 +1,13 @@
+
+		
+		<!-- Closed Dates Widget -->
+		<li id="ClosedDates" class="rel" ng-click="quickCloseDetail.hide || switchSuiteDashboardView('quick_close', $event)" show-widget-spinner="{{quickCloseDetail==null}}" ng-class="{pointer: !quickCloseDetail.hide}">
+			<h3 class="fb18">Property Quick Close</h3>
+			<div class="spin"></div>
+
+			<div id="calendarCloseDate" close-date-widget class="smallTransparentCalendar" ng-hide="quickCloseDetail.hide"></div>
+			<!-- <h4 ng-show="quickCloseDetail.hide" class="noDataMsg center">No data available for the selected date range</h4> -->
+			<h4 ng-show="quickCloseDetail.hide" class="noDataMsg center">Date selection invalid. Reselect dates.</h4>
+		</li>
+
+		
