@@ -1,0 +1,18 @@
+/*===================================
+			Common styles
+=====================================*/
+
+h1 {
+	color: green;
+}
+
+#mapContainer{
+	background-color: #E5E3DF;
+	overflow: hidden;
+	position: absolute;
+	top: 162px;
+	right: 362px;
+	bottom: 84px;
+	left: 42px;
+	height: 400px;
+}
